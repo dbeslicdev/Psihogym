@@ -8,16 +8,26 @@ import { useEffect } from "react";
 export function useScrollReveal(dep) {
   useEffect(() => {
     const items = document.querySelectorAll(".reveal");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          entry.target.classList.toggle("is-visible", entry.isIntersecting);
+          if (!entry.isIntersecting) return;
+          entry.target.classList.remove("is-pending");
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
         });
       },
       { rootMargin: "0px 0px -12% 0px", threshold: 0 },
     );
-    items.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    items.forEach((el) => {
+      if (el.getBoundingClientRect().top > window.innerHeight) el.classList.add("is-pending");
+      observer.observe(el);
+    });
+    return () => {
+      observer.disconnect();
+      items.forEach((el) => el.classList.remove("is-pending"));
+    };
   }, [dep]);
 }
 

@@ -20,8 +20,8 @@
   --v4-sage: var(--ps-sage);
   --v4-sage-soft: var(--ps-sage-soft);
   --v4-ink: var(--ps-ink); /* tamni ink — ZA POVRŠINE (gumbi, toggle, topbar) */
-  --v4-text: #5c3d29; /* tamnija čokoladna smeđa — GLAVNI TEKST */
-  --v4-muted: rgba(92, 61, 41, 0.66); /* muted čokoladna (sekundarni tekst) */
+  --v4-text: var(--ps-text-brand);
+  --v4-muted: var(--ps-text-brand-muted);
   --v4-line: var(--ps-border);
   --v4-serif: var(--ps-font-display);
   --v4-ease: var(--ps-ease);
@@ -63,7 +63,7 @@
 }
 
 /* naglasak (kurziv) u v4 = sage, ne globalna Nori-plava */
-.v4 em { font-style: italic; color: var(--v4-sage); }
+.v4 em { font-style: italic; color: var(--ps-text-accent); }
 
 /* ---------- Nav preuzima boju sekcije ISPOD sebe ----------
    --nav-bg/--nav-fg postavlja useV4Transitions (kit.jsx) na svakom scrollu.
@@ -120,7 +120,7 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
   position: relative;
   isolation: isolate; /* i hero je svoj sloj — krug prve sekcije ide preko njega */
   min-height: 100svh;
-  padding: 0 9vw; /* njen lijevi rub: x = 131/1440 */
+  padding: 7rem max(var(--ps-inset), 6vw) 4rem;
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: center;
@@ -132,11 +132,11 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
   /* stupac 1 = širina naslova "Online … savjetovalište" (max-content);
      tag ide u stupac 2 pa počinje TOČNO gdje ta riječ završava.
      Čisto relativno — radi na md/lg/xl bez fiksnih px. */
-  grid-template-columns: max-content minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "name name"
-    "role ."
-    ".    tag";
+    "name"
+    "role"
+    "tag";
   column-gap: clamp(0.75rem, 1.4vw, 1.4rem);
   row-gap: clamp(0.7rem, 1.4vh, 1.15rem);
   align-content: center;
@@ -231,7 +231,7 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
   font-weight: 400;
   font-size: clamp(1.4rem, 2.2vw, 2rem); /* njena titula: 32px */
   margin: 0;
-  white-space: nowrap; /* jedna linija → stupac 1 = puna širina naslova */
+  white-space: normal;
 }
 /* meki rub maske putuje s lijeva na desno → tekst se "otkriva" kao fade */
 @property --v4-wipe {
@@ -241,7 +241,7 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
 }
 .v4-hero__tag {
   grid-area: tag;
-  max-width: 20rem;
+  max-width: 36ch;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--v4-muted);
@@ -1176,26 +1176,43 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
     grid-template-columns: 1fr;
     justify-items: start;
     row-gap: 2.5rem;
+    align-content: center;
+    padding: 7rem var(--ps-inset) 4rem;
   }
+  .v4-hero__text { width: 100%; }
   .v4-ring { width: min(15rem, 60vw); }
   .v4-hero__shapes { justify-self: start; width: min(22rem, 78vw); }
   .v4-hero__tag { margin-left: 0; margin-top: 1rem; }
   /* mobitel: bez bočnog klizanja (chipovi u koloni) */
   .v4-chip {
     position: static;
-    margin: 0.5rem auto;
-    max-width: 20rem;
+    margin: 0;
+    width: 100%;
+    min-width: 0;
     --enterX: 0px !important;
     transition: none;
+    transform: none;
+    will-change: auto;
   }
-  .v4-podrucja { min-height: 0; }
+  .v4-chip__inner {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    padding: 1.5rem;
+    animation: none;
+    overflow-wrap: anywhere;
+  }
+  .v4-podrucja { height: auto; min-height: 0; margin-bottom: 0; }
   .v4-podrucja__chips {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    width: 100%;
+    max-width: 44rem;
+    gap: 1rem;
     margin-top: 2rem;
   }
-  .v4-step { height: 74vh; }
+  .v4-step { height: auto; margin-bottom: 1.5rem; }
+  .v4-stackcard { position: static; min-height: 0; }
   /* O nama: prose u jedan stupac */
   .on-prose { grid-template-columns: 1fr; gap: 1.5rem; }
   /* Savjetovanje: kartice u jedan stupac */

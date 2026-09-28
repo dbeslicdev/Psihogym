@@ -1,252 +1,161 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Link, Navigate, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { programiById } from "../../data.js";
-import { hasAccess, logout } from "../../auth.js";
+import { getUser, hasAccess, logout } from "../../auth.js";
 import { getProgress, setProgress } from "../../progress.js";
-
-/* ============================================================
-   Player lekcije — čita program iz /app/program/:programId.
-   Provjerava pristup (mock uloge) i pamti napredak u
-   localStorage (nastavi gdje si stao/la). Video je placeholder
-   do spajanja na Bunny Stream.
-   ============================================================ */
-
-const TABS = [
-  { id: "pregled", label: "Pregled" },
-  { id: "materijali", label: "Materijali" },
-  { id: "biljeske", label: "Bilješke" },
-  { id: "refleksija", label: "Refleksija" },
-];
+import { createDemoWorkspaceRepository } from "../../services/storage.js";
+import Curriculum from "../../components/learning/Curriculum.jsx";
+import LessonTabs from "../../components/learning/LessonTabs.jsx";
+import Modal from "../../components/Modal.jsx";
 
 export default function ProgramPlayer() {
   const { programId } = useParams();
-  const navigate = useNavigate();
   const program = programiById[programId];
+  if (!program || program.status !== "active" || !hasAccess(programId)) return <Navigate to="/app" replace />;
+  return <Player key={programId + getUser().username} program={program} />;
+}
 
-  // Nepoznat, prazan (uskoro) ili nedostupan program → natrag na portal
-  const flat = useMemo(
-    () => (program ? program.modules.flatMap((m) => m.lessons) : []),
-    [program],
-  );
-
-  const [currentId, setCurrentId] = useState(() => {
-    const { current } = getProgress(programId);
-    return current || flat[0]?.id || null;
-  });
-  const [done, setDone] = useState(() => new Set(getProgress(programId).done));
+function Player({ program }) {
+  const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+  const flat = useMemo(() => program.modules.flatMap((module) => module.lessons), [program]);
+  const initial = useMemo(() => getProgress(program.id), [program.id]);
+  const requested = params.get("lekcija") || initial.current;
+  const current = flat.find((lesson) => lesson.id === requested) || flat[0];
+  const index = flat.indexOf(current);
+  const [done, setDone] = useState(() => new Set(initial.done));
   const [tab, setTab] = useState("pregled");
-  const [notes, setNotes] = useState([]);
-  const [draft, setDraft] = useState("");
+  const [curriculumOpen, setCurriculumOpen] = useState(false);
+  const [progressError, setProgressError] = useState("");
+  const [saveError, setSaveError] = useState("");
+  const [saved, setSaved] = useState(false);
+  const titleRef = useRef(null);
+  const repository = useMemo(() => createDemoWorkspaceRepository(sessionStorage, getUser().username, program.id), [program.id]);
+  const [workspace, setWorkspace] = useState(() => repository.read());
+  const entry = workspace[current.id] || {};
+  const notes = Array.isArray(entry.notes) ? entry.notes.filter((note) => typeof note?.body === "string") : [];
+  const draft = typeof entry.draft === "string" ? entry.draft : "";
+  const answers = Array.isArray(entry.answers) ? entry.answers : [];
+  const pct = Math.round(done.size / flat.length * 100);
 
-  // Perzistiraj napredak na svaku promjenu
   useEffect(() => {
-    if (!program) return;
-    setProgress(programId, { done: [...done], current: currentId });
-  }, [program, programId, done, currentId]);
+    if (params.get("lekcija") !== current.id) setParams({ lekcija: current.id }, { replace: true });
+  }, [current.id, params, setParams]);
+  useEffect(() => {
+    try {
+      setProgress(program.id, { done: [...done], current: current.id });
+      setProgressError("");
+    } catch { setProgressError("Napredak nije spremljen. Omogući pohranu u pregledniku i pokušaj ponovno."); }
+  }, [program.id, done, current.id]);
+  useEffect(() => {
+    if (!saveError) return;
+    const warn = (event) => { event.preventDefault(); event.returnValue = ""; };
+    window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [saveError]);
+  useEffect(() => {
+    const media = window.matchMedia("(min-width: 64.001rem)");
+    const close = () => { if (media.matches) setCurriculumOpen(false); };
+    media.addEventListener("change", close);
+    return () => media.removeEventListener("change", close);
+  }, []);
 
-  if (!program || program.status !== "active" || flat.length === 0) {
-    return <Navigate to="/app" replace />;
-  }
-  if (!hasAccess(programId)) {
-    return <Navigate to="/app" replace />;
-  }
-
-  const idx = flat.findIndex((l) => l.id === currentId);
-  const current = flat[idx] || flat[0];
-  const progressPct = Math.round((done.size / flat.length) * 100);
-  const isDone = done.has(current.id);
-
-  const toggleDone = () => {
-    setDone((prev) => {
-      const next = new Set(prev);
-      if (next.has(current.id)) next.delete(current.id);
-      else next.add(current.id);
-      return next;
-    });
+  const persist = (next) => {
+    setWorkspace(next);
+    try { repository.save(next); setSaveError(""); setSaved(true); }
+    catch { setSaveError("Zapis nije spremljen. Tvoj unos ostaje na ovoj stranici; pokušaj ponovno prije izlaska."); setSaved(false); }
   };
-
+  const updateEntry = (patch) => persist({ ...workspace, [current.id]: { ...entry, ...patch } });
+  const selectLesson = (id) => {
+    setParams({ lekcija: id });
+    setCurriculumOpen(false);
+    setSaved(false);
+    requestAnimationFrame(() => titleRef.current?.focus());
+  };
+  const toggleDone = () => setDone((previous) => {
+    const next = new Set(previous);
+    if (next.has(current.id)) next.delete(current.id); else next.add(current.id);
+    return next;
+  });
   const saveNote = () => {
-    const body = draft.trim();
-    if (!body) return;
-    setNotes((prev) => [{ id: `n${prev.length + 1}`, time: "upravo sada", body }, ...prev]);
-    setDraft("");
+    if (!draft.trim()) return;
+    updateEntry({ draft: "", notes: [{ id: crypto.randomUUID(), createdAt: new Date().toISOString(), body: draft.trim() }, ...notes] });
   };
+  const curriculum = <Curriculum program={program} currentId={current.id} done={done} onSelect={selectLesson} />;
+  const panelProps = (id) => ({ id: "panel-" + id, role: "tabpanel", "aria-labelledby": "tab-" + id, hidden: tab !== id, tabIndex: 0 });
 
-  const handleLogout = () => {
-    logout();
-    navigate("/programi");
-  };
-
-  return (
-    <div className="player">
-      <header className="player__topbar">
-        <Link to="/app" className="player__back">← Moji programi</Link>
-        <span className="player__program">{program.title}</span>
-        <div className="player__progress">
-          <div className="player__progress-bar">
-            <span style={{ width: `${progressPct}%` }} />
-          </div>
-          <span className="player__progress-label">{progressPct}% završeno</span>
+  return <div className="player">
+    <header className="player__topbar">
+      <Link to="/app" className="player__back">← Moji programi</Link>
+      <span className="player__program" title={program.title}>{program.title}</span>
+      <div className="player__progress">
+        <progress className="player__progress-native" value={pct} max="100" aria-label="Završenost programa" />
+        <span className="player__progress-label">{pct}% završeno</span>
+      </div>
+      <button type="button" className="player__logout" onClick={() => { logout(); navigate("/programi"); }}>Odjava</button>
+    </header>
+    <div className="player__mobile-tools">
+      <button type="button" className="btn btn--dark" aria-haspopup="dialog" aria-expanded={curriculumOpen} onClick={() => setCurriculumOpen(true)}>Sadržaj programa</button>
+      <span>Lekcija {index + 1} od {flat.length}</span>
+    </div>
+    <Modal open={curriculumOpen} onClose={() => setCurriculumOpen(false)} title="Sadržaj programa" className="player">{curriculum}</Modal>
+    <div className="player__body">
+      <aside className="player__sidebar" aria-label="Sadržaj programa" data-lenis-prevent>{curriculum}</aside>
+      <div className="player__main">
+        <div className="player__video" role="region" aria-label="Video lekcije">
+          <span className="player__video-play" aria-hidden="true">▶</span>
+          <p className="player__video-note">Video ove lekcije još nije dostupan.</p>
         </div>
-        <button type="button" className="player__logout" onClick={handleLogout}>
-          Odjava
-        </button>
-      </header>
-
-      <div className="player__body">
-        {/* ---------- Kurikulum ---------- */}
-        <aside className="player__sidebar" data-lenis-prevent>
-          {program.modules.map((m, mi) => (
-            <div className="player__module" key={m.id}>
-              <p className="player__module-title label">
-                {String(mi + 1).padStart(2, "0")} — {m.title}
-              </p>
-              <ul>
-                {m.lessons.map((l) => {
-                  const cls = [
-                    "player__lesson",
-                    l.id === current.id ? "is-current" : "",
-                    done.has(l.id) ? "is-done" : "",
-                  ]
-                    .filter(Boolean)
-                    .join(" ");
-                  return (
-                    <li key={l.id}>
-                      <button className={cls} onClick={() => setCurrentId(l.id)}>
-                        <span className="player__lesson-status" aria-hidden="true">
-                          {done.has(l.id) ? "✓" : ""}
-                        </span>
-                        <span className="player__lesson-name">{l.title}</span>
-                        <span className="player__lesson-dur">{l.duration}</span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
-        </aside>
-
-        {/* ---------- Sadržaj lekcije ---------- */}
-        <main className="player__main">
-          <div className="player__video">
-            <button className="player__video-play" aria-label="Pokreni video">▶</button>
-            <p className="player__video-note">
-              Video player — Bunny Stream HLS (placeholder)
-            </p>
-          </div>
-
-          <div className="player__lesson-head">
-            <h1 className="player__lesson-title">{current.title}</h1>
-            <button
-              className={`player__done-btn${isDone ? " is-done" : ""}`}
-              onClick={toggleDone}
-            >
-              {isDone ? "✓ Završeno" : "Označi kao završeno"}
-            </button>
-          </div>
-
-          <div className="player__nav">
-            <button
-              className="player__nav-btn"
-              disabled={idx <= 0}
-              onClick={() => setCurrentId(flat[idx - 1].id)}
-            >
-              ← Prethodna
-            </button>
-            <button
-              className="player__nav-btn"
-              disabled={idx === flat.length - 1}
-              onClick={() => setCurrentId(flat[idx + 1].id)}
-            >
-              Sljedeća →
-            </button>
-          </div>
-
-          <div className="player__tabs" role="tablist">
-            {TABS.map((t) => (
-              <button
-                key={t.id}
-                role="tab"
-                aria-selected={tab === t.id}
-                className={`player__tab${tab === t.id ? " is-active" : ""}`}
-                onClick={() => setTab(t.id)}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          {tab === "pregled" && (
-            <section className="player__panel">
-              <p>
-                U ovoj lekciji učiš prepoznati svoje okidače — situacije, misli i
-                tjelesne signale koji pokreću stare obrasce. Kad ih naučiš uočiti
-                na vrijeme, dobivaš prostor za drugačiju reakciju.
-              </p>
-              <h3>Što ćeš naučiti</h3>
-              <ul className="player__bullets">
-                <li>Razliku između okidača, reakcije i obrasca</li>
-                <li>Kako tijelo prvo signalizira da je okidač aktiviran</li>
-                <li>Tri koraka za hvatanje okidača u trenutku</li>
-              </ul>
-            </section>
-          )}
-
-          {tab === "materijali" && (
-            <section className="player__panel">
-              {program.assets.length === 0 && (
-                <p className="player__empty">Nema materijala za ovu lekciju.</p>
-              )}
-              {program.assets.map((a) => (
-                <div className="player__asset" key={a.id}>
-                  <span className="player__asset-kind">{a.kind}</span>
-                  <span className="player__asset-name">{a.title}</span>
-                  <button className="player__asset-dl">Preuzmi</button>
-                </div>
-              ))}
-            </section>
-          )}
-
-          {tab === "biljeske" && (
-            <section className="player__panel">
-              <textarea
-                className="kontakt-textarea player__note-input"
-                rows={4}
-                placeholder="Zapiši što ti je sjelo iz ove lekcije…"
-                value={draft}
-                onChange={(e) => setDraft(e.target.value)}
-              />
-              <button className="btn btn--dark" onClick={saveNote}>
-                Spremi bilješku
-              </button>
-              {notes.map((n) => (
-                <div className="player__note" key={n.id}>
-                  <time>{n.time}</time>
-                  {n.body}
-                </div>
-              ))}
-            </section>
-          )}
-
-          {tab === "refleksija" && (
-            <section className="player__panel player__reflect">
-              {program.reflection.map((q, i) => (
-                <div key={i}>
-                  <label htmlFor={`refl-${i}`}>
-                    {i + 1}. {q}
-                  </label>
-                  <textarea
-                    id={`refl-${i}`}
-                    className="kontakt-textarea player__note-input"
-                    rows={3}
-                  />
-                </div>
-              ))}
-            </section>
-          )}
-        </main>
+        <div className="player__lesson-head">
+          <h1 ref={titleRef} tabIndex={-1} className="player__lesson-title">{current.title}</h1>
+          <button type="button" className={"player__done-btn" + (done.has(current.id) ? " is-done" : "")} aria-pressed={done.has(current.id)} onClick={toggleDone}>
+            {done.has(current.id) ? "✓ Završeno" : "Označi kao završeno"}
+          </button>
+        </div>
+        {progressError && <p className="error-message" role="alert">{progressError}</p>}
+        <nav className="player__nav" aria-label="Navigacija lekcija">
+          <button type="button" className="player__nav-btn" disabled={index === 0} onClick={() => selectLesson(flat[index - 1].id)}>← Prethodna</button>
+          <button type="button" className="player__nav-btn" disabled={index === flat.length - 1} onClick={() => selectLesson(flat[index + 1].id)}>Sljedeća →</button>
+        </nav>
+        <LessonTabs active={tab} onChange={setTab} />
+        <section className="player__panel" {...panelProps("pregled")}>
+          <h2>{current.title}</h2>
+          <p>{current.description || "Opis ove lekcije je u pripremi."}</p>
+          <p>Trajanje: {current.duration} · Lekcija {index + 1} od {flat.length}</p>
+        </section>
+        <section className="player__panel" {...panelProps("materijali")}>
+          <h2>Materijali programa</h2>
+          <p>Preuzimanja će biti dostupna nakon objave materijala.</p>
+          {program.assets.map((asset) => <div className="player__asset" key={asset.id}>
+            <span className="player__asset-kind">{asset.kind}</span>
+            <span className="player__asset-name">{asset.title}</span>
+            <span className="player__asset-dl">U pripremi</span>
+          </div>)}
+        </section>
+        <section className="player__panel" {...panelProps("biljeske")}>
+          <label htmlFor="lesson-note">Bilješka uz lekciju „{current.title}”</label>
+          <textarea id="lesson-note" className="kontakt-textarea player__note-input" rows={4} maxLength={10000}
+            placeholder="Zapiši svoju misao…" value={draft} onChange={(event) => updateEntry({ draft: event.target.value })} />
+          <button type="button" className="btn btn--dark" disabled={!draft.trim()} onClick={saveNote}>Spremi bilješku</button>
+          {notes.map((note) => <article className="player__note" key={note.id}>
+            <time dateTime={note.createdAt}>{note.createdAt ? new Date(note.createdAt).toLocaleString("hr-HR") : "Bilješka"}</time>
+            <p>{note.body}</p>
+          </article>)}
+        </section>
+        <section className="player__panel player__reflect" {...panelProps("refleksija")}>
+          <p>Osvrni se na ovu lekciju kroz pitanja programa.</p>
+          {program.reflection.map((question, i) => <div key={i}>
+            <label htmlFor={"refl-" + i}>{i + 1}. {question}</label>
+            <textarea id={"refl-" + i} className="kontakt-textarea player__note-input" rows={3} maxLength={10000}
+              value={typeof answers[i] === "string" ? answers[i] : ""} onChange={(event) => {
+                const next = [...answers]; next[i] = event.target.value; updateEntry({ answers: next });
+              }} />
+          </div>)}
+        </section>
+        {(tab === "biljeske" || tab === "refleksija") && <p className="status-message">Demo: zapisi se čuvaju u ovom tabu do odjave ili zatvaranja. Koristi probni tekst.</p>}
+        <p role="status" className="status-message">{saved && !saveError ? "Spremljeno u ovom tabu." : ""}</p>
+        {saveError && <div role="alert" className="error-message"><p>{saveError}</p><button type="button" onClick={() => persist(workspace)}>Pokušaj ponovno</button></div>}
       </div>
     </div>
-  );
+  </div>;
 }

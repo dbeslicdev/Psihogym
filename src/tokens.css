@@ -21,8 +21,12 @@
   --ps-surface: var(--ps-cream);        /* podloga stranice */
   --ps-surface-raised: var(--ps-white); /* kartice / izdignute plohe */
   --ps-text: var(--ps-ink);
-  --ps-text-muted: rgba(58, 53, 71, 0.62);
-  --ps-text-faint: rgba(58, 53, 71, 0.4);
+  --ps-text-muted: #625d6c;
+  --ps-text-faint: #686271;
+  --ps-text-brand: #5c3d29;
+  --ps-text-brand-muted: #705846;
+  --ps-text-accent: #45583f;
+  --ps-focus: #62448a;
   --ps-border: rgba(58, 53, 71, 0.14);
   --ps-accent: var(--ps-lavender);
   --ps-on-accent: var(--ps-ink);        /* tekst na akcentu */
@@ -51,7 +55,7 @@
   --ps-tracking-label: 0.16em;
 
   /* ---------- 5. RAZMAK (nasljeđuje postojeći ritam) ---------- */
-  --ps-inset: var(--inset);          /* bočni gutter stranice */
+  --ps-inset: clamp(1rem, 4vw, 3rem);
   --ps-section-y: var(--section-y);  /* vertikalni razmak sekcija */
   --ps-gap-sm: 0.75rem;
   --ps-gap: 1.5rem;

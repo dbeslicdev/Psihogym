@@ -1,38 +1,19 @@
-/* ============================================================
-   Napredak po programu — trajno u localStorage (preživi
-   zatvaranje taba, za razliku od sesije). Oblik po programu:
-     { done: ["l1","l2"], current: "l4" }
-   Kasnije se seli u bazu po korisniku.
-   ============================================================ */
-
-const KEY = "psihogym_progress";
-
-function readAll() {
-  try {
-    return JSON.parse(localStorage.getItem(KEY)) || {};
-  } catch {
-    return {};
-  }
-}
-
-function writeAll(data) {
-  localStorage.setItem(KEY, JSON.stringify(data));
-}
-
+import { getUser } from "./auth.js";
+import { programiById } from "./data.js";
+import { normalizeProgress, readObject, writeObject } from "./services/storage.js";
+const keyFor = (username) => "psihogym_progress_v2:" + username;
+const idsFor = (programId) => programiById[programId]?.modules.flatMap((m) => m.lessons.map((l) => l.id)) || [];
 export function getProgress(programId) {
-  const p = readAll()[programId];
-  return { done: p?.done ?? [], current: p?.current ?? null };
+  const user = getUser();
+  const value = user ? readObject(localStorage, keyFor(user.username))[programId] : null;
+  return normalizeProgress(value, idsFor(programId));
 }
-
-export function setProgress(programId, progress) {
-  const all = readAll();
-  all[programId] = progress;
-  writeAll(all);
+export function setProgress(programId, value) {
+  const user = getUser();
+  if (!user) throw new Error("Prijavi se za spremanje napretka.");
+  const key = keyFor(user.username);
+  writeObject(localStorage, key, { ...readObject(localStorage, key), [programId]: normalizeProgress(value, idsFor(programId)) });
 }
-
-/** Postotak završenosti (0–100) na temelju broja lekcija. */
 export function progressPct(programId, totalLessons) {
-  if (!totalLessons) return 0;
-  const { done } = getProgress(programId);
-  return Math.round((done.length / totalLessons) * 100);
+  return totalLessons ? Math.min(100, Math.round(getProgress(programId).done.length / totalLessons * 100)) : 0;
 }

@@ -1,0 +1,42 @@
+[hidden] { display: none !important; }
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 3px solid var(--ps-focus);
+  outline-offset: 4px;
+}
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.skip-link {
+  position: fixed; top: 1rem; left: 1rem; z-index: 200;
+  padding: .75rem 1rem; background: var(--ps-ink); color: white;
+  transform: translateY(-200%);
+}
+.skip-link:focus { transform: none; }
+button:disabled { cursor: not-allowed; }
+.status-message { margin-block: 1rem; color: var(--ps-text-muted); }
+.error-message { color: #982e27; margin-block: 1rem; }
+.page-state { max-width: 48rem; margin-inline: auto; padding: 9rem var(--ps-inset) 5rem; }
+.page-state h1 { margin-bottom: 1rem; }
+.page-state p { margin-bottom: 1.5rem; }
+.modal {
+  padding: 1.25rem; border: 1px solid var(--ps-border); border-radius: 1rem;
+  width: min(36rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem);
+  background: var(--ps-surface); color: var(--ps-text); overflow-y: auto;
+}
+.modal::backdrop { background: rgb(24 20 30 / .65); }
+.modal__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.modal__header h2 { font-family: var(--ps-font-display); font-size: 1.75rem; }
+.modal__close { min-width: 44px; min-height: 44px; border: 1px solid currentColor; border-radius: 50%; }
+.menu-modal { background: var(--ps-ink); color: var(--ps-cream); }
+.menu-modal .menu__inner { min-height: 0; max-height: none; padding: 0; gap: 2rem; overflow: visible; }
+.menu-modal .menu__link { font-family: var(--ps-font-display); font-size: clamp(1.75rem, 5vw, 3rem); padding-block: .85rem; }
+.menu-modal .menu__num { color: var(--ps-lavender); }
+.menu-modal .menu__link:hover { color: var(--ps-lavender); }
+.menu-modal :focus-visible { outline-color: var(--ps-lavender); }
+.nav:focus-within { transform: none; }
+.nav__cart, .nav__burger, .dash__logout, .player__logout { min-width: 44px; min-height: 44px; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}

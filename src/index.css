@@ -23,7 +23,7 @@
   --font-mono: "Geist Mono", monospace;
 
   /* Ritam */
-  --inset: clamp(0.3125rem, 1vw, 1.25rem);
+  --inset: var(--ps-inset);
   --section-y: clamp(4rem, 10vh, 7.5rem);
   --radius: 1rem;
 }
@@ -59,7 +59,7 @@ body {
   line-height: 1.6;
   color: var(--bg);
   background: var(--light);
-  overflow-x: hidden;
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3 {
@@ -94,12 +94,13 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--blue); }
 
 /* ============ REVEAL ANIMACIJE ============ */
 .reveal {
-  opacity: 0;
-  transform: translateY(2rem);
+  opacity: 1;
+  transform: none;
   transition:
     opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
+.reveal.is-pending { opacity: 0; transform: translateY(2rem); }
 .reveal[data-delay="1"] { transition-delay: 0.12s; }
 .reveal[data-delay="2"] { transition-delay: 0.24s; }
 .reveal[data-delay="3"] { transition-delay: 0.36s; }
@@ -115,7 +116,7 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--blue); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal, .reveal.is-pending { opacity: 1; transform: none; transition: none; }
   .route-fade { animation: none; }
   .footer__ring-svg { animation: none; }
 }
@@ -250,13 +251,17 @@ body.page-light.menu-open .nav { color: var(--light); }
   background: var(--bg);
   color: var(--light);
   clip-path: inset(0 0 100% 0);
+  visibility: hidden;
+  pointer-events: none;
   transition: clip-path 0.6s cubic-bezier(0.76, 0, 0.24, 1);
 }
-body.menu-open .menu { clip-path: inset(0 0 0 0); }
+body.menu-open .menu { clip-path: inset(0 0 0 0); visibility: visible; pointer-events: auto; }
 body.menu-open { overflow: hidden; }
 
 .menu__inner {
-  height: 100%;
+  min-height: 100%;
+  max-height: 100dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1000,7 +1005,8 @@ body.menu-open { overflow: hidden; }
 }
 .kontakt-input:focus,
 .kontakt-textarea:focus {
-  outline: none;
+  outline: 2px solid var(--ps-focus);
+  outline-offset: 3px;
   border-color: var(--blue);
 }
 .kontakt-textarea { resize: vertical; }
@@ -1220,8 +1226,8 @@ body.menu-open { overflow: hidden; }
 .player {
   --light: var(--ps-cream); /* podloga / hover / current */
   --bg: var(--ps-ink); /* topbar, video, tekst */
-  --blue: var(--ps-sage); /* akcent: progres, current, done */
-  --blue-deep: #8f9d88; /* tamnija sage (hover) */
+  --blue: var(--ps-text-accent);
+  --blue-deep: #34462f;
   --grey: var(--ps-text-faint, rgba(58, 53, 71, 0.45));
   --muted-on-light: var(--ps-text-muted);
   --muted-on-dark: rgba(250, 246, 240, 0.62);
@@ -1292,7 +1298,7 @@ body.menu-open { overflow: hidden; }
 
 .program-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(19rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
   gap: 1.5rem;
 }
 .program-card {
@@ -1579,7 +1585,7 @@ body.menu-open { overflow: hidden; }
 /* ---------- Raspored ---------- */
 .player__body {
   display: grid;
-  grid-template-columns: 21rem 1fr;
+  grid-template-columns: 19rem minmax(0, 1fr);
   align-items: start;
 }
 
@@ -1646,6 +1652,9 @@ body.menu-open { overflow: hidden; }
 .player__main {
   padding: 1.75rem var(--inset) 4rem 1.75rem;
   max-width: 64rem;
+  width: 100%;
+  min-width: 0;
+  margin-inline: auto;
 }
 .player__video {
   aspect-ratio: 16 / 9;
@@ -1736,8 +1745,10 @@ body.menu-open { overflow: hidden; }
   gap: 0.25rem;
   border-bottom: 1px solid var(--line-on-light);
   margin-bottom: 1.5rem;
+  overflow-x: auto;
 }
 .player__tab {
+  flex: none;
   padding: 0.7rem 1rem;
   margin-bottom: -1px;
   border: none;
@@ -1830,7 +1841,7 @@ body.menu-open { overflow: hidden; }
 /* ---------- Responsive ---------- */
 @media (max-width: 64rem) {
   .player__body { grid-template-columns: 1fr; }
-  .player__main { order: -1; padding: 1.25rem var(--inset) 2.5rem; }
+  .player__main { padding: 1.25rem var(--inset) 2.5rem; }
   .player__sidebar {
     position: static;
     max-height: none;

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useCartItems } from "../cart.js";
+import Modal from "./Modal.jsx";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -30,6 +31,7 @@ export default function Navigation() {
   // Blokiraj scroll dok je menu otvoren
   useEffect(() => {
     document.body.classList.toggle("menu-open", menuOpen);
+    return () => document.body.classList.remove("menu-open");
   }, [menuOpen]);
 
   // Zatvori menu na promjenu rute
@@ -37,7 +39,7 @@ export default function Navigation() {
     setMenuOpen(false);
   }, [location.pathname]);
 
-  const navClass = `nav${hidden ? " nav--hidden" : ""}${solid ? " nav--solid" : ""}`;
+  const navClass = `nav${hidden && !menuOpen ? " nav--hidden" : ""}${solid ? " nav--solid" : ""}`;
 
   return (
     <>
@@ -72,7 +74,9 @@ export default function Navigation() {
           </Link>
           <button
             className="nav__burger"
-            aria-label="Toggle menu"
+            aria-label="Otvori izbornik"
+            aria-expanded={menuOpen}
+            aria-haspopup="dialog"
             onClick={() => setMenuOpen((o) => !o)}
           >
             <span></span>
@@ -81,7 +85,7 @@ export default function Navigation() {
         </div>
       </nav>
 
-      <div className="menu">
+      <Modal open={menuOpen} onClose={() => setMenuOpen(false)} title="Izbornik" className="menu-modal">
         <div className="menu__inner">
           <nav className="menu__nav">
             <Link to="/o-nama" className="menu__link">
@@ -101,14 +105,9 @@ export default function Navigation() {
             <a href="mailto:info@psihogym.hr" className="menu__email">
               info@psihogym.hr
             </a>
-            <div className="menu__social">
-              <a href="#" aria-label="Facebook">Facebook</a>
-              <a href="#" aria-label="Instagram">Instagram</a>
-              <a href="#" aria-label="LinkedIn">LinkedIn</a>
-            </div>
           </div>
         </div>
-      </div>
+      </Modal>
     </>
   );
 }
