@@ -125,6 +125,7 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  if(process.env.NODE_ENV==='production')throw new Error('Local account server: production deployment requires HTTPS, email verification/recovery and operational review.');
+ // PSIHOGYM_ORIGIN: adresa s koje se stranica otvara (npr. http://192.168.1.82:4182 za pregled u lokalnoj mreži).
  const dbPath=process.env.PSIHOGYM_DB||fileURLToPath(new URL('./data/accounts.sqlite',import.meta.url));
- createApi({dbPath,testPurchases:process.env.ALLOW_TEST_PURCHASES==='true'}).listen(Number(process.env.API_PORT)||4183,'127.0.0.1',()=>console.log('Account API listening on loopback.'));
+ createApi({dbPath,origin:process.env.PSIHOGYM_ORIGIN||undefined,testPurchases:process.env.ALLOW_TEST_PURCHASES==='true'}).listen(Number(process.env.API_PORT)||4183,'127.0.0.1',()=>console.log('Account API listening on loopback.'));
 }
