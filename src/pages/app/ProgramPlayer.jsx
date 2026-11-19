@@ -61,8 +61,11 @@ function CourseReader({ program, programId }) {
   const [logoutError, setLogoutError] = useState("");
   const [retry, setRetry] = useState(0);
   const title = useRef(null);
+  const opened = useRef(progress);
 
   useEffect(() => {
+    // Samo otvaranje programa ne sprema napredak (inače dashboard nudi "Nastavi" bez čitanja).
+    if (progress === opened.current && retry === 0) return;
     let active = true;
     // Queue each selection, including a quick A → B → A while B is still saving.
     setProgress(programId, progress)

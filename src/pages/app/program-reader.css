@@ -1,3 +1,8 @@
+/* Portal ima vlastiti bočni razmak: globalni --inset na mobitelu je samo 5 px. */
+.dash, .player { --inset: clamp(1rem, 4vw, 1.25rem); }
+@media (min-width: 90rem) { .dash, .player { --inset: clamp(1.75rem, 2.75vw, 4rem); } }
+@media (min-width: 120rem) { .dash, .player { --inset: 3.75vw; } }
+
 .player.player__loading {
   padding: clamp(2rem, 6vw, 6rem) var(--inset);
 }
@@ -88,9 +93,14 @@
 .dash .program-card__meta { display: inline-block; margin-bottom: .65rem; }
 .dash .program-card__expiry { font-size: .85rem; color: var(--ps-text-muted); }
 
-@media (max-width: 64rem) {
+/* Na širokim ekranima traka prati centrirani sadržaj (.player__body, max 98rem). */
+.player .player__topbar { padding-inline: max(var(--inset), calc((100% - 98rem) / 2 + 1rem)); }
+
+/* Do 56rem: sadržaj programa iznad lekcije. Traka sa sadržajem ostaje zalijepljena
+   ispod gornje trake pa je popis lekcija uvijek dostupan, i kad se otvori nije prekriven. */
+@media (max-width: 56rem) {
   .player .player__main, .player .player__sidebar { order: initial; }
-  .player .player__sidebar { position: static; max-height: none; }
+  .player .player__sidebar { position: sticky; top: 3.5rem; z-index: 40; max-height: none; overflow: visible; padding: 0; }
   .player .player__outline-toggle {
     display: flex;
     align-items: center;
@@ -112,6 +122,12 @@
     scrollbar-gutter: stable;
     padding-inline: max(1rem, var(--inset));
   }
+  .player .player__lesson-title { scroll-margin-top: 11rem; }
+}
+/* Mobitel: gornja traka je u dva-tri reda (104–185 px), pa se ne lijepi — ostaje samo traka sa sadržajem. */
+@media (max-width: 40rem) {
+  .player .player__topbar { position: static; }
+  .player .player__sidebar { top: 0; }
   .player .player__lesson-title { scroll-margin-top: 9rem; }
 }
 @media (max-width: 27rem) {

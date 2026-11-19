@@ -1902,7 +1902,7 @@ main:has(.v4-cta) .footer-marquee { background: var(--ps-terra); }
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 64rem) {
+@media (max-width: 56rem) {
   .player__body { grid-template-columns: 1fr; }
   .player__main { order: -1; padding: 1.25rem var(--inset) 2.5rem; }
   .player__sidebar {
