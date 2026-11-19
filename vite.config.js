@@ -17,7 +17,8 @@ export default defineConfig({
     },
   ],
   server: {
-    proxy: {"/api": "http://127.0.0.1:4183"},
+    // xfwd: API vidi stvarnu adresu klijenta (X-Forwarded-For) za ograničenje pokušaja prijave.
+    proxy: {"/api": {target: "http://127.0.0.1:4183", xfwd: true}},
     port: Number(process.env.PORT) || 4182,
     strictPort: true,
     fs: {

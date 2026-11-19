@@ -17,6 +17,14 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
  `);
  const courses = courseAccess(db);
  const ttl=7*24*3600000, rates=new Map();
+ // API sluša samo na loopbacku, pa svaki zahtjev dolazi preko lokalnog proxyja (Vite, nginx).
+ // Stvarni klijent je zadnja adresa koju je proxy dopisao u X-Forwarded-For.
+ const clientIp=req=>String(req.headers['x-forwarded-for']||'').split(',').map(v=>v.trim()).filter(Boolean).at(-1)||req.socket.remoteAddress;
+ // Ograničenja: neuspjele prijave po IP-u i po e-mailu, registracije po IP-u. Uspješna prijava se ne broji.
+ const limits={ip:{max:15,window:60000},email:{max:10,window:15*60000},register:{max:10,window:3600000}};
+ const limited=(kind,key)=>{const now=Date.now();for(const [k,v]of rates)if(v.until<=now)rates.delete(k);return (rates.get(kind+':'+key)?.count||0)>=limits[kind].max;};
+ const hit=(kind,key)=>{const id=kind+':'+key,now=Date.now(),rate=rates.get(id)||{count:0,until:now+limits[kind].window};rate.count++;rates.set(id,rate);};
+ const tooMany=()=>fail(429,'Previše pokušaja. Pokušaj ponovno malo kasnije.');
  const fail=(status,message)=>Object.assign(new Error(message),{status});
  const secureCookie = new URL(origin).protocol === 'https:' ? '; Secure' : '';
  const cookie=(token,age=ttl/1000)=>`pg_session=${token}; HttpOnly; SameSite=Strict; Path=/api; Max-Age=${age}${secureCookie}`;
@@ -46,18 +54,21 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
    }
    if(path==='/api/session'&&req.method==='GET')return send({...account(getSession(req)),testPurchases});
    if(['/api/login','/api/register'].includes(path)&&req.method==='POST'){
-    const now=Date.now(),key=req.socket.remoteAddress;for(const [k,v]of rates)if(v.until<now)rates.delete(k);
-    const rate=rates.get(key)||{count:0,until:now+60000};rate.count++;rates.set(key,rate);if(rate.count>15)throw fail(429,'Previše pokušaja. Pokušaj ponovno za minutu.');
+    const now=Date.now(),ip=clientIp(req);
     const email=typeof body.email==='string'?body.email.trim().toLowerCase():'';const password=body.password;
+    if(limited('ip',ip)||limited('email',email))throw tooMany();
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||typeof password!=='string'||password.length>128)throw fail(400,'Provjeri e-mail i lozinku.');
     if(path==='/api/register'){
+     if(limited('register',ip))throw tooMany();
+     hit('register',ip);
      if(password.length<12||typeof body.name!=='string'||!body.name.trim()||body.name.length>100)throw fail(400,'Unesi ime i lozinku od najmanje 12 znakova.');
      const salt=randomBytes(16).toString('hex'),hash=(await scrypt(password,salt,64)).toString('hex');
      try{db.prepare('INSERT INTO users VALUES(?,?,?,?,?,?)').run(randomUUID(),email,body.name.trim(),hash,salt,now)}catch(e){if(e.code?.includes('SQLITE')||String(e).includes('UNIQUE'))throw fail(409,'Račun nije moguće registrirati. Pokušaj se prijaviti.');throw e;}
     }
     const user=db.prepare('SELECT * FROM users WHERE email=?').get(email);
     const actual=await scrypt(password,user?.salt||'00000000000000000000000000000000',64);
-    if(!user||!timingSafeEqual(actual,Buffer.from(user.password_hash,'hex')))throw fail(401,'Neispravan e-mail ili lozinka.');
+    if(!user||!timingSafeEqual(actual,Buffer.from(user.password_hash,'hex'))){hit('ip',ip);hit('email',email);throw fail(401,'Neispravan e-mail ili lozinka.');}
+    rates.delete('email:'+email);
     return send(issue(user,res));
    }
    if(path==='/api/logout'&&req.method==='POST'){const token=/(?:^|;\s*)pg_session=([a-f0-9]{64})(?:;|$)/.exec(req.headers.cookie||'')?.[1];if(token)db.prepare('DELETE FROM sessions WHERE token_hash=?').run(digest(token));res.setHeader('Set-Cookie',cookie('',0));return send({ok:true});}
