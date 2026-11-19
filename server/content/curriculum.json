@@ -1,0 +1,770 @@
+{
+  "emocionalni-razvoj": {
+    "title": "14-dnevni izazov emocionalnog razvoja",
+    "description": "Ovaj online program daje ti alate za bolje razumijevanje, upravljanje i izražavanje emocija.",
+    "days": 14,
+    "benefits": [
+      "dva modula s ukupno 10 psihoedukativnih videolekcija",
+      "Dnevnik emocionalnog razvoja na 43 stranice, s 14 vježbi te dvije samorefleksije za praćenje napretka",
+      "jednu bonus videolekciju",
+      "potvrdu o završetku izazova"
+    ],
+    "workbook": {
+      "title": "Dnevnik emocionalnog razvoja",
+      "pages": 43,
+      "exercises": 14
+    },
+    "audience": "Ovaj program je za tebe ako si mlada ili odrasla osoba kojoj je ponekad teško prepoznati što osjeća ili izraziti svoje emocije i želi naučiti kako se lakše nositi s njima. Za sudjelovanje nije potrebno predznanje.",
+    "activities": "Kroz videolekcije ćeš upoznati kako emocije nastaju, čemu služe i kako su povezane s tvojim mislima, tijelom i ponašanjem. Kroz vježbe ćeš istražiti vlastite emocije i isprobati tehnike koje ti mogu pomoći kad te preplave.",
+    "basis": "Program je nastao iz individualnog rada s klijentima. Temelji se na najčešćim temama i alatima koji su se pokazali učinkovitima u praksi. Kombinira integrativni pristup, stručnu literaturu i jednostavan jezik uz ilustracije, s ciljem da ti omogući rad na sebi online kad god ti odgovara.",
+    "operation": [
+      "Program se odvija online na Psihogym platformi. Dnevnik možeš ispunjavati online ili ga ispisati i ispunjavati rukom.",
+      "Program prolaziš samostalno, vlastitim tempom. Individualne konzultacije nisu uključene u cijenu."
+    ],
+    "duration": "U 14 dana prolaziš kroz 10 kratkih videolekcija podijeljenih u dva modula, uz 14 vježbi te dvije samorefleksije koje će ti pomoći primijeniti naučeno u svakodnevnom životu. Ako ti je neki dan zahtjevniji, slobodno ga rasporedi na više dana.",
+    "access": "Pristup programu imaš 90 dana od kupnje. Tako možeš raditi svojim tempom i ponovno se vraćati lekcijama i vježbama. Preuzeti dnevnik ostaje ti i nakon isteka pristupa.",
+    "accessDays": 90,
+    "unsuitable": "Program nije za tebe ako tražiš terapiju za ozbiljne emocionalne izazove, očekuješ brza rješenja bez vlastitog angažmana, nisi spreman/na raditi na sebi ili ne želiš primjenjivati naučeno u svakodnevnom životu.",
+    "price": 79,
+    "promoPrice": 59,
+    "promotionDays": 14,
+    "priceDescription": "Po cijeni od 79 € (početna promotivna cijena: 59 €; promocija traje 2 tjedna) dobivaš videolekcije, praktične vježbe i dnevnik koji te vodi kroz istraživanje vlastitih emocija.",
+    "introduction": "Uvod u program",
+    "bibliography": "Korištena literatura (PDF)",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Razumijevanje emocija",
+        "description": "U ovom modulu ćeš naučiti prepoznati i razumjeti svoje emocije te ih povezati sa svojim mislima, ponašanjima i tjelesnim osjetima.",
+        "lessons": [
+          {
+            "id": "l1",
+            "type": "video",
+            "title": "Što su emocije?",
+            "description": "U ovoj lekciji ćeš naučiti što su to emocije i kako nastaju."
+          },
+          {
+            "id": "l2",
+            "type": "video",
+            "title": "Koliko si u kontaktu sa svojim emocijama?",
+            "description": "U ovoj lekciji ćeš osvijestiti koliko si u kontaktu sa sobom i svojim emocijama."
+          },
+          {
+            "id": "l3",
+            "type": "video",
+            "title": "Kako prepoznati svoje emocije?",
+            "description": "U ovoj lekciji ćeš naučiti kako prepoznati što točno osjećaš."
+          },
+          {
+            "id": "l4",
+            "type": "video",
+            "title": "Zašto emocije postoje?",
+            "description": "U ovoj lekciji ćeš naučiti čemu emocije služe i kako su povezane s tvojim mislima, tjelesnim osjetima i ponašanjem."
+          },
+          {
+            "id": "l5",
+            "type": "video",
+            "title": "Koja je uloga neugodnih emocija?",
+            "description": "U ovoj lekciji ćeš naučiti zašto tvoje neugodne emocije postoje i što ti poručuju."
+          },
+          {
+            "id": "r1",
+            "type": "reflection",
+            "title": "Samorefleksija nakon prvog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Upravljanje emocijama",
+        "description": "U ovom modulu ćeš naučiti primjenjivati praktične tehnike za upravljanje emocijama i razvoj zdravijih načina suočavanja s izazovima.",
+        "lessons": [
+          {
+            "id": "l6",
+            "type": "video",
+            "title": "Što ne činiti s emocijama?",
+            "description": "U ovoj lekciji ćeš naučiti prepoznati loše obrasce koji te dovode do problema s emocijama."
+          },
+          {
+            "id": "l7",
+            "type": "video",
+            "title": "Što je domino efekt?",
+            "description": "U ovoj lekciji ćeš osvijestiti svoje destruktivne i konstruktivne metode smanjenja neugodnih emocija."
+          },
+          {
+            "id": "l8",
+            "type": "video",
+            "title": "Kako uspješnije upravljati emocijama?",
+            "description": "U ovoj lekciji ćeš naučiti jednostavnu tehniku za ublažavanje intenziteta i trajanja neugodnih emocija."
+          },
+          {
+            "id": "l9",
+            "type": "video",
+            "title": "Kako se suočiti s emocijama?",
+            "description": "U ovoj lekciji ćeš naučiti kako se smiriti kad ti je teško kroz tehnike samoregulacije."
+          },
+          {
+            "id": "l10",
+            "type": "video",
+            "title": "Koji su temelji brige o sebi?",
+            "description": "U ovoj lekciji ćeš se upoznati s temeljima samopomoći i emocionalne otpornosti."
+          },
+          {
+            "id": "r2",
+            "type": "reflection",
+            "title": "Samorefleksija nakon drugog modula",
+            "description": "Osvrt na naučeno i odabir alata koje želiš nastaviti koristiti."
+          },
+          {
+            "id": "bonus",
+            "type": "bonus",
+            "title": "Kako živjeti sretnije?",
+            "description": "U ovoj lekciji ćeš preispitati svoja očekivanja od sreće i prepoznati vrijednost malih svakodnevnih trenutaka."
+          }
+        ]
+      }
+    ]
+  },
+  "anksioznost": {
+    "title": "25-dnevni izazov za upravljanje anksioznošću",
+    "description": "Ovaj online program daje ti alate za bolje razumijevanje i upravljanje anksioznošću.",
+    "days": 25,
+    "benefits": [
+      "tri modula s ukupno 19 psihoedukativnih videolekcija",
+      "Dnevnik upravljanja anksioznošću na 76 stranica, s 24 vježbe te tri samorefleksije za praćenje napretka",
+      "jednu bonus videolekciju",
+      "potvrdu o završetku izazova"
+    ],
+    "workbook": {
+      "title": "Dnevnik upravljanja anksioznošću",
+      "pages": 76,
+      "exercises": 24
+    },
+    "audience": "Ovaj program je za tebe ako si mlada ili odrasla osoba koju često zaokupljaju brige i misli o tome što bi moglo poći loše, osjeća napetost ili izbjegava neugodne situacije i želi naučiti kako se lakše nositi s anksioznošću. Za sudjelovanje nije potrebno predznanje.",
+    "activities": "Kroz videolekcije ćeš upoznati kako nastaju strah, anksioznost, zabrinutost i trema te kako su povezani s tvojim mislima i načinima reagiranja. Kroz vježbe ćeš istražiti što potiče tvoju anksioznost, preispitati misli koje je pojačavaju, isprobati tehnike samosmirivanja i napraviti plan bolje brige o sebi.",
+    "basis": "Program je nastao iz individualnog rada s klijentima. Temelji se na najčešćim temama i alatima koji su se pokazali učinkovitima u praksi. Kombinira integrativni pristup, stručnu literaturu i jednostavan jezik uz ilustracije, s ciljem da ti omogući rad na sebi online kad god ti odgovara.",
+    "operation": [
+      "Program se odvija online na Psihogym platformi. Dnevnik možeš ispunjavati online ili ga ispisati i ispunjavati rukom.",
+      "Program prolaziš samostalno, vlastitim tempom. Individualne konzultacije nisu uključene u cijenu."
+    ],
+    "duration": "U 25 dana prolaziš kroz 19 kratkih videolekcija podijeljenih u tri modula, uz 24 vježbe te tri samorefleksije koje će ti pomoći primijeniti naučeno u svakodnevnom životu. Ako ti je neki dan zahtjevniji, slobodno ga rasporedi na više dana.",
+    "access": "Pristup programu imaš 90 dana od kupnje. Tako možeš raditi svojim tempom i ponovno se vraćati lekcijama i vježbama. Preuzeti dnevnik ostaje ti i nakon isteka pristupa.",
+    "accessDays": 90,
+    "unsuitable": "Program nije za tebe ako tražiš terapiju za ozbiljne emocionalne izazove, očekuješ brza rješenja bez vlastitog angažmana, nisi spreman/na raditi na sebi ili ne želiš primjenjivati naučeno u svakodnevnom životu.",
+    "price": 149,
+    "promoPrice": 119,
+    "promotionDays": 14,
+    "priceDescription": "Po cijeni od 149 € (početna promotivna cijena: 119 €; promocija traje 2 tjedna) dobivaš videolekcije, praktične vježbe i dnevnik koji te vodi kroz razumijevanje i upravljanje anksioznošću.",
+    "introduction": "Uvod u program",
+    "bibliography": "Korištena literatura (PDF)",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Razumijevanje anksioznosti",
+        "description": "U ovom modulu ćeš naučiti prepoznati svoje emocije i razumjeti mehanizme koji stoje iza straha, zabrinutosti, treme i anksioznosti.",
+        "lessons": [
+          {
+            "id": "l1",
+            "type": "video",
+            "title": "Što su emocije?",
+            "description": "U ovoj lekciji ćeš naučiti što su to emocije i kako nastaju."
+          },
+          {
+            "id": "l2",
+            "type": "video",
+            "title": "Kako prepoznati svoje emocije?",
+            "description": "U ovoj lekciji ćeš naučiti kako prepoznati što točno osjećaš."
+          },
+          {
+            "id": "l3",
+            "type": "video",
+            "title": "Koja je uloga neugodnih emocija?",
+            "description": "U ovoj lekciji ćeš naučiti zašto tvoje neugodne emocije postoje i što ti poručuju."
+          },
+          {
+            "id": "l4",
+            "type": "video",
+            "title": "Strah",
+            "description": "U ovoj lekciji ćeš upoznati svoj strah."
+          },
+          {
+            "id": "l5",
+            "type": "video",
+            "title": "Anksioznost",
+            "description": "U ovoj lekciji ćeš upoznati svoju anksioznost."
+          },
+          {
+            "id": "l6",
+            "type": "video",
+            "title": "Zabrinutost",
+            "description": "U ovoj lekciji ćeš upoznati svoju zabrinutost i naučiti koristiti tehniku dekatastrofizacije."
+          },
+          {
+            "id": "l7",
+            "type": "video",
+            "title": "Trema",
+            "description": "U ovoj lekciji ćeš upoznati svoju tremu i naučiti kako je preispitati."
+          },
+          {
+            "id": "r1",
+            "type": "reflection",
+            "title": "Samorefleksija nakon prvog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Promjena perspektive",
+        "description": "U ovom modulu ćeš naučiti kako prepoznati i preoblikovati pogreške u razmišljanju te izgraditi zdravije mentalne navike. Dobit ćeš jednostavne, ali učinkovite alate koji donose mentalni predah i jasniju perspektivu.",
+        "lessons": [
+          {
+            "id": "l8",
+            "type": "video",
+            "title": "Što ne činiti s emocijama?",
+            "description": "U ovoj lekciji ćeš naučiti prepoznati loše obrasce koji te dovode do problema s emocijama."
+          },
+          {
+            "id": "l9",
+            "type": "video",
+            "title": "Kako uspješnije upravljati emocijama?",
+            "description": "U ovoj lekciji ćeš naučiti jednostavnu tehniku za ublažavanje intenziteta i trajanja neugodnih emocija."
+          },
+          {
+            "id": "l10",
+            "type": "video",
+            "title": "Razmišljanje koje odmaže",
+            "description": "U ovoj lekciji ćeš naučiti prepoznati pogreške u razmišljanju."
+          },
+          {
+            "id": "l11",
+            "type": "video",
+            "title": "Razmišljanje koje pomaže",
+            "description": "U ovoj lekciji ćeš naučiti upravljati pogreškama u razmišljanju."
+          },
+          {
+            "id": "l12",
+            "type": "video",
+            "title": "Ostale tehnike koje pomažu",
+            "description": "U ovoj lekciji ćeš upoznati tehnike samosmirivanja, vizualizacije i preusmjeravanja pozornosti."
+          },
+          {
+            "id": "l13",
+            "type": "video",
+            "title": "Na što doista možeš utjecati?",
+            "description": "U ovoj lekciji ćeš naučiti prepoznati granice vlastitog utjecaja."
+          },
+          {
+            "id": "r2",
+            "type": "reflection",
+            "title": "Samorefleksija nakon drugog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Briga o sebi",
+        "description": "U ovom modulu ćeš naučiti kako kroz zdrave navike i mentalnu higijenu upravljati anksioznošću i održavati emocionalnu ravnotežu.",
+        "lessons": [
+          {
+            "id": "l14",
+            "type": "video",
+            "title": "Koji su temelji brige o sebi?",
+            "description": "U ovoj lekciji ćeš se upoznati s temeljima samopomoći i emocionalne otpornosti."
+          },
+          {
+            "id": "l15",
+            "type": "video",
+            "title": "Koliko brineš o sebi?",
+            "description": "U ovoj lekciji ćeš osvijestiti kako brineš o svom cjelokupnom zdravlju."
+          },
+          {
+            "id": "l16",
+            "type": "video",
+            "title": "Kako puniti svoje baterije?",
+            "description": "U ovoj lekciji ćeš prepoznati svoje unutarnje izvore snage i napraviti plan uspostave ravnoteže."
+          },
+          {
+            "id": "l17",
+            "type": "video",
+            "title": "Koja uvjerenja ti otežavaju brigu o sebi?",
+            "description": "U ovoj lekciji ćeš osvijestiti i preoblikovati uvjerenja koja ti otežavaju brigu o sebi."
+          },
+          {
+            "id": "l18",
+            "type": "video",
+            "title": "Daješ li prostora tišini?",
+            "description": "U ovoj lekciji ćeš naučiti kako koristiti tišinu i kreativnost za poticanje smirenosti."
+          },
+          {
+            "id": "l19",
+            "type": "video",
+            "title": "Koji su izazovi rada na sebi?",
+            "description": "U ovoj lekciji ćeš prepoznati svoje izazove te izraditi krizni plan za njihovo prevladavanje."
+          },
+          {
+            "id": "r3",
+            "type": "reflection",
+            "title": "Samorefleksija nakon trećeg modula",
+            "description": "Osvrt na naučeno, odabir alata koje želiš nastaviti koristiti i poruka podrške za nastavak rada na sebi."
+          },
+          {
+            "id": "bonus",
+            "type": "bonus",
+            "title": "Kako manje misliti?",
+            "description": "U ovoj lekciji ćeš se upoznati s usredotočenom svjesnošću. Bonus lekcija uključuje šest vježbi usredotočene svjesnosti u dnevniku."
+          }
+        ]
+      }
+    ]
+  },
+  "stres": {
+    "title": "21-dnevni izazov za bolje upravljanje stresom",
+    "description": "Ovaj online program daje ti alate za bolje upravljanje stresom.",
+    "days": 21,
+    "benefits": [
+      "tri modula s ukupno 17 psihoedukativnih videolekcija",
+      "Dnevnik upravljanja stresom na 56 stranica, s 24 vježbe te tri samorefleksije za praćenje napretka",
+      "potvrdu o završetku izazova"
+    ],
+    "workbook": {
+      "title": "Dnevnik upravljanja stresom",
+      "pages": 56,
+      "exercises": 24
+    },
+    "audience": "Ovaj program je za tebe ako si mlada ili odrasla osoba koja se često osjeća pod pritiskom, teško pronalazi vrijeme za sebe i želi naučiti kako se lakše nositi sa stresom. Za sudjelovanje nije potrebno predznanje.",
+    "activities": "Kroz videolekcije ćeš upoznati kako stres djeluje na tebe, prepoznati znakove sagorijevanja i istražiti načine suočavanja sa stresom. Kroz vježbe ćeš prepoznati što te najviše opterećuje, odrediti svoje prioritete, napraviti plan malih promjena i istražiti koji ti oblici odmora odgovaraju.",
+    "basis": "Program je nastao iz individualnog rada s klijentima. Temelji se na najčešćim temama i alatima koji su se pokazali učinkovitima u praksi. Kombinira integrativni pristup, stručnu literaturu i jednostavan jezik uz ilustracije, s ciljem da ti omogući rad na sebi online kad god ti odgovara.",
+    "operation": [
+      "Program se odvija online na Psihogym platformi. Dnevnik možeš ispunjavati online ili ga ispisati i ispunjavati rukom.",
+      "Program prolaziš samostalno, vlastitim tempom. Individualne konzultacije nisu uključene u cijenu."
+    ],
+    "duration": "U 21 dan prolaziš kroz 17 kratkih videolekcija podijeljenih u tri modula, uz 24 vježbe te tri samorefleksije koje će ti pomoći primijeniti naučeno u svakodnevnom životu. Ako ti je neki dan zahtjevniji, slobodno ga rasporedi na više dana.",
+    "access": "Pristup programu imaš 90 dana od kupnje. Tako možeš raditi svojim tempom i ponovno se vraćati lekcijama i vježbama. Preuzeti dnevnik ostaje ti i nakon isteka pristupa.",
+    "accessDays": 90,
+    "unsuitable": "Program nije za tebe ako tražiš terapiju za ozbiljne emocionalne izazove, očekuješ brza rješenja bez vlastitog angažmana, nisi spreman/na raditi na sebi ili ne želiš primjenjivati naučeno u svakodnevnom životu.",
+    "price": 129,
+    "promoPrice": 99,
+    "promotionDays": 14,
+    "priceDescription": "Po cijeni od 129 € (početna promotivna cijena: 99 €; promocija traje 2 tjedna) dobivaš videolekcije, praktične vježbe i dnevnik koji te vodi kroz bolje razumijevanje i upravljanje stresom.",
+    "introduction": "Uvod u program",
+    "bibliography": "Korištena literatura (PDF)",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Razumijevanje stresa",
+        "description": "U ovom modulu ćeš otkriti što stres znači za tebe i tvoje tijelo, prepoznati njegove znakove i rane pokazatelje sagorijevanja. Naučit ćeš praktične načine kako se nositi sa stresom i pripremiti se za izazovne situacije.",
+        "lessons": [
+          {
+            "id": "l1",
+            "type": "video",
+            "title": "Što je stres?",
+            "description": "U ovoj lekciji ćeš naučiti što je stres i kako utječe na tvoje tijelo i um."
+          },
+          {
+            "id": "l2",
+            "type": "video",
+            "title": "Koji su simptomi stresa?",
+            "description": "U ovoj lekciji ćeš naučiti prepoznati znakove stresa kod sebe i drugih."
+          },
+          {
+            "id": "l3",
+            "type": "video",
+            "title": "Što je sindrom sagorijevanja?",
+            "description": "U ovoj lekciji ćeš naučiti što je sindrom sagorijevanja i kako prepoznati njegove rane znakove."
+          },
+          {
+            "id": "l4",
+            "type": "video",
+            "title": "Koji su načini suočavanja sa stresom?",
+            "description": "U ovoj lekciji ćeš istražiti ključne načine suočavanja sa stresom."
+          },
+          {
+            "id": "l5",
+            "type": "video",
+            "title": "Kako se pripremiti na stresnu situaciju?",
+            "description": "U ovoj lekciji ćeš naučiti kako se pripremiti za stresnu situaciju i lakše nositi s njom."
+          },
+          {
+            "id": "l6",
+            "type": "video",
+            "title": "Na što možeš utjecati?",
+            "description": "U ovoj lekciji ćeš istražiti koliko vjeruješ da imaš utjecaj na to što ti se događa u životu."
+          },
+          {
+            "id": "r1",
+            "type": "reflection",
+            "title": "Samorefleksija nakon prvog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Upravljanje vremenom i prioritetima",
+        "description": "U ovom modulu ćeš osvijestiti vlastitu životnu neravnotežu i prepoznati što ti je doista važno. Naučit ćeš kako živjeti u skladu sa svojim vrijednostima, postavljati realne ciljeve te bolje planirati i organizirati vlastito vrijeme.",
+        "lessons": [
+          {
+            "id": "l7",
+            "type": "video",
+            "title": "Zašto si u grču?",
+            "description": "U ovoj lekciji ćeš osvijestiti vlastitu životnu neravnotežu i prepoznati područja koja zahtijevaju više pažnje i brige o sebi."
+          },
+          {
+            "id": "l8",
+            "type": "video",
+            "title": "Što ti je važno?",
+            "description": "U ovoj lekciji ćeš istražiti svoje temeljne vrijednosti kao vodiče u životu."
+          },
+          {
+            "id": "l9",
+            "type": "video",
+            "title": "Kako postaviti smislene ciljeve?",
+            "description": "U ovoj lekciji ćeš naučiti postavljati realne i ostvarive ciljeve koji te vode prema emocionalnoj ravnoteži."
+          },
+          {
+            "id": "l10",
+            "type": "video",
+            "title": "Kako bolje upravljati vremenom?",
+            "description": "U ovoj lekciji ćeš otkriti kako bolje planirati i organizirati vrijeme te smanjiti osjećaj pritiska."
+          },
+          {
+            "id": "r2",
+            "type": "reflection",
+            "title": "Samorefleksija nakon drugog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Briga o sebi",
+        "description": "U ovom modulu ćeš naučiti prepoznati svoje unutarnje snage, ali i uvjerenja koja ti otežavaju brigu o sebi. Naučit ćeš kako uključiti odmor, zabavu, smijeh i kreativnost u svoj svakodnevni život te stvoriti male navike koje povećavaju otpornost na stres.",
+        "lessons": [
+          {
+            "id": "l11",
+            "type": "video",
+            "title": "Kako puniti svoje baterije?",
+            "description": "U ovoj lekciji ćeš prepoznati svoje unutarnje izvore snage i napraviti plan uspostave ravnoteže."
+          },
+          {
+            "id": "l12",
+            "type": "video",
+            "title": "Koja uvjerenja ti otežavaju brigu o sebi?",
+            "description": "U ovoj lekciji ćeš osvijestiti i preoblikovati uvjerenja koja ti otežavaju brigu o sebi."
+          },
+          {
+            "id": "l13",
+            "type": "video",
+            "title": "Koliko se zabavljaš i odmaraš?",
+            "description": "U ovoj lekciji ćeš procijeniti koliko se zabavljaš i odmaraš te prepoznati koji ti oblici odmora nedostaju."
+          },
+          {
+            "id": "l14",
+            "type": "video",
+            "title": "Koliko se smiješ?",
+            "description": "U ovoj lekciji ćeš si dati dozvolu za zabavu."
+          },
+          {
+            "id": "l15",
+            "type": "video",
+            "title": "Daješ li prostora tišini?",
+            "description": "U ovoj lekciji ćeš naučiti kako koristiti tišinu i kreativnost za poticanje smirenosti."
+          },
+          {
+            "id": "l16",
+            "type": "video",
+            "title": "Kako živjeti sretnije?",
+            "description": "U ovoj lekciji ćeš preispitati svoja očekivanja od sreće i prepoznati vrijednost malih svakodnevnih trenutaka."
+          },
+          {
+            "id": "l17",
+            "type": "video",
+            "title": "Primjećuješ li dobro?",
+            "description": "U ovoj lekciji ćeš primijeniti metodu prakticiranja zahvalnosti."
+          },
+          {
+            "id": "r3",
+            "type": "reflection",
+            "title": "Samorefleksija nakon trećeg modula",
+            "description": "Osvrt na naučeno i odabir alata koje želiš nastaviti koristiti."
+          }
+        ]
+      }
+    ]
+  },
+  "odnosi": {
+    "title": "21-dnevni izazov za zdravije odnose",
+    "description": "Ovaj online program daje ti alate za izgradnju zdravijih odnosa s drugima.",
+    "days": 21,
+    "benefits": [
+      "dva modula s ukupno 11 psihoedukativnih videolekcija",
+      "Dnevnik zdravijih odnosa na 43 stranice, sa 16 vježbi te dvije samorefleksije za praćenje napretka",
+      "jednu bonus videolekciju",
+      "potvrdu o završetku izazova"
+    ],
+    "workbook": {
+      "title": "Dnevnik zdravijih odnosa",
+      "pages": 43,
+      "exercises": 16
+    },
+    "audience": "Ovaj program je za tebe ako si mlada ili odrasla osoba koja se želi bolje zauzeti za sebe i naučiti postavljati zdrave osobne granice. Za sudjelovanje nije potrebno predznanje.",
+    "activities": "Kroz videolekcije ćeš upoznati komunikacijske stilove, načine zauzimanja za sebe i postavljanja zdravih osobnih granica. Kroz vježbe ćeš istražiti gdje prešućuješ svoje potrebe, uvježbati kako reći ne i razmotriti što možeš učiniti kad netko prijeđe tvoju granicu.",
+    "basis": "Program je nastao iz individualnog rada s klijentima. Temelji se na najčešćim temama i alatima koji su se pokazali učinkovitima u praksi. Kombinira integrativni pristup, stručnu literaturu i jednostavan jezik uz ilustracije, s ciljem da ti omogući rad na sebi online kad god ti odgovara.",
+    "operation": [
+      "Program se odvija online na Psihogym platformi. Dnevnik možeš ispunjavati online ili ga ispisati i ispunjavati rukom.",
+      "Program prolaziš samostalno, vlastitim tempom. Individualne konzultacije nisu uključene u cijenu."
+    ],
+    "duration": "U 21 dan prolaziš kroz 11 kratkih videolekcija podijeljenih u dva modula, uz 16 vježbi te dvije samorefleksije koje će ti pomoći primijeniti naučeno u svakodnevnom životu. Ako ti je neki dan zahtjevniji, slobodno ga rasporedi na više dana.",
+    "access": "Pristup programu imaš 90 dana od kupnje. Tako možeš raditi svojim tempom i ponovno se vraćati lekcijama i vježbama. Preuzeti dnevnik ostaje ti i nakon isteka pristupa.",
+    "accessDays": 90,
+    "unsuitable": "Program nije za tebe ako tražiš terapiju za ozbiljne emocionalne izazove, očekuješ brza rješenja bez vlastitog angažmana, nisi spreman/na raditi na sebi ili ne želiš primjenjivati naučeno u svakodnevnom životu.",
+    "price": 119,
+    "promoPrice": 89,
+    "promotionDays": 14,
+    "priceDescription": "Po cijeni od 119 € (početna promotivna cijena: 89 €; promocija traje 2 tjedna) dobivaš videolekcije, praktične vježbe i dnevnik koji te vodi kroz izgradnju zdravijih odnosa s drugima.",
+    "introduction": "Uvod u program",
+    "bibliography": "Korištena literatura (PDF)",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Zauzimanje za sebe",
+        "description": "U ovom modulu ćeš istražiti svoje odnose, otkriti svoj stil komunikacije i naučiti se otvoreno izražavati.",
+        "lessons": [
+          {
+            "id": "l1",
+            "type": "video",
+            "title": "Koliko su zdravi tvoji odnosi?",
+            "description": "U ovoj lekciji ćeš razbiti mitove o zdravim odnosima i provjeriti koliko su tvoji odnosi stvarno zdravi."
+          },
+          {
+            "id": "l2",
+            "type": "video",
+            "title": "Koji je tvoj komunikacijski stil?",
+            "description": "U ovoj lekciji ćeš upoznati različite komunikacijske stilove i otkriti svoj."
+          },
+          {
+            "id": "l3",
+            "type": "video",
+            "title": "Koji su uzroci pasivnog ponašanja?",
+            "description": "U ovoj lekciji ćeš istražiti najčešće uzroke pasivnog ponašanja."
+          },
+          {
+            "id": "l4",
+            "type": "video",
+            "title": "Kako se asertivnije ponašati?",
+            "description": "U ovoj lekciji ćeš naučiti kako jasnije izražavati svoje osjećaje, potrebe i želje."
+          },
+          {
+            "id": "l5",
+            "type": "video",
+            "title": "Što te sprječava u zauzimanju za sebe?",
+            "description": "U ovoj lekciji ćeš upoznati najčešće prepreke u zauzimanju za sebe."
+          },
+          {
+            "id": "r1",
+            "type": "reflection",
+            "title": "Samorefleksija nakon prvog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Osobne granice",
+        "description": "U ovom modulu ćeš osvijestiti svoja prava i odgovornosti, istražiti svoje osobne granice te ih naučiti postavljati i dosljedno čuvati.",
+        "lessons": [
+          {
+            "id": "l6",
+            "type": "video",
+            "title": "Koliko su zdrave tvoje osobne granice?",
+            "description": "U ovoj lekciji ćeš upoznati različite vrste osobnih granica i procijeniti koliko su tvoje granice zdrave."
+          },
+          {
+            "id": "l7",
+            "type": "video",
+            "title": "Što te sprječava u postavljanju granica?",
+            "description": "U ovoj lekciji ćeš istražiti svoja uvjerenja o granicama i osvijestiti svoja prava i odgovornosti."
+          },
+          {
+            "id": "l8",
+            "type": "video",
+            "title": "Kako postaviti zdrave granice?",
+            "description": "U ovoj lekciji ćeš naučiti kako postaviti zdrave granice, jasno se izraziti i reći ne."
+          },
+          {
+            "id": "l9",
+            "type": "video",
+            "title": "Što kad se tvoje granice prekrše?",
+            "description": "U ovoj lekciji ćeš naučiti kako se postaviti kada netko prekrši tvoje granice."
+          },
+          {
+            "id": "l10",
+            "type": "video",
+            "title": "Kako konstruktivno kritizirati?",
+            "description": "U ovoj lekciji ćeš naučiti kako konstruktivno kritizirati."
+          },
+          {
+            "id": "l11",
+            "type": "video",
+            "title": "Koju ulogu igraš u odnosima?",
+            "description": "U ovoj lekciji ćeš prepoznati nezdrave uloge u odnosima i upoznati drugačije načine ponašanja."
+          },
+          {
+            "id": "r2",
+            "type": "reflection",
+            "title": "Samorefleksija nakon drugog modula",
+            "description": "Osvrt na naučeno, odabir alata koje želiš nastaviti koristiti i poruka podrške za nastavak rada na sebi."
+          },
+          {
+            "id": "bonus",
+            "type": "bonus",
+            "title": "Što zapravo tražiš u odnosima?",
+            "description": "U ovoj lekciji ćeš osvijestiti što zapravo tražiš u odnosima s drugim ljudima."
+          }
+        ]
+      }
+    ]
+  },
+  "samopouzdanje": {
+    "title": "21-dnevni izazov za razvoj samopouzdanja",
+    "description": "Ovaj online program daje ti alate za razvoj samopouzdanja.",
+    "days": 21,
+    "benefits": [
+      "dva modula s ukupno 12 psihoedukativnih videolekcija",
+      "Dnevnik samopouzdanja na 48 stranica, s 20 vježbi te dvije samorefleksije za praćenje napretka",
+      "jednu bonus videolekciju",
+      "potvrdu o završetku izazova"
+    ],
+    "workbook": {
+      "title": "Dnevnik samopouzdanja",
+      "pages": 48,
+      "exercises": 20
+    },
+    "audience": "Ovaj program je za tebe ako si mlada ili odrasla osoba koja često sumnja u sebe, strogo se procjenjuje ili teže postavlja granice i želi izgraditi bolji odnos prema sebi. Za sudjelovanje nije potrebno predznanje.",
+    "activities": "Kroz videolekcije ćeš istražiti kako tvoj unutarnji govor, očekivanja i odnosi s drugima utječu na tvoj odnos prema sebi. Kroz vježbe ćeš učiti kako biti manje kritičan/na prema sebi i jasnije izraziti svoje potrebe.",
+    "basis": "Program je nastao iz individualnog rada s klijentima. Temelji se na najčešćim temama i alatima koji su se pokazali učinkovitima u praksi. Kombinira integrativni pristup, stručnu literaturu i jednostavan jezik uz ilustracije, s ciljem da ti omogući rad na sebi online kad god ti odgovara.",
+    "operation": [
+      "Program se odvija online na Psihogym platformi. Dnevnik možeš ispunjavati online ili ga ispisati i ispunjavati rukom.",
+      "Program prolaziš samostalno, vlastitim tempom. Individualne konzultacije nisu uključene u cijenu."
+    ],
+    "duration": "U 21 dan prolaziš kroz 12 kratkih videolekcija podijeljenih u dva modula, uz 20 vježbi te dvije samorefleksije koje će ti pomoći primijeniti naučeno u svakodnevnom životu. Ako ti je neki dan zahtjevniji, slobodno ga rasporedi na više dana.",
+    "access": "Pristup programu imaš 90 dana od kupnje. Tako možeš raditi svojim tempom i ponovno se vraćati lekcijama i vježbama. Preuzeti dnevnik ostaje ti i nakon isteka pristupa.",
+    "accessDays": 90,
+    "unsuitable": "Program nije za tebe ako tražiš terapiju za ozbiljne emocionalne izazove, očekuješ brza rješenja bez vlastitog angažmana, nisi spreman/na raditi na sebi ili ne želiš primjenjivati naučeno u svakodnevnom životu.",
+    "price": 119,
+    "promoPrice": 89,
+    "promotionDays": 14,
+    "priceDescription": "Po cijeni od 119 € (početna promotivna cijena: 89 €; promocija traje 2 tjedna) dobivaš videolekcije, praktične vježbe i dnevnik koji te vodi kroz razvoj samopouzdanja i boljeg odnosa prema sebi.",
+    "introduction": "Uvod u program",
+    "bibliography": "Korištena literatura (PDF)",
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Bolji odnos prema sebi",
+        "description": "U ovom modulu ćeš istražiti kako vidiš sebe i koliko vjeruješ u sebe. Dobit ćeš alate za razvoj boljeg odnosa prema sebi.",
+        "lessons": [
+          {
+            "id": "l1",
+            "type": "video",
+            "title": "Tko si ti?",
+            "description": "U ovoj lekciji ćeš istražiti tko si, što cijeniš i očekuješ od sebe."
+          },
+          {
+            "id": "l2",
+            "type": "video",
+            "title": "Koliko misliš da vrijediš?",
+            "description": "U ovoj lekciji ćeš naučiti što je to samopoštovanje i kako ga graditi."
+          },
+          {
+            "id": "l3",
+            "type": "video",
+            "title": "Koliko vjeruješ u svoje sposobnosti?",
+            "description": "U ovoj lekciji ćeš naučiti što je to samopouzdanje i kako ga graditi."
+          },
+          {
+            "id": "l4",
+            "type": "video",
+            "title": "Kako razgovaraš sa sobom?",
+            "description": "U ovoj lekciji ćeš otkriti kako razmišljaš o sebi i kako to utječe na tvoje ponašanje."
+          },
+          {
+            "id": "l5",
+            "type": "video",
+            "title": "Koliko si strog/a prema sebi?",
+            "description": "U ovoj lekciji ćeš naučiti kako prepoznati svog unutarnjeg kritičara i upravljati njime."
+          },
+          {
+            "id": "l6",
+            "type": "video",
+            "title": "Koliko su visoki tvoji standardi i očekivanja od sebe?",
+            "description": "U ovoj lekciji ćeš preispitati svoje standarde i očekivanja te procijeniti kako se odnosiš prema sebi u izazovnim razdobljima."
+          },
+          {
+            "id": "r1",
+            "type": "reflection",
+            "title": "Samorefleksija nakon prvog modula",
+            "description": "Osvrt na najvažnije spoznaje i njihovu primjenu."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Bolji odnos prema sebi kroz odnose s drugima",
+        "description": "U ovom modulu ćeš otkriti kako se ponašaš u odnosima s drugima – udovoljavaš li previše, bojiš li se odbacivanja i kako reagiraš na kritiku. Dobit ćeš alate za sigurnije i jasnije izražavanje svojih potreba.",
+        "lessons": [
+          {
+            "id": "l7",
+            "type": "video",
+            "title": "Udovoljavaš li drugima?",
+            "description": "U ovoj lekciji ćeš otkriti udovoljavaš li drugim ljudima i zašto."
+          },
+          {
+            "id": "l8",
+            "type": "video",
+            "title": "Bojiš li se odbacivanja?",
+            "description": "U ovoj lekciji ćeš istražiti strah od odbacivanja i njegov utjecaj na tebe."
+          },
+          {
+            "id": "l9",
+            "type": "video",
+            "title": "Kako se lakše nositi s kritikom?",
+            "description": "U ovoj lekciji ćeš naučiti kako se lakše nositi s kritikom."
+          },
+          {
+            "id": "l10",
+            "type": "video",
+            "title": "Kako komunikacijom jačati samopoštovanje?",
+            "description": "U ovoj lekciji ćeš naučiti 5 komunikacijskih trikova za jačanje samopoštovanja i bolje odnose s drugima."
+          },
+          {
+            "id": "l11",
+            "type": "video",
+            "title": "Koliko su zdrave tvoje osobne granice?",
+            "description": "U ovoj lekciji ćeš istražiti svoje osobne granice."
+          },
+          {
+            "id": "l12",
+            "type": "video",
+            "title": "Kako postaviti zdrave granice?",
+            "description": "U ovoj lekciji ćeš naučiti kako postaviti zdrave granice, jasnije se izraziti i reći ne."
+          },
+          {
+            "id": "r2",
+            "type": "reflection",
+            "title": "Samorefleksija nakon drugog modula",
+            "description": "Osvrt na naučeno i odabir alata koje želiš nastaviti koristiti."
+          },
+          {
+            "id": "bonus",
+            "type": "bonus",
+            "title": "Kako lakše donositi odluke?",
+            "description": "U ovoj lekciji ćeš naučiti kako uravnoteženije donositi odluke."
+          }
+        ]
+      }
+    ]
+  }
+}

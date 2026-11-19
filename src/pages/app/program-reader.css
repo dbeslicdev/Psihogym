@@ -1,0 +1,129 @@
+.player.player__loading {
+  padding: clamp(2rem, 6vw, 6rem) var(--inset);
+}
+.player__loading p { margin-block: 1.5rem; }
+.player__loading a, .player__error button { text-decoration: underline; }
+.player .player__body { max-width: 98rem; margin-inline: auto; }
+.player .player__main {
+  width: 100%;
+  padding: clamp(1.75rem, 4vw, 4.5rem) clamp(1.25rem, 5vw, 5rem);
+}
+.player .player__sidebar { padding: 0; }
+.player__outline {
+  max-height: calc(100dvh - 3.5rem);
+  overflow-y: auto;
+  padding: 1.5rem 1rem;
+}
+.player .player__module-title {
+  color: var(--ps-brown);
+  font-family: var(--ps-font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+.player .player__lesson { min-height: 2.75rem; }
+.player__eyebrow {
+  font: 500 var(--ps-text-label)/1.5 var(--ps-font-mono);
+  color: var(--ps-burnt-text);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+}
+.player .player__lesson-title {
+  font: 400 clamp(2rem, 4vw, 3.5rem)/1.12 var(--ps-font-display);
+  color: var(--ps-brown);
+  margin-block: .65rem 1.25rem;
+  scroll-margin-top: 6rem;
+}
+.player .player__lesson-title:focus { outline: 0; }
+.player .player__reading-copy {
+  max-width: 55ch;
+  font-size: clamp(1.08rem, 1.4vw, 1.3rem);
+  line-height: 1.55;
+}
+.player .player__availability {
+  color: var(--ps-text-muted);
+  font-size: .94rem;
+  line-height: 1.45;
+  margin-top: 1rem;
+}
+.player__reading-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .85rem 1.25rem;
+  margin-block: clamp(1.5rem, 3vw, 2.5rem);
+}
+.player .player__nav { margin: 0; gap: .6rem; }
+.player .player__nav-btn, .player .player__done-btn { min-height: 2.75rem; }
+.player__disclosure { border-top: 1px solid var(--ps-border); }
+.player__disclosure:last-of-type { border-bottom: 1px solid var(--ps-border); }
+.player__disclosure summary {
+  cursor: pointer;
+  padding-block: 1rem;
+  color: var(--ps-brown);
+  font-weight: 500;
+}
+.player__disclosure > :last-child:not(summary) { margin-bottom: 1.25rem; }
+.player__disclosure p, .player__disclosure label {
+  max-width: 60ch;
+  line-height: 1.55;
+  color: var(--ps-text-muted);
+}
+.player__disclosure form { margin-top: 1rem; }
+.player__disclosure label { display: block; margin-bottom: .4rem; }
+.player__disclosure textarea { font-family: inherit; color: var(--ps-brown); }
+.player .player__note { white-space: pre-wrap; overflow-wrap: anywhere; }
+.player__error { margin-block: 1rem; }
+.player .player__outline-toggle { display: none; }
+.player__sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.dash .program-grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.dash .program-card__head { display: block; }
+.dash .program-card__title { font: 400 clamp(1.5rem, 2.3vw, 2rem)/1.17 var(--ps-font-display); }
+.dash .program-card__meta { display: inline-block; margin-bottom: .65rem; }
+.dash .program-card__expiry { font-size: .85rem; color: var(--ps-text-muted); }
+
+@media (max-width: 64rem) {
+  .player .player__main, .player .player__sidebar { order: initial; }
+  .player .player__sidebar { position: static; max-height: none; }
+  .player .player__outline-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3.1rem;
+    padding: .7rem max(1.25rem, var(--inset));
+    font: 500 1rem var(--ps-font-body);
+    text-align: left;
+    color: var(--ps-brown);
+    background: var(--ps-white);
+    border-bottom: 1px solid var(--ps-border);
+  }
+  .player__outline-toggle span { font-size: 1.4rem; }
+  .player__outline { display: none; }
+  .player__outline.is-open {
+    display: block;
+    max-height: min(56dvh, 29rem);
+    scrollbar-gutter: stable;
+    padding-inline: max(1rem, var(--inset));
+  }
+  .player .player__lesson-title { scroll-margin-top: 9rem; }
+}
+@media (max-width: 27rem) {
+  .player__reading-controls { flex-direction: column; align-items: flex-start; }
+  .player .player__nav { width: 100%; }
+  .player .player__nav-btn { flex: 1; }
+}
+.dash__expired { margin-top: 2rem; }
+.dash__expired h2 { font: 400 1.5rem/1.3 var(--ps-font-display); }
+.dash__expired li { display: grid; gap: .3rem; margin-top: 1rem; }
+.dash__expired a { text-decoration: underline; }
+.dash__expired span { font-size: .85rem; color: var(--ps-text-muted); }
+@media (max-width: 40rem) {
+  .player .player__topbar, .dash .dash__topbar { padding-inline: max(1.15rem, var(--inset)); }
+}

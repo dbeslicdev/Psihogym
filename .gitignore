@@ -1,0 +1,15 @@
+node_modules
+dist
+dist-ssr
+*.local
+.DS_Store
+
+server/data/
+.env
+.env.*
+*.sqlite*
+*-api.log
+
+# Izvorne fotografije — ne idu u build ni u git
+izvorni-materijali/
+*.log

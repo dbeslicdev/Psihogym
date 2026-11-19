@@ -1,0 +1,5 @@
+import {chromium} from 'file:///C:/Users/dbesl/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/index.mjs';
+const b=await chromium.launch();const result=[];
+for(const width of [320,768,1024,1366]){const p=await b.newPage({viewport:{width,height:768},hasTouch:width<961});await p.goto('http://127.0.0.1:4182/programi');await p.waitForTimeout(300);const cards=p.locator('.program-reveal');for(let i=0;i<5;i++){await cards.nth(i).evaluate(e=>e.querySelector('.program-reveal__toggle').click());await p.waitForTimeout(700);const v=await cards.nth(i).evaluate(c=>{const t=c.querySelector('.program-reveal__title').getBoundingClientRect(),a=c.querySelector('.program-reveal__actions').getBoundingClientRect(),b=c.querySelector('.program-benefits').getBoundingClientRect(),r=c.getBoundingClientRect();return {w:r.width,titleOutside:t.right>r.right+1,overlap:b.bottom>a.top+1,gap:a.top-b.bottom,titleWidth:t.width};});if(v.titleOutside||v.overlap)result.push({width,i,...v});}await p.close();}
+console.log(JSON.stringify(result,null,2));await b.close();
+

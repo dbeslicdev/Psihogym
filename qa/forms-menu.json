@@ -1,0 +1,226 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "menu": {
+      "overflow": false,
+      "scrollable": false,
+      "links": [
+        {
+          "text": "01O nama",
+          "width": 272
+        },
+        {
+          "text": "02Savjetovanje",
+          "width": 272
+        },
+        {
+          "text": "03Programi",
+          "width": 272
+        },
+        {
+          "text": "04Kontakt",
+          "width": 272
+        },
+        {
+          "text": "info@psihogym.hr",
+          "width": 123.625
+        },
+        {
+          "text": "Facebook",
+          "width": 94.71875
+        },
+        {
+          "text": "Instagram",
+          "width": 97.84375
+        }
+      ]
+    },
+    "visibleInquiryForms": 1,
+    "disabledBefore": true,
+    "enabledAfter": true,
+    "controls": 270,
+    "form": 272,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "menu": {
+      "overflow": false,
+      "scrollable": false,
+      "links": [
+        {
+          "text": "01O nama",
+          "width": 331.5
+        },
+        {
+          "text": "02Savjetovanje",
+          "width": 331.5
+        },
+        {
+          "text": "03Programi",
+          "width": 331.5
+        },
+        {
+          "text": "04Kontakt",
+          "width": 331.5
+        },
+        {
+          "text": "info@psihogym.hr",
+          "width": 123.625
+        },
+        {
+          "text": "Facebook",
+          "width": 94.71875
+        },
+        {
+          "text": "Instagram",
+          "width": 97.84375
+        }
+      ]
+    },
+    "visibleInquiryForms": 1,
+    "disabledBefore": true,
+    "enabledAfter": true,
+    "controls": 330,
+    "form": 332,
+    "overflow": false
+  },
+  {
+    "width": 640,
+    "height": 450,
+    "menu": {
+      "overflow": false,
+      "scrollable": true,
+      "links": [
+        {
+          "text": "01O nama",
+          "width": 544
+        },
+        {
+          "text": "02Savjetovanje",
+          "width": 544
+        },
+        {
+          "text": "03Programi",
+          "width": 544
+        },
+        {
+          "text": "04Kontakt",
+          "width": 544
+        },
+        {
+          "text": "info@psihogym.hr",
+          "width": 123.625
+        },
+        {
+          "text": "Facebook",
+          "width": 94.71875
+        },
+        {
+          "text": "Instagram",
+          "width": 97.84375
+        }
+      ]
+    },
+    "visibleInquiryForms": 1,
+    "disabledBefore": true,
+    "enabledAfter": true,
+    "controls": 542,
+    "form": 544,
+    "overflow": false
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "menu": {
+      "overflow": false,
+      "scrollable": true,
+      "links": [
+        {
+          "text": "01O nama",
+          "width": 717.40625
+        },
+        {
+          "text": "02Savjetovanje",
+          "width": 717.40625
+        },
+        {
+          "text": "03Programi",
+          "width": 717.40625
+        },
+        {
+          "text": "04Kontakt",
+          "width": 717.40625
+        },
+        {
+          "text": "info@psihogym.hr",
+          "width": 123.625
+        },
+        {
+          "text": "Facebook",
+          "width": 94.71875
+        },
+        {
+          "text": "Instagram",
+          "width": 97.84375
+        }
+      ]
+    },
+    "visibleInquiryForms": 1,
+    "disabledBefore": true,
+    "enabledAfter": true,
+    "controls": 715,
+    "form": 717,
+    "overflow": false
+  },
+  {
+    "width": 955,
+    "height": 860,
+    "menu": {
+      "overflow": false,
+      "scrollable": false,
+      "links": [
+        {
+          "text": "01O nama",
+          "width": 811.75
+        },
+        {
+          "text": "02Savjetovanje",
+          "width": 811.75
+        },
+        {
+          "text": "03Programi",
+          "width": 811.75
+        },
+        {
+          "text": "04Kontakt",
+          "width": 811.75
+        },
+        {
+          "text": "info@psihogym.hr",
+          "width": 123.625
+        },
+        {
+          "text": "Facebook",
+          "width": 94.71875
+        },
+        {
+          "text": "Instagram",
+          "width": 97.84375
+        }
+      ]
+    },
+    "visibleInquiryForms": 1,
+    "disabledBefore": true,
+    "enabledAfter": true,
+    "controls": 810,
+    "form": 812,
+    "overflow": false
+  },
+  {
+    "reducedMotion": true,
+    "careerParagraphsVisible": 5
+  }
+]

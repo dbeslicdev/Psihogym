@@ -1,0 +1,109 @@
+/* ============================================================
+   PSIHOGYM — DESIGN TOKENI
+   Izvučeno iz v4 "Utočište". Namespace: --ps-*
+   Jedan izvor istine za boje, tipografiju, razmak, pokret.
+   Koristi na cijelom webu preko var(--ps-...).
+   ============================================================ */
+
+:root {
+  /* ---------- 1. BOJE — primitivi (paleta) ----------
+     TOČNO 4 pozadinske boje, svaka u svojoj obitelji nijansi pa se ne
+     miješaju u oku, a sve iste svjetline (pastelne) uz smeđi tekst:
+       krem (topli neutral) · terra (breskva) · magla (hladna plava)
+       · kadulja (zelena)
+     Sve ostale pozadine su ALIASI na ove četiri — ne dodavati petu. */
+  --ps-cream: #fbf5ec;          /* 1. topla krem podloga (hero) */
+  --ps-terra: #efcfbe;          /* 2. topla terakota / breskva */
+  --ps-mist: #e2ecf1;           /* 3. hladna magla (bivše dvije plave) */
+  --ps-sage-bg: #e5ecdd;        /* 4. blaga kadulja (zamjena za pješčanu) */
+  /* stari primitivi — ostaju kao aliasi da se ništa ne raspadne */
+  --ps-cream-2: var(--ps-cream);
+  --ps-sky: var(--ps-mist);
+  --ps-sand: var(--ps-sage-bg);
+  --ps-brown: #4a3a32;          /* topla tamna smeđa — tekst */
+  --ps-burnt: #c07a57;          /* pečena terakota — akcent za PLOHE i dekor */
+  /* burnt za TEKST: #c07a57 na krem podlozi ima omjer 3.14:1 (WCAG AA za
+     mali tekst traži 4.5:1). Ova tamnija nijansa daje 5.04:1 na krem i
+     5.04:1 za krem tekst NA njoj (hover gumba). Dekor (linije, točke,
+     zvjezdice) smije ostati na svijetlom burntu. */
+  --ps-burnt-text: #9b5836;
+  --ps-white: #ffffff;
+  /* podloge poglavlja (programi) — SAMO aliasi na 4 boje palete */
+  --ps-ch-1: var(--ps-terra);
+  --ps-ch-2: var(--ps-mist);
+  --ps-ch-3: var(--ps-sage-bg);
+  --ps-ch-4: var(--ps-terra);
+  --ps-ch-5: var(--ps-mist);
+
+  /* ---------- 2. BOJE — semantičke role ---------- */
+  --ps-surface: var(--ps-cream);        /* podloga stranice */
+  --ps-surface-raised: var(--ps-white); /* kartice / izdignute plohe */
+  --ps-ink: var(--ps-brown);            /* kompatibilnost sa starim imenom */
+  --ps-text: var(--ps-brown);
+  /* Prozirnosti odabrane po IZMJERENOM WCAG kontrastu nad stvarnim
+     podlogama (krem, bijela, terra, ch-2..5):
+     - muted 0.82 → ≥4.6:1 na svim podlogama (AA za mali tekst)
+     - faint 0.72 → 4.5:1 na krem/bijeloj; koristi se SAMO na njima
+     - soft 0.6  → 3.3:1 — dovoljno SAMO za velik tekst (≥24px);
+       mali tekst nikad ne smije koristiti soft */
+  --ps-text-muted: rgba(74, 58, 50, 0.82);
+  --ps-text-soft: rgba(74, 58, 50, 0.6);
+  --ps-text-faint: rgba(74, 58, 50, 0.72);
+  --ps-border: rgba(74, 58, 50, 0.12);
+  --ps-accent: var(--ps-burnt);
+  --ps-on-accent: var(--ps-cream);      /* tekst na akcentu */
+  /* ambijenti za smjenu sekcija (bg morph) */
+  --ps-tint-lavender: var(--ps-ch-2);
+  --ps-tint-blush: var(--ps-ch-1);
+  --ps-tint-sage: var(--ps-ch-5);
+
+  /* ---------- 3. TIPOGRAFIJA — obitelji ---------- */
+  --ps-font-display: "Marcellus", Georgia, serif;      /* naslovi */
+  --ps-font-body: "Hanken Grotesk", system-ui, sans-serif; /* tekst */
+  --ps-font-mono: "Geist Mono", monospace;             /* labele / mikrotekst */
+
+  /* ---------- 4. TIPOGRAFIJA — fluidna skala ---------- */
+  /* Fluidna skala: svaka razina RASTE kroz cijeli raspon širina.
+     Prije su d2/d3 imali premali vw koeficijent (3.8 / 4.4) pa su ostajali
+     zaključani na minimumu sve do ~790px odn. ~680px — cijeli telefon i mali
+     tablet imali su naslov sekcije na 30px dok je hero već rastao. Sada je
+     ljestvica hero > rečenica > naslov sekcije provjereno očuvana na
+     375 / 768 / 1440 / 1920. */
+  --ps-text-display-xl: clamp(42px, 6.2vw, 100px);            /* hero naslov (d1) */
+  --ps-text-display-l: clamp(35px, 29px + 1.6vw, 58px);       /* naslov sekcije (d2) */
+  --ps-text-display-m: clamp(39px, 32.3px + 1.78vw, 66px);    /* velika rečenica (stage) */
+  --ps-text-title: clamp(26px, 3.2vw, 50px);         /* naslov poglavlja */
+  --ps-text-lead: clamp(16.5px, 1.28vw, 20px);       /* uvodni odlomak */
+  --ps-text-body: 16px;      /* tekst */
+  /* labela (uppercase, razmaknuta) — i mikro-tekst mora rasti s ekranom */
+  --ps-text-label: clamp(11.5px, 11px + 0.13vw, 13px);
+
+  --ps-leading-tight: 1.06;  /* naslovi */
+  --ps-leading-snug: 1.12;   /* velike rečenice */
+  --ps-leading-body: 1.66;   /* tekst */
+  --ps-tracking-label: 0.24em;
+  --ps-weight-body: 300;
+
+  /* ---------- 5. RAZMAK (nasljeđuje postojeći ritam) ---------- */
+  --ps-inset: var(--inset);          /* bočni gutter stranice */
+  --ps-section-y: var(--section-y);  /* vertikalni razmak sekcija */
+  --ps-gap-sm: 0.75rem;
+  --ps-gap: 1.5rem;
+  --ps-gap-lg: 3rem;
+
+  /* ---------- 6. ZAOBLJENJA ---------- */
+  --ps-radius-sm: 0.75rem;
+  --ps-radius: 1.1rem;
+  --ps-radius-lg: 1.5rem;
+  --ps-radius-pill: 999px;
+  --ps-arch: 50% 50% 0 0 / 32% 32% 0 0; /* luk za portretne slike */
+
+  /* ---------- 7. SJENE ---------- */
+  --ps-shadow-soft: 0 18px 45px -22px rgba(58, 53, 71, 0.32);
+  --ps-shadow-lift: 0 24px 60px -30px rgba(58, 53, 71, 0.28);
+
+  /* ---------- 8. POKRET ---------- */
+  --ps-ease: cubic-bezier(0.25, 1, 0.35, 1); /* mekana, "njegujuća" krivulja */
+  --ps-dur: 1.1s;    /* mirni prijelaz (hover, bg morph) */
+  --ps-dur-in: 1.3s; /* ulazna animacija */
+}

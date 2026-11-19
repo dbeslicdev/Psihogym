@@ -1,0 +1,365 @@
+/* Public pages only. Portal sizing and theme remain independent. */
+.marketing-page {
+  --gut: clamp(1.5rem, 7.5vw, 8rem);
+  --sec-y: clamp(3rem, 7vh, 6rem);
+  --ps-text-display-xl: clamp(2.5rem, 1.25rem + 4.5vw, 6.25rem);
+  --ps-text-display-l: clamp(2rem, 1.35rem + 1.6vw, 3.625rem);
+  --ps-text-display-m: clamp(2.15rem, 1.45rem + 1.9vw, 4.125rem);
+  --v4-cta-gap: clamp(1.5rem, 3vh, 2.5rem);
+  --v4-head-gap: clamp(1.5rem, 3vh, 2.25rem);
+  transition: none;
+}
+/* A continuous surface replaces the giant circle on public pages. Its
+   elliptical top corners animate to zero radius: the final edge is flat.
+   Extending to the wrapper's end keeps the outgoing color behind each wave. */
+.marketing-page .v4-curve > .v4-circle {
+  left: 0;
+  top: calc(-1 * var(--wave-lift, 0px));
+  width: 100%;
+  height: calc(var(--wave-height, 100%) + var(--wave-lift, 0px));
+  aspect-ratio: auto;
+  border-radius: 50% 50% 0 0 / var(--wave-depth, 80px) var(--wave-depth, 80px) 0 0;
+  transform: none;
+  will-change: auto;
+}
+.marketing-page :is(.v4-hero, .v4-emphasis, .v4-ivana, .v4-podrucja,
+  .v4-online, .v4-stats, .v4-iskustva, .v4-cta, .on-hero, .on-prose,
+  .sv-section, .kontakt-sekcija, .v4-programi__head, .v4-programi__track) {
+  padding-inline: max(var(--gut), calc((100% - 80rem) / 2));
+}
+.marketing-page :is(.on-prose, .sv-section, .kontakt-sekcija) {
+  padding-block: var(--sec-y);
+}
+.marketing-page .on-prose { max-width: none; }
+.marketing-page .on-hero {
+  min-height: clamp(22rem, 54svh, 36rem);
+  padding-block: clamp(7rem, 15vh, 10rem) var(--sec-y);
+  gap: 1.25rem;
+}
+.marketing-page .on-hero__title {
+  font-size: clamp(2rem, 1.25rem + 2.5vw, 3.75rem);
+  max-width: 28ch;
+  line-height: 1.15;
+}
+.marketing-page .on-hero__intro { max-width: 48ch; color: var(--ps-text-muted); font-size: 1.05rem; line-height: 1.65; }
+.marketing-page :is(.on-prose__title, .sv-h2, .kontakt-intro-title) {
+  font-size: var(--ps-text-display-l);
+  line-height: 1.12;
+}
+.marketing-page :is(.on-prose__body p, .sv-know li) {
+  font-size: clamp(1rem, 0.94rem + 0.2vw, 1.125rem);
+}
+.marketing-page .v4-cta { min-height: 0; padding-block: var(--sec-y); }
+.marketing-page .on-cta__row { margin-top: var(--v4-cta-gap); }
+.marketing-page .on-cta__row .v4-btn { margin-top: 0; }
+.marketing-page .v4-btn { min-height: 2.75rem; justify-content: center; text-align: center; }
+.marketing-page :is(.kontakt-layout__right, .kontakt-form, .kontakt-fieldset,
+  .kontakt-input, .kontakt-textarea, .on-prose__body) { min-width: 0; }
+.marketing-page .kontakt-check:has(.kontakt-input) { flex-wrap: wrap; }
+.marketing-page .kontakt-check .kontakt-input { flex: 1 1 12rem; }
+.marketing-page .kontakt-toggles { flex-wrap: wrap; gap: 0.5rem; }
+.marketing-page .kontakt-toggle { flex: 1; }
+.marketing-page .kontakt-check { align-items: flex-start; }
+.marketing-page .kontakt-check input[type="checkbox"] { margin-top: 0.3rem; }
+.marketing-page .on-portret__role { max-width: 44ch; line-height: 1.65; }
+.marketing-page .v4-program__title { font-size: clamp(1.625rem, 1.05rem + 1.5vw, 2.5rem); }
+.marketing-page .v4-program__foot { flex-wrap: wrap; }
+.marketing-page .v4-programi--static .v4-programi__viewport {
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gut);
+  padding-block: 0.75rem;
+}
+.marketing-page .v4-programi--static .v4-program { scroll-snap-align: start; }
+.marketing-page .v4-programi--static .v4-programi__progress { display: none; }
+
+/* The exit space exceeds the wave's maximum 18vh / 240px reach, so the
+   last paragraph or button leaves naturally before the next surface arrives. */
+.marketing-page .reading-exit {
+  --reading-space: 30svh;
+  padding-bottom: max(var(--sec-y), var(--reading-space));
+}
+.marketing-page .reading-exit--long { --reading-space: 35svh; }
+.marketing-page .reading-exit--short { --reading-space: 25svh; }
+
+/* All review steps stick inside the whole reviews section, rather than
+   figures sticking inside their own short wrapper and escaping too early. */
+@media (min-width: 60.001rem) and (min-height: 42.001rem) {
+  .marketing-page .v4-iskustva { display: flow-root; }
+  .marketing-page .v4-step {
+    position: sticky;
+    top: var(--stack-top);
+    padding-bottom: 0;
+    margin-bottom: 25svh;
+    display: flow-root;
+  }
+  .marketing-page .v4-step--long { margin-bottom: 45svh; }
+  .marketing-page .v4-stackcard { position: static; }
+}
+
+/* Shared public navigation: reachable on small and short screens. */
+.nav, .footer { padding-inline: clamp(1.5rem, 4vw, 4rem); }
+.nav:focus-within { transform: none; }
+.nav__burger, .nav__cart { min-width: 2.75rem; min-height: 2.75rem; justify-content: center; }
+.nav__cart-badge { background: var(--ps-burnt-text); }
+.menu {
+  visibility: hidden;
+  pointer-events: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--ps-brown);
+  color: var(--ps-cream);
+  transition: clip-path 0.4s ease, visibility 0s 0.4s;
+}
+body.menu-open .menu { visibility: visible; pointer-events: auto; transition-delay: 0s; }
+body.menu-open .nav { background: var(--ps-brown); }
+.menu__inner {
+  height: auto;
+  min-height: 100%;
+  padding: 6.5rem clamp(1.5rem, 7.5vw, 8rem) 2rem;
+  gap: clamp(1.5rem, 5vh, 3.5rem);
+}
+.menu__link { font-size: clamp(2rem, 1.25rem + 4vw, 4.25rem); padding-block: clamp(0.75rem, 2vh, 1.1rem); }
+.menu__num, .menu__social { color: rgba(251, 245, 236, 0.8); }
+.menu__link:hover, .menu__social a:hover { color: var(--ps-terra); }
+.menu :focus-visible, body.menu-open .nav :focus-visible { outline-color: var(--ps-cream); }
+.menu__social { flex-wrap: wrap; gap: 1rem; }
+.footer__top { grid-template-columns: minmax(0, 1fr) auto; }
+.footer__copy { grid-column: 1 / -1; justify-self: start; text-align: left; }
+.footer__links { flex-wrap: wrap; gap: 0.5rem 1.5rem; justify-self: end; }
+.footer__links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+
+@media (max-width: 60rem) {
+  .marketing-page .v4-hero { min-height: min(42rem, 85svh); padding-block: 7rem 3rem; }
+  .marketing-page .v4-hero__name { max-width: 16ch; margin-inline: auto; }
+  .marketing-page .v4-ivana:has(> .v4-ivana__tx) { row-gap: 1.75rem; }
+  .marketing-page .v4-ivana__tx { max-width: 36rem; margin-inline: auto; }
+  .marketing-page .v4-ivana > .v4-ivana__media { width: min(100%, 23rem); }
+  .marketing-page .on-portret .v4-ivana__arch { width: min(100%, 22rem); }
+  .marketing-page .v4-stackcard { padding: clamp(1.5rem, 4vw, 2.5rem); }
+  .marketing-page .v4-stackcard blockquote { font-size: clamp(1.2rem, 1rem + 0.8vw, 1.55rem); line-height: 1.5; }
+  .marketing-page .v4-step, .marketing-page .v4-chip { padding-bottom: clamp(5rem, 12vh, 8rem); }
+  .marketing-page .on-hero { min-height: 0; padding-block: 7rem 2.5rem; }
+  .marketing-page .sv-vs__card { padding: 1.5rem; }
+  .marketing-page .kontakt-disclaimer { padding: 1rem; }
+  .footer__top { grid-template-columns: minmax(0, 1fr); }
+  .footer__links { justify-self: start; }
+}
+
+/* Floating chips need enough width for their longest titles. */
+@media (min-width: 60.001rem) and (max-width: 80rem), (max-height: 42rem) {
+  .marketing-page .v4-podrucja { height: auto; min-height: 0; margin-bottom: 0; padding-block: var(--sec-y); }
+  .marketing-page .v4-podrucja__title { position: static; width: 100%; max-width: none; padding-block: 0; margin-bottom: 2rem; }
+  .marketing-page .v4-podrucja__chips { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; width: 100%; max-width: 60rem; margin-inline: auto; }
+  .marketing-page .v4-chip { position: static; margin: 0; padding: 0; height: auto; transform: none !important; }
+  .marketing-page .v4-chip__inner { position: static; width: 100%; max-width: none; height: 100%; padding: 1.5rem; animation: none; }
+}
+@media (max-height: 42rem) {
+  .marketing-page .v4-hero { min-height: 0; }
+  .marketing-page .v4-iskustva__head, .marketing-page .v4-stackcard { position: static; }
+  .marketing-page .v4-iskustva__head { padding-top: 2rem; }
+  .marketing-page .v4-stackcard { min-height: 0; }
+  .marketing-page .v4-step { padding-bottom: 2rem; }
+  .menu__inner { justify-content: flex-start; }
+}
+@media (max-width: 35rem) and (max-height: 42rem) {
+  .marketing-page .v4-podrucja__chips { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 35rem) {
+  .footer__links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .menu, .nav, .marketing-page *, .marketing-page *::before { transition: none !important; }
+  .marketing-page .v4-rate { animation: none; opacity: 1; }
+  .marketing-page .reading-exit { padding-bottom: var(--sec-y); }
+  .marketing-page .v4-step { position: static; margin-bottom: 2rem; padding-bottom: 0; }
+  .marketing-page .v4-stackcard, .marketing-page .v4-iskustva__head { position: static; }
+}
+
+/* Shared program content grows naturally; long cards switch to the static
+   gallery when the available viewport height cannot contain them. */
+.marketing-page .v4-programi__sticky {
+  padding-top: 6.5rem;
+  padding-bottom: 2rem;
+  gap: 1.5rem;
+}
+.marketing-page .v4-programi__head,
+.marketing-page .v4-programi__viewport,
+.marketing-page .v4-programi__progress { flex-shrink: 0; }
+.marketing-page .v4-programi__viewport { padding-block: 0.75rem; }
+.marketing-page .v4-program {
+  width: clamp(20rem, 32vw, 29rem);
+  min-height: 0;
+  padding: clamp(1.25rem, 2vw, 2rem);
+}
+.marketing-page .v4-program__title { line-height: 1.16; overflow-wrap: anywhere; }
+.marketing-page .v4-programi--static .v4-programi__sticky {
+  height: auto;
+  padding-block: var(--sec-y);
+  justify-content: flex-start;
+  overflow: visible;
+}
+.marketing-page .v4-programi--static .v4-programi__viewport { overflow-x: auto; }
+.program-benefits { margin-top: 1.25rem; }
+.program-benefits__title {
+  margin: 0 0 0.65rem;
+  font-family: var(--ps-font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ps-text);
+}
+.program-benefits__list {
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 1.15rem;
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--ps-text-muted);
+}
+.marketing-page .prog-sekcija { padding-inline: max(var(--gut), calc((100% - 80rem) / 2)); }
+.marketing-page .catalog-card { min-width: 0; scroll-margin-top: 7rem; }
+.marketing-page .catalog-card__top { flex-wrap: wrap; }
+.marketing-page .catalog-card__title { flex: 1 1 12rem; min-width: 0; overflow-wrap: anywhere; line-height: 1.2; }
+.marketing-page .catalog-card__price { white-space: nowrap; color: var(--ps-burnt-text); }
+.marketing-page .catalog-card .program-benefits { margin-top: 0; }
+.marketing-page .catalog-card__cta { min-height: 2.75rem; display: inline-flex; align-items: center; line-height: 1.5; text-align: left; }
+.v4-rate { color: var(--ps-text); text-decoration: none; }
+.v4-rate:hover { background: var(--ps-white); }
+.reviews-link { display: inline-flex; gap: 0.5rem; align-items: center; min-height: 2.75rem; margin-bottom: 2rem; color: var(--ps-text); text-underline-offset: 0.25em; }
+.social-links { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+.social-links a { display: inline-flex; align-items: center; gap: 0.55rem; min-height: 2.75rem; color: inherit; text-underline-offset: 0.25em; }
+.social-links svg { flex-shrink: 0; }
+.footer__social { grid-column: 1 / -1; color: var(--ps-cream); }
+.footer__social a:hover { color: var(--ps-terra); }
+.social-links a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 0.25rem; }
+.marketing-page .kontakt-submit-notice { line-height: 1.65; color: var(--ps-text); }
+.kontakt-submit-notice a { color: var(--ps-burnt-text); text-underline-offset: 0.2em; }
+@media (max-width: 60rem) {
+  .marketing-page .v4-program { width: min(85vw, 24rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marketing-page .reveal { opacity: 1; transform: none; }
+  .footer-marquee__spin, .footer__ring-svg { animation: none; }
+  .marketing-page .v4-program { transition: none; }
+  .marketing-page .v4-program:hover { transform: none; }
+}
+
+.marketing-page .catalog-card { color: var(--ps-text); }
+
+/* One persistent title moves and shrinks first. Benefits enter only after
+   its 560ms journey, while tags and the original summary fade away. */
+.marketing-page .v4-program {
+  width: clamp(20rem, 30vw, 27rem);
+  min-height: clamp(22rem, 48vh, 28rem);
+  padding: 2.25rem;
+}
+.program-reveal__body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  --program-title-rise: 0px;
+  --program-title-scale: 0.65;
+  --program-title-space: 5rem;
+  --program-title-duration: 560ms;
+}
+.v4-program .program-reveal__body { min-height: 13rem; }
+.program-reveal__front { position: relative; }
+.catalog-card .program-reveal__front,
+.catalog-card .program-reveal__summary { display: grid; gap: 0.9rem; }
+.program-reveal__title {
+  position: relative;
+  z-index: 2;
+  transform-origin: top left;
+  transform: translateY(0) scale(1);
+  transition: transform var(--program-title-duration) cubic-bezier(0.4, 0, 0.2, 1) 160ms;
+}
+.program-reveal__before,
+.program-reveal__summary,
+.program-reveal__aside {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 220ms ease calc(var(--program-title-duration) + 160ms), visibility 0s calc(var(--program-title-duration) + 160ms);
+}
+.program-reveal__back {
+  position: absolute;
+  inset: var(--program-title-space) 0 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(0.65rem);
+  transition: opacity 160ms ease, transform 160ms ease, visibility 0s 160ms;
+}
+.program-reveal__back .program-benefits { margin: 0; }
+.program-reveal__back .program-benefits__list { list-style: disc; }
+.program-reveal[data-expanded="true"] .program-reveal__title {
+  transform: translateY(var(--program-title-rise)) scale(var(--program-title-scale));
+  transition-delay: 0s;
+}
+.program-reveal[data-expanded="true"] .program-reveal__before,
+.program-reveal[data-expanded="true"] .program-reveal__summary,
+.program-reveal[data-expanded="true"] .program-reveal__aside {
+  opacity: 0;
+  visibility: hidden;
+  transition-delay: 0s, 220ms;
+}
+.program-reveal[data-expanded="true"] .program-reveal__back {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 260ms ease var(--program-title-duration), transform 320ms var(--ps-ease) var(--program-title-duration), visibility 0s var(--program-title-duration);
+}
+.program-reveal__actions { display: flex; flex-direction: column; align-items: stretch; gap: 0.6rem; margin-top: auto; }
+.catalog-card .program-reveal__actions { margin-top: 0.9rem; }
+.program-reveal__toggle {
+  -webkit-tap-highlight-color: transparent;
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  background: none;
+  border: 0;
+  border-top: 1px solid var(--ps-border);
+  color: var(--ps-text);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+.program-reveal__toggle svg { transition: transform 0.3s var(--ps-ease); }
+.program-reveal[data-expanded="true"] .program-reveal__toggle svg { transform: rotate(180deg); }
+@media (hover: hover) and (pointer: fine) {
+  /* The content animates inside the card; the card itself stays in place. */
+  .marketing-page .v4-program.program-reveal:hover { transform: none; }
+}
+@media (hover: none), (pointer: coarse), (max-width: 60rem) {
+  .program-reveal__toggle { display: inline-flex; }
+  .program-reveal[data-expanded="true"] .program-reveal__front { position: absolute; inset: 0; }
+  .program-reveal[data-expanded="true"] .program-reveal__back { position: relative; inset: auto; padding-top: var(--program-title-space); overflow: visible; }
+}
+@media (max-width: 60rem) {
+  .marketing-page .v4-program { width: min(80vw, 21rem); min-height: 0; padding: 1.75rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .program-reveal__title, .program-reveal__before, .program-reveal__summary,
+  .program-reveal__aside, .program-reveal__back, .program-reveal__toggle svg { transition: none !important; }
+  .program-reveal__back, .program-reveal__toggle svg { transform: none !important; }
+}
+
+.program-benefits__header { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; margin-bottom: 0.65rem; }
+.program-benefits__header .program-benefits__title { margin: 0; }
+.program-benefits__price { color: var(--ps-burnt-text); font-family: var(--ps-font-display); font-size: 1.25rem; white-space: nowrap; }
+
+/* Match contact fields to the full width of the form-type controls. */
+.marketing-page .kontakt-layout__right > .kontakt-form { width: 100%; max-width: none; }
+
+/* Hide the browser's date-format hint until the field is being edited. */
+.marketing-page .kontakt-date[data-empty="true"]:not(:focus) { color: transparent; }
+.marketing-page .kontakt-date[data-empty="true"]:not(:focus)::-webkit-datetime-edit { opacity: 0; }
+.marketing-page .kontakt-date::-webkit-calendar-picker-indicator { opacity: 1; }

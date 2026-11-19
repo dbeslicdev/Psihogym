@@ -1,0 +1,48 @@
+.pg-detail .pd-facts > div {
+  display: grid;
+  grid-template-rows: subgrid;
+  grid-row: span 2;
+  row-gap: 0;
+}
+
+.player .player__media-pending {
+  min-height: 7rem;
+  display: grid;
+  align-content: center;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: #e2ecf1;
+  color: var(--ps-brown);
+  margin-bottom: 1.5rem;
+}
+
+.player .player__media-pending p { margin: 0; }
+.player .player__asset-status { color: var(--ps-text-muted); font-size: .85rem; }
+
+.checkout-page .btn--dark {
+  justify-content: center;
+  background: var(--ps-brown);
+  color: var(--ps-cream);
+}
+.pg-detail .pd-facts dd small, .pg-detail .pd-purchase del {
+  font-family: var(--ps-font-mono);
+  font-size: .72rem;
+  color: var(--ps-text-muted);
+}
+.pg-detail .pd-section-lead { max-width: 62ch; }
+.pg-detail .pd-syllabus-intro { color: var(--ps-text-muted); font-size: .9rem; margin-block: 1.5rem 1rem; }
+.pg-detail .pd-module-intro:first-child, .pg-detail .pd-question-body {
+  font-size: 1rem; line-height: 1.65; color: var(--ps-brown);
+}
+.pg-detail .pd-lesson-list { list-style: none; padding: 0; margin: 1rem 0 0; }
+.pg-detail .pd-lesson-list li {
+  display: grid; grid-template-columns: 3rem 1fr; gap: .75rem;
+  padding-block: .6rem; border-top: 1px solid rgba(74,58,50,.13); line-height: 1.45;
+}
+.pg-detail .pd-lesson-index { font: .7rem/1.6 var(--ps-font-mono); color: var(--ps-text-muted); padding-block: .15rem; }
+.pg-detail .pd-questions summary { grid-template-columns: minmax(0,1fr) auto; }
+.pg-detail .pd-question-body { max-width: 60ch; padding: 0 1.5rem 1rem 0; }
+.pg-detail .pd-question-body p { margin-block: 0 .75rem; }
+@media(max-width: 32rem) {
+  .pg-detail .pd-lesson-list li { grid-template-columns: 2.5rem 1fr; gap: .5rem; }
+}
