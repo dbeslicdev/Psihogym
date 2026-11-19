@@ -2,6 +2,8 @@ import {test} from 'node:test';import assert from 'node:assert/strict';
 import {mkdtempSync,rmSync} from 'node:fs';import {tmpdir} from 'node:os';import {join} from 'node:path';
 import {DatabaseSync} from 'node:sqlite';
 import {createApi} from './api.mjs';
+import {programiById} from './program-catalog.mjs';
+const day=86_400_000;
 test('bilješke su trajne, vidljive samo vlasniku i dostupne za brisanje i nakon isteka pristupa',async()=>{
  const dir=mkdtempSync(join(tmpdir(),'psihogym-notes-'));const dbPath=join(dir,'test.sqlite');const server=createApi({dbPath,testPurchases:true});await new Promise(r=>server.listen(0,'127.0.0.1',r));
  const base=`http://127.0.0.1:${server.address().port}`;
@@ -29,10 +31,19 @@ test('bilješke su trajne, vidljive samo vlasniku i dostupne za brisanje i nakon
   const e=await call(p+'/'+n.body.id,{body:'Uređeno'},a,'PUT');assert.equal(e.status,200);assert.equal(e.body.body,'Uređeno');
   assert.deepEqual((await call(p,undefined,a)).body.notes.map(x=>[x.lessonId,x.body]),[['l1','Uređeno'],['l2','Druga']]);
   // Istek pristupa: čitanje i brisanje rade, pisanje ne.
-  const db=new DatabaseSync(dbPath);db.prepare('UPDATE purchases SET created_at=0 WHERE user_id=(SELECT id FROM users WHERE email=?)').run('a@example.test');db.close();
+  const access=programiById['emocionalni-razvoj'].accessDays*day;
+  const expire=(daysAgo,email)=>{const db=new DatabaseSync(dbPath);db.prepare('UPDATE purchases SET created_at=? WHERE user_id=(SELECT id FROM users WHERE email=?)').run(Date.now()-access-daysAgo*day,email);db.close();};
+  expire(29,'a@example.test');
   assert.equal((await call(p,undefined,a)).body.notes.length,2);
   assert.equal((await call(p,{lessonId:'l1',body:'nova'},a)).status,403);
   assert.equal((await call(p+'/'+n.body.id,{},a,'DELETE')).status,200);
   assert.deepEqual((await call(p,undefined,a)).body.notes.map(x=>x.body),['Druga']);
+  // Rok čuvanja: 30 dana nakon isteka bilješke se trajno brišu (i pri čitanju i pri pokretanju servera).
+  expire(31,'a@example.test');
+  assert.deepEqual((await call(p,undefined,a)).body.notes,[]);
+  assert.equal((await call(p,{lessonId:'l1',body:'B ostaje'},b)).status,201);
+  expire(31,'b@example.test');
+  const db=new DatabaseSync(dbPath);assert.equal(db.prepare('SELECT count(*) AS n FROM notes').get().n,1);db.close();
+  const restarted=createApi({dbPath});const left=new DatabaseSync(dbPath);assert.equal(left.prepare('SELECT count(*) AS n FROM notes').get().n,0);left.close();restarted.close();
  }finally{await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true});}
 });

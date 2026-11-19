@@ -22,6 +22,15 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
  const noteBody=v=>{if(typeof v!=='string'||!v.trim()||v.length>noteLimit.body)throw fail(400,'Bilješka mora imati od 1 do '+noteLimit.body+' znakova.');return v.trim();};
  const noteRow=n=>({id:n.id,lessonId:n.lesson_id,body:n.body,createdAt:n.created_at,updatedAt:n.updated_at});
  const courses = courseAccess(db);
+ // Rok čuvanja: bilješke se brišu 30 dana nakon isteka pristupa programu. Obnova unutar roka ih zadržava.
+ const noteRetention=30*24*3600000;
+ const purgeNotes=(now=Date.now(),userIds=db.prepare('SELECT DISTINCT user_id FROM notes').all().map(r=>r.user_id))=>{
+  const del=db.prepare('DELETE FROM notes WHERE user_id=? AND program_id=?');
+  for(const userId of userIds){const {purchases,expiredPurchases}=courses.list(userId,now);const kept=new Set(purchases.map(o=>o.programId));
+   for(const o of expiredPurchases)if(o.expiresAt+noteRetention>now)kept.add(o.programId);
+   for(const {program_id} of db.prepare('SELECT DISTINCT program_id FROM notes WHERE user_id=?').all(userId))if(!kept.has(program_id))del.run(userId,program_id);}
+ };
+ purgeNotes();const purgeTimer=setInterval(()=>purgeNotes(),6*3600000);purgeTimer.unref();
  const ttl=7*24*3600000, rates=new Map();
  // API sluša samo na loopbacku, pa svaki zahtjev dolazi preko lokalnog proxyja (Vite, nginx).
  // Stvarni klijent je zadnja adresa koju je proxy dopisao u X-Forwarded-For.
@@ -91,7 +100,7 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
     // Čitanje i brisanje ostaju dostupni i nakon isteka pristupa; pisanje traži aktivan program.
     const active=()=>{if(!courses.list(user.id).purchases.some(order=>order.programId===id))throw fail(403,'Nemaš pristup ovom programu.');};
     const own=()=>{const n=db.prepare('SELECT * FROM notes WHERE id=? AND user_id=? AND program_id=?').get(noteId,user.id,id);if(!n)throw fail(404,'Bilješka nije pronađena.');return n;};
-    if(!noteId&&req.method==='GET')return send({notes:db.prepare('SELECT * FROM notes WHERE user_id=? AND program_id=? ORDER BY created_at,id').all(user.id,id).map(noteRow)});
+    if(!noteId&&req.method==='GET'){purgeNotes(Date.now(),[user.id]);return send({notes:db.prepare('SELECT * FROM notes WHERE user_id=? AND program_id=? ORDER BY created_at,id').all(user.id,id).map(noteRow)});}
     if(!noteId&&req.method==='POST'){active();if(!isLesson(id,body.lessonId))throw fail(400,'Neispravna lekcija.');const text=noteBody(body.body);
      if(db.prepare('SELECT count(*) AS n FROM notes WHERE user_id=? AND program_id=?').get(user.id,id).n>=noteLimit.perProgram)throw fail(400,'Dosegnut je najveći broj bilješki za ovaj program.');
      const now=Date.now(),n={id:randomUUID(),user_id:user.id,program_id:id,lesson_id:body.lessonId,body:text,created_at:now,updated_at:now};
@@ -112,7 +121,7 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
    throw fail(404,'Nije pronađeno.');
   }catch(e){if(!e.status)console.error('API error:',e.code||e.name);send({error:e.status?e.message:'Poslužitelj trenutačno nije dostupan.'},e.status||500);}
  });
- server.on('close',()=>db.close());return server;
+ server.on('close',()=>{clearInterval(purgeTimer);db.close();});return server;
 }
 if(process.argv[1]&&resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  if(process.env.NODE_ENV==='production')throw new Error('Local account server: production deployment requires HTTPS, email verification/recovery and operational review.');
