@@ -24,3 +24,9 @@ export function saveProgress(id,value){
    return saved;
  });progressQueue=task;return task;
 }
+// Bilješke: server je jedini izvor; klijent ih ne sprema lokalno (mogu sadržavati podatke o zdravlju).
+const notesPath=id=>'/programs/'+encodeURIComponent(id)+'/notes';
+export const listNotes=id=>api(notesPath(id),undefined,'GET').then(v=>v.notes);
+export const addNote=(id,lessonId,body)=>api(notesPath(id),{lessonId,body});
+export const editNote=(id,noteId,body)=>api(notesPath(id)+'/'+noteId,{body},'PUT');
+export const deleteNote=(id,noteId)=>api(notesPath(id)+'/'+noteId,{},'DELETE');

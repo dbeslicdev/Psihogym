@@ -5,7 +5,7 @@ import {promisify} from 'node:util';
 import {mkdirSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {courseAccess, isPurchasable, programCurriculum, validatedProgress} from './course-access.mjs';
+import {courseAccess, isLesson, isPurchasable, programCurriculum, validatedProgress} from './course-access.mjs';
 const scrypt=promisify(scryptCallback), digest=v=>createHash('sha256').update(v).digest('hex');
 export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=false}={}) {
  mkdirSync(dirname(dbPath),{recursive:true});const db=new DatabaseSync(dbPath);
@@ -14,7 +14,13 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
  CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),expires_at INTEGER NOT NULL);
  CREATE TABLE IF NOT EXISTS purchases(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),program_id TEXT NOT NULL,amount_cents INTEGER NOT NULL,kind TEXT NOT NULL CHECK(kind IN ('test','paid')),created_at INTEGER NOT NULL,UNIQUE(user_id,program_id));
  CREATE TABLE IF NOT EXISTS progress(user_id TEXT NOT NULL REFERENCES users(id),program_id TEXT NOT NULL,done TEXT NOT NULL,current TEXT,updated_at INTEGER NOT NULL,PRIMARY KEY(user_id,program_id));
+ CREATE TABLE IF NOT EXISTS notes(id TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id),program_id TEXT NOT NULL,lesson_id TEXT NOT NULL,body TEXT NOT NULL,created_at INTEGER NOT NULL,updated_at INTEGER NOT NULL);
+ CREATE INDEX IF NOT EXISTS notes_owner ON notes(user_id,program_id,created_at);
  `);
+ // Bilješke mogu sadržavati podatke o zdravlju: vidljive su samo vlasniku, nikad se ne logiraju.
+ const noteLimit={body:5000,perProgram:500};
+ const noteBody=v=>{if(typeof v!=='string'||!v.trim()||v.length>noteLimit.body)throw fail(400,'Bilješka mora imati od 1 do '+noteLimit.body+' znakova.');return v.trim();};
+ const noteRow=n=>({id:n.id,lessonId:n.lesson_id,body:n.body,createdAt:n.created_at,updatedAt:n.updated_at});
  const courses = courseAccess(db);
  const ttl=7*24*3600000, rates=new Map();
  // API sluša samo na loopbacku, pa svaki zahtjev dolazi preko lokalnog proxyja (Vite, nginx).
@@ -63,11 +69,12 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
      hit('register',ip);
      if(password.length<12||typeof body.name!=='string'||!body.name.trim()||body.name.length>100)throw fail(400,'Unesi ime i lozinku od najmanje 12 znakova.');
      const salt=randomBytes(16).toString('hex'),hash=(await scrypt(password,salt,64)).toString('hex');
-     try{db.prepare('INSERT INTO users VALUES(?,?,?,?,?,?)').run(randomUUID(),email,body.name.trim(),hash,salt,now)}catch(e){if(e.code?.includes('SQLITE')||String(e).includes('UNIQUE'))throw fail(409,'Račun nije moguće registrirati. Pokušaj se prijaviti.');throw e;}
+     try{db.prepare('INSERT INTO users VALUES(?,?,?,?,?,?)').run(randomUUID(),email,body.name.trim(),hash,salt,now)}catch(e){if(!String(e).includes('UNIQUE'))throw e;}
+     // Postojeći e-mail: ista provjera lozinke kao prijava (uz iste limite), bez poruke da račun postoji.
     }
     const user=db.prepare('SELECT * FROM users WHERE email=?').get(email);
     const actual=await scrypt(password,user?.salt||'00000000000000000000000000000000',64);
-    if(!user||!timingSafeEqual(actual,Buffer.from(user.password_hash,'hex'))){hit('ip',ip);hit('email',email);throw fail(401,'Neispravan e-mail ili lozinka.');}
+    if(!user||!timingSafeEqual(actual,Buffer.from(user.password_hash,'hex'))){hit('ip',ip);hit('email',email);throw path==='/api/register'?fail(400,'Registracija nije uspjela. Provjeri podatke ili se prijavi ako već imaš račun.'):fail(401,'Neispravan e-mail ili lozinka.');}
     rates.delete('email:'+email);
     return send(issue(user,res));
    }
@@ -78,6 +85,20 @@ export function createApi({dbPath,origin='http://127.0.0.1:4182',testPurchases=f
     const ids=body.programIds;if(!Array.isArray(ids)||!ids.length||ids.length>10||new Set(ids).size!==ids.length||ids.some(id=>!isPurchasable(id)))throw fail(400,'Neispravan odabir programa.');
     courses.grantTestPurchase(user.id, ids);
     return send(account(user));
+   }
+   const notes=path.match(/^\/api\/programs\/([a-z0-9-]+)\/notes(?:\/([0-9a-f-]{36}))?$/);
+   if(notes){const [,id,noteId]=notes;if(!programCurriculum(id))throw fail(404,'Nije pronađeno.');
+    // Čitanje i brisanje ostaju dostupni i nakon isteka pristupa; pisanje traži aktivan program.
+    const active=()=>{if(!courses.list(user.id).purchases.some(order=>order.programId===id))throw fail(403,'Nemaš pristup ovom programu.');};
+    const own=()=>{const n=db.prepare('SELECT * FROM notes WHERE id=? AND user_id=? AND program_id=?').get(noteId,user.id,id);if(!n)throw fail(404,'Bilješka nije pronađena.');return n;};
+    if(!noteId&&req.method==='GET')return send({notes:db.prepare('SELECT * FROM notes WHERE user_id=? AND program_id=? ORDER BY created_at,id').all(user.id,id).map(noteRow)});
+    if(!noteId&&req.method==='POST'){active();if(!isLesson(id,body.lessonId))throw fail(400,'Neispravna lekcija.');const text=noteBody(body.body);
+     if(db.prepare('SELECT count(*) AS n FROM notes WHERE user_id=? AND program_id=?').get(user.id,id).n>=noteLimit.perProgram)throw fail(400,'Dosegnut je najveći broj bilješki za ovaj program.');
+     const now=Date.now(),n={id:randomUUID(),user_id:user.id,program_id:id,lesson_id:body.lessonId,body:text,created_at:now,updated_at:now};
+     db.prepare('INSERT INTO notes VALUES(?,?,?,?,?,?,?)').run(n.id,n.user_id,n.program_id,n.lesson_id,n.body,n.created_at,n.updated_at);return send(noteRow(n),201);}
+    if(noteId&&req.method==='PUT'){active();const n=own(),text=noteBody(body.body),now=Date.now();db.prepare('UPDATE notes SET body=?,updated_at=? WHERE id=?').run(text,now,n.id);return send(noteRow({...n,body:text,updated_at:now}));}
+    if(noteId&&req.method==='DELETE'){own();db.prepare('DELETE FROM notes WHERE id=?').run(noteId);return send({ok:true});}
+    throw fail(404,'Nije pronađeno.');
    }
    const match=path.match(/^\/api\/programs\/([a-z0-9-]+)\/(progress|access|curriculum)$/);
    if(match){const [,id,action]=match;if(!courses.list(user.id).purchases.some(order=>order.programId===id))throw fail(403,'Nemaš pristup ovom programu.');

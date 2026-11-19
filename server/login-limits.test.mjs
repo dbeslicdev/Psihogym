@@ -23,3 +23,16 @@ test('neuspjele prijave s jedne adrese ne zaključavaju ostale korisnike',async(
   assert.equal(await call('/register',{email:'r10@example.test',name:'R',password:'Long test password R'},'10.0.0.9'),429);
  }finally{await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true});}
 });
+test('registracija postojećeg e-maila ne potvrđuje da račun postoji',async()=>{
+ const dir=mkdtempSync(join(tmpdir(),'psihogym-register-'));const server=createApi({dbPath:join(dir,'test.sqlite')});await new Promise(r=>server.listen(0,'127.0.0.1',r));
+ const base=`http://127.0.0.1:${server.address().port}`;
+ const call=body=>fetch(base+'/api/register',{method:'POST',headers:{Origin:'http://127.0.0.1:4182','Content-Type':'application/json'},body:JSON.stringify(body)}).then(async r=>({status:r.status,body:await r.json()}));
+ try{
+  assert.equal((await call({email:'a@example.test',name:'A',password:'Long test password A'})).status,200);
+  // Ista lozinka: korisnik je jednostavno prijavljen, kao kod nove registracije.
+  const same=await call({email:'a@example.test',name:'Drugo ime',password:'Long test password A'});assert.equal(same.status,200);assert.equal(same.body.user.ime,'A');
+  // Druga lozinka: generička poruka, bez 409 i bez "račun postoji".
+  const other=await call({email:'a@example.test',name:'X',password:'Neka druga lozinka'});assert.equal(other.status,400);
+  assert.doesNotMatch(other.body.error,/postoji|zauzet/i);
+ }finally{await new Promise(r=>server.close(r));rmSync(dir,{recursive:true,force:true});}
+});

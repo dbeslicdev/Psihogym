@@ -77,7 +77,14 @@
 .player__disclosure form { margin-top: 1rem; }
 .player__disclosure label { display: block; margin-bottom: .4rem; }
 .player__disclosure textarea { font-family: inherit; color: var(--ps-brown); }
-.player .player__note { white-space: pre-wrap; overflow-wrap: anywhere; }
+.player .player__notes { margin-block: .5rem 1.25rem; }
+.player .player__note { padding-block: .9rem; border-bottom: 1px solid var(--ps-border); }
+.player .player__note-body { white-space: pre-wrap; overflow-wrap: anywhere; color: var(--ps-brown); margin: 0; }
+.player__note-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem 1rem; margin-top: .5rem; font-size: .9rem; color: var(--ps-text-muted); }
+.player__note-date { margin-right: auto; }
+.player .player__note-link { min-height: 2.75rem; padding: 0; text-decoration: underline; color: var(--ps-brown); background: none; border: 0; cursor: pointer; }
+.player .player__note-link:disabled { opacity: .5; cursor: default; }
+.player .player__note-download { margin-top: 1rem; }
 .player__error { margin-block: 1rem; }
 .player .player__outline-toggle { display: none; }
 .player__sr {

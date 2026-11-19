@@ -16,6 +16,10 @@ export function programCurriculum(id) {
   return lessonIds.has(id) ? curriculum[id] : null;
 }
 
+export function isLesson(id, lessonId) {
+  return typeof lessonId === 'string' && !!lessonIds.get(id)?.has(lessonId);
+}
+
 export function validatedProgress(id, value) {
   const valid = lessonIds.get(id);
   if (!valid || !Array.isArray(value.done) || value.done.length > valid.size ||
