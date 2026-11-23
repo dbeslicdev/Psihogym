@@ -121,8 +121,8 @@ export function OnlineJourney() {
   return (
     <div className="pg-online-sequence pg-online-text-only" ref={entranceRef}>
       <div className="pg-online-copy">
-        <SplitText as="h2" className="v4-h2 pg-online-title" active={ready} delay={0.1} segments={[{ text: "Online savjetovanje" }]} />
-        <SplitText as="p" className="pg-online-subtitle" active={ready} delay={0.22} segments={[{ text: "Bez obzira na lokaciju, tu smo za tebe." }]} />
+        <SplitText as="h2" className="v4-h2 pg-online-title" active={ready} delay={0.1} segments={[{ text: "Online individualni rad" }]} />
+        <SplitText as="p" className="pg-online-subtitle" active={ready} delay={0.22} segments={[{ text: "Bez obzira na lokaciju, tu sam za tebe." }]} />
         <SplitText as="p" className="pg-online-body" active={ready} delay={0.34} segments={[{ text: "Dobivaš istu kvalitetu podrške kao i uživo, i to bez izlaska iz kuće. Sve što ti treba je stabilan internet, malo privatnosti i kamera – i možemo početi." }]} />
         <Link to="/kontakt" className="v4-btn pg-sequence-cta">Dogovori termin <span className="cta-arrow" aria-hidden="true">↗</span></Link>
       </div>

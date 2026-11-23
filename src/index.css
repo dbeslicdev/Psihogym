@@ -198,8 +198,9 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--blue); }
   font-weight: 500;
   letter-spacing: -0.03em;
 }
-/* točka u logu prati standardnu (terakota) paletu, ne staru plavu */
-.nav__logo-dot { color: var(--ps-burnt-text); }
+/* SVG logo: visina kao prijašnji tekstualni logo, boja = boja navigacije (currentColor). */
+.nav__logo { display: inline-flex; align-items: center; }
+.nav__logo-mark { display: block; height: 1.5rem; width: auto; }
 
 .nav__right { display: flex; align-items: center; gap: 1rem; }
 .nav__cart {
@@ -306,7 +307,7 @@ body.menu-open { overflow: hidden; }
   gap: 1.5rem;
   font-size: 0.95rem;
 }
-.menu__email { border-bottom: 1px solid var(--blue); padding-bottom: 2px; }
+.menu__email { padding-bottom: 2px; }
 .menu__social { display: flex; gap: 1.5rem; color: var(--grey); }
 .menu__social a:hover { color: var(--blue); }
 

@@ -11,6 +11,7 @@
     "test:accounts": "node --test server/accounts.test.mjs server/course-access.test.mjs server/checkout-contract.test.mjs server/login-limits.test.mjs server/notes.test.mjs"
   },
   "dependencies": {
+    "@fontsource/caveat": "5.3.0",
     "@fontsource/geist-mono": "5.3.0",
     "@fontsource/hanken-grotesk": "5.3.0",
     "@fontsource/marcellus": "5.3.0",

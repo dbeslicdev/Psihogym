@@ -57,7 +57,7 @@ export default function ONamaPage() {
         </div>
         <div className="v4-ivana__tx">
           <SplitText as="h2" className="v4-ivana__name" active={portraitReady} delay={0.1} segments={[{ text: "Ivana Bešlić" }]} />
-          <SplitText as="p" className="v4-ivana__role" active={portraitReady} delay={0.22} segments={[{ text: "Magistra socijalne pedagogije i savjetodavna terapeutkinja" }]} />
+          <SplitText as="p" className="v4-ivana__role" active={portraitReady} delay={0.22} segments={[{ text: "Socijalna pedagoginja i savjetodavna terapeutkinja" }]} />
           <div className="on-about-intro">
             <SplitText as="p" active={portraitReady} delay={0.34} segments={[{ text: "Ja sam Ivana Bešlić, magistra socijalne pedagogije i savjetodavna terapeutkinja. Prije svega sam supruga, majka jedne divne djevojčice i cjeloživotna učenica." }]} />
           </div>

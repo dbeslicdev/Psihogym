@@ -46,6 +46,8 @@
   letter-spacing: -.055em;
   margin: 0;
 }
+/* SVG logo u boji footera (currentColor); visina ~ visina prijašnjeg teksta. */
+.site-footer .footer__logo { display: block; height: 1.05em; width: auto; max-width: 100%; }
 .site-footer a:hover { color: var(--footer-ink); text-decoration: none; }
 .site-footer a:focus-visible { outline: 2px solid var(--footer-ink); outline-offset: 3px; border-radius: 2px; }
 @media (max-width: 760px) {

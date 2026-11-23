@@ -12,11 +12,21 @@ export default function useReviewStack(sectionRef) {
     const update = () => {
       frame = undefined;
       const cards = steps.map(step => step.querySelector(".v4-stackcard"));
+      // Na nižim ekranima najviša kartica ne stane ispod naslova; tada se kartice
+      // stisnu (manji razmaci i slova), da naslov i dalje stoji dok se kartice izmjenjuju.
+      const fits = () => Math.max(0, ...cards.map(card => card?.offsetHeight || 0)) + (heading?.offsetHeight || 0) + 28 <= innerHeight;
+      delete section.dataset.reviewCompact;
+      if (!motion.matches && !fits()) {
+        section.dataset.reviewCompact = "true";
+        if (!fits()) delete section.dataset.reviewCompact;
+      }
       const heights = cards.map(card => card?.offsetHeight || 0);
       const navClearance = (document.querySelector(".nav")?.offsetHeight || 64) + 8;
       section.style.setProperty("--review-pin-top", navClearance + "px");
       const headingPixels = heading?.offsetHeight || 0;
       const resolvedTop = headingPixels + 12;
+      // Visina mekog prijelaza: kartica blijedi dok prolazi iza naslova (kao kartice tema).
+      const fade = Math.round(Math.min(64, Math.max(36, innerHeight * .06)));
       section.style.setProperty("--stack-top", resolvedTop + "px");
       const stacking = !motion.matches && Math.max(0, ...heights) + resolvedTop + 16 <= innerHeight;
       section.dataset.reviewLayout = stacking ? "sticky" : "flow";
@@ -47,6 +57,21 @@ export default function useReviewStack(sectionRef) {
       steps.forEach((step, index) => {
         const offset = stacking ? positions[index] - tops[index] : 0;
         if (cards[index]) cards[index].style.transform = offset ? `translateY(${offset}px)` : "";
+        // Blijeđenje: čim se kartica pomakne iznad svog mjesta, njezin dio uz donji rub
+        // naslova postupno postaje proziran (maska), umjesto oštrog reza.
+        const rise = stacking ? resolvedTop - positions[index] : 0;
+        if (cards[index]) {
+          if (rise > 0.5) {
+            const cut = headingBottom - positions[index];
+            const strength = Math.min(1, rise / fade);
+            const mask = `linear-gradient(to bottom, rgba(0,0,0,${(1 - strength).toFixed(3)}) ${cut.toFixed(1)}px, #000 ${(cut + fade).toFixed(1)}px)`;
+            cards[index].style.maskImage = mask;
+            cards[index].style.webkitMaskImage = mask;
+          } else if (cards[index].style.maskImage) {
+            cards[index].style.maskImage = "";
+            cards[index].style.webkitMaskImage = "";
+          }
+        }
         const covered = stacking && (positions[index] + heights[index] <= 0 || (index < steps.length - 1 && positions[index + 1] <= tops[index] + 0.5));
         step.dataset.covered = String(covered);
         step.inert = covered;
@@ -73,9 +98,10 @@ export default function useReviewStack(sectionRef) {
       section.style.removeProperty("--stack-top");
       section.style.removeProperty("--review-heading-height");
       delete section.dataset.reviewLayout;
+      delete section.dataset.reviewCompact;
       observer.disconnect();
       cancelAnimationFrame(frame);
-      steps.forEach(step => { delete step.dataset.covered; step.querySelector(".v4-stackcard")?.style.removeProperty("transform"); step.inert = false; step.removeAttribute("aria-hidden"); });
+      steps.forEach(step => { delete step.dataset.covered; step.querySelector(".v4-stackcard")?.style.removeProperty("transform"); step.querySelector(".v4-stackcard")?.style.removeProperty("mask-image"); step.querySelector(".v4-stackcard")?.style.removeProperty("-webkit-mask-image"); step.inert = false; step.removeAttribute("aria-hidden"); });
     };
   }, [sectionRef]);
 }

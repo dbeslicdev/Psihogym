@@ -2,6 +2,7 @@ import {useAccount,refreshAccount} from "./account.js";
 import { useEffect, useRef } from "react";
 import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import Lenis from "lenis";
+import { smoothScroll } from "./smoothScroll.js";
 import Navigation from "./components/Navigation.jsx";
 import ScrollThread from "./v4/ScrollThread.jsx";
 import Footer from "./components/Footer.jsx";
@@ -80,6 +81,7 @@ export default function App() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({ lerp: 0.09, smoothWheel: true });
     lenisRef.current = lenis;
+    smoothScroll.instance = lenis;
     let raf;
     const loop = (time) => {
       lenis.raf(time);
@@ -90,6 +92,7 @@ export default function App() {
       cancelAnimationFrame(raf);
       lenis.destroy();
       lenisRef.current = null;
+      smoothScroll.instance = null;
     };
   }, []);
 

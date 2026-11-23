@@ -242,6 +242,8 @@ export function useV4Transitions(wrapRef) {
       const previous = section.previousElementSibling;
       let readingEdge = null;
       if (!editorial && previous?.matches(".v4-online")) readingEdge = previous.querySelector(".v4-btn");
+      // Ivana → Teme: val staje ispod gumba "Pričajmo", pa ostaje zakrivljen i ne prekriva gumb.
+      else if (!editorial && previous?.matches(".v4-ivana")) readingEdge = previous.querySelector(".v4-ivana__cta");
       else if (!editorial && previous?.matches(".v4-programi")) readingEdge = previous.querySelector(".v4-programi__viewport");
       else if (!editorial && previous?.matches(".v4-iskustva")) readingEdge = previous.querySelector(".v4-step:last-child .v4-stackcard");
       return {
@@ -340,7 +342,8 @@ export function useV4Transitions(wrapRef) {
             const safeGap = Math.max(24, Math.min(48, vh * .045));
             const bottom = rectOf(readingEdge).bottom;
             let available = Math.max(0, r.top - bottom - safeGap);
-            const galleryExit = c.section.matches(".v4-stats") && previous.matches(".v4-programi");
+            // Izlaz iz galerije programa vrijedi za bilo koju sekciju koja slijedi (redoslijed se mijenjao).
+            const galleryExit = previous.matches(".v4-programi");
             const reviewExit = c.section.matches(".pg-home-closing") && previous.matches(".v4-iskustva");
             if (!still && (galleryExit || reviewExit)) {
               // Release the surface once the last card is leaving the reading area.
@@ -354,6 +357,12 @@ export function useV4Transitions(wrapRef) {
               shape.depth = Math.max(shape.depth, Math.min(vh * .15, r.width * .09) * remaining);
             }
             shape.lift = Math.min(shape.lift, available);
+            // Ivana → Teme: luk zadržava zakrivljenost dok se ne približi vrhu, umjesto ravne crte.
+            if (!still && c.section.matches(".v4-podrucja") && previous.matches(".v4-ivana")) {
+              const crest = r.top - shape.lift;
+              const remaining = Math.max(0, Math.min(1, (crest + .12 * vh) / (.65 * vh)));
+              shape.depth = Math.max(shape.depth, Math.min(vh * .15, r.width * .09) * remaining);
+            }
           }
           if (c.section.hasAttribute("data-center-wave")) {
             // Keep the invitation centred in the visible surface as its top lifts.

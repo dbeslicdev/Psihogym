@@ -4,36 +4,37 @@ import { programPrice } from "./content/program-pricing.js";
 
 /** Sav sadržaj stranice na jednom mjestu — preslikan iz originala. */
 
+// Redoslijed tema: od unutarnjeg prema odnosima.
 export const podrucja = [
   {
     num: "01",
-    title: ["Odnosi"],
-    desc: "Pomažemo ti graditi bolje odnose s ljudima oko sebe.",
+    title: ["Anksioznost"],
+    desc: "Pomažem ti razumjeti što ti se događa i istražiti što možeš učiniti kad ti je teško.",
   },
   {
     num: "02",
-    title: ["Anksioznost"],
-    desc: "Pomažemo ti razumjeti što ti se događa i pronaći načine da se lakše nosiš s onim što osjećaš.",
+    title: ["Stres"],
+    desc: "Pomažem ti usporiti i lakše se nositi sa svakodnevnim pritiscima.",
   },
   {
     num: "03",
     title: ["Samopouzdanje"],
-    desc: "Pomažemo ti graditi bolji odnos sa sobom.",
+    desc: "Pomažem ti graditi bolji odnos prema sebi.",
   },
   {
     num: "04",
     title: ["Zauzimanje", "za sebe"],
-    desc: "Pomažemo ti izraziti svoje potrebe i postaviti zdrave granice.",
+    desc: "Pomažem ti izraziti svoje potrebe i postaviti zdrave granice.",
   },
   {
     num: "05",
-    title: ["Stres"],
-    desc: "Pomažemo ti usporiti i ponovno se povezati sa sobom.",
+    title: ["Odnosi"],
+    desc: "Pomažem ti njegovati zdravije odnose s ljudima oko sebe.",
   },
   {
     num: "06",
     title: ["Roditeljstvo"],
-    desc: "Pomažemo ti pronaći svoj odgojni jezik.",
+    desc: "Pomažem ti pronaći topliji i jasniji odgojni jezik.",
   },
 ];
 
@@ -47,26 +48,42 @@ export const stats = [
 export const iskustva = [
   {
     name: "Irena J.",
-    text: "Odlasci na individualno savjetovanje u Psihogym, promjenilo je kvalitetu mog života i života moje obitelji nabolje. Ivana je profesionalna, empatična i u potpunosti predana klijentu. Predivno iskustvo koje ostavlja duboki trag...Hvala na svemu draga Ivana. Zauvijek ćete ostati dio našeg života",
+    // PROBA: pola kartica "centered" (5), pola "marker" (9, istaknuta misao s markerom)
+    design: "centered",
+    textMark: "promjenilo je kvalitetu mog života i života moje obitelji nabolje.",
+    text: "Odlasci na individualno savjetovanje u Psihogym, promjenilo je kvalitetu mog života i života moje obitelji nabolje. Ivana je profesionalna, empatična i u potpunosti predana klijentu. Predivno iskustvo koje ostavlja duboki trag...Hvala na svemu draga Ivana. Zauvijek ćete ostati dio našeg života.",
   },
   {
     name: "Barbara H.",
-    text: "Ivana je jako topla i draga, te vrlo pristupačna i susretljiva. Tople preporuke za ovu divnu ženu",
+    design: "centered",
+    // Centrirane kartice: najvažniji dio teksta podcrtan markerom (točno kako piše u recenziji).
+    textMark: "jako topla i draga",
+    text: "Ivana je jako topla i draga, te vrlo pristupačna i susretljiva. Tople preporuke za ovu divnu ženu.",
   },
   {
     name: "Andrea D.",
+    design: "centered",
+    textMark: "Postavili smo itekako dobre temelje za suočavanje sa svime što život nosi.",
     text: "Toplo preporučujem Psihogym i psihoterapeutkinju Ivanu svima koji osjećaju da im treba podrška u životu. Ivana je strpljiva, ljubazna i profesionalna te mi je pružila potporu u mom nastojanju da budem bolja verzija sebe. Postavili smo itekako dobre temelje za suočavanje sa svime što život nosi. Velika preporuka! :)",
   },
   {
     name: "Gabrijela Stella S.",
+    design: "centered",
+    textMark: "alate za nošenje sa životnim problemima koje ću koristit cijeli život",
+    highlight: "koji mi je dao alate za nošenje sa životnim problemima.",
+    mark: "Centar unutarnje snage",
     text: "Psihogym je za mene definitivno bio centar unutarnje snage koji mi je dao alate za nošenje sa životnim problemima koje ću koristit cijeli život. Toplo preporučujem psihoterapeuticu Ivanu svakom tko se osjeća izgubljeno i potrebna mu je podrška i pomoć da izgradi sebe iznova u najboljem svjetlu kojem može!",
   },
   {
     name: "Željka A.",
+    design: "centered",
+    textMark: "Pomogla je mojoj kćeri u najtežim trenucima",
     text: "Upoznali smo Ivanu i njenu terapiju prije 2 godine. Pomogla je mojoj kćeri u najtežim trenucima. S se osjećala ugodno, imala je potpuno povjerenje i što je najvažnije nakon razgovora osjećala se puno bolje. Mi kao roditelji bili smo također jako zadovoljni. Svaka preporuka od nas.",
   },
   {
     name: "Željka A.",
+    design: "centered",
+    textMark: "Pomogla je mojoj kćeri u najtežim trenucima",
     text: "Upoznali smo Ivanu i njenu terapiju prije 2 godine. Pomogla je mojoj kćeri u najtežim trenucima. S se osjećala ugodno, imala je potpuno povjerenje i što je najvažnije nakon razgovora osjećala se puno bolje. Mi kao roditelji bili smo također jako zadovoljni. Svaka preporuka od nas.",
   },
 ];
@@ -139,18 +156,26 @@ function counted(value, one, few, other) {
 }
 
 const cardTaglines = {
-  "emocionalni-razvoj": "Bolje razumijevanje, upravljanje i izražavanje emocija.",
-  anksioznost: "Razumij i preuzmi kontrolu nad anksioznošću.",
-  stres: "Uspori i vrati si prostor.",
-  odnosi: "Gradi odnose u kojima ti je dobro.",
-  samopouzdanje: "Bolji odnos sa sobom, korak po korak.",
+  "emocionalni-razvoj": "Nauči prepoznati svoje emocije, razumjeti njihovu ulogu i upravljati njima kad te preplave.",
+  anksioznost: "Nauči razumjeti svoju anksioznost, lakše se nositi s brigama i bolje brinuti o sebi.",
+  stres: "Nauči prepoznati što te opterećuje, posložiti svoje prioritete i pronaći više prostora za sebe.",
+  odnosi: "Nauči se zauzimati za sebe, otvoreno izražavati svoje potrebe i postavljati zdrave granice.",
+  samopouzdanje: "Nauči graditi bolji odnos prema sebi, utišati unutarnjeg kritičara i više vjerovati u svoje sposobnosti.",
 };
 
-export const programi = catalog.map(program => {
+// Broj samorefleksija u dnevniku svakog programa (za "Što dobivaš?").
+const reflections = { "emocionalni-razvoj": 2, anksioznost: 3, stres: 3, samopouzdanje: 2, odnosi: 2 };
+// "s" ili "sa": "sa" ispred broja koji se izgovara sa s/š (6, 7, 16, 17, 60–79).
+const withNumber = n => (/^(6|7|16|17|[67]\d)$/.test(String(n)) ? "sa" : "s");
+
+// Redoslijed kao u temama: od unutarnjeg prema odnosima.
+const programOrder = ["emocionalni-razvoj", "anksioznost", "stres", "samopouzdanje", "odnosi"];
+const orderOf = id => { const i = programOrder.indexOf(id); return i < 0 ? programOrder.length : i; };
+
+export const programi = [...catalog].sort((a, b) => orderOf(a.id) - orderOf(b.id)).map(program => {
   const lessons = program.modules.flatMap(module => module.lessons);
   return {
     ...program,
-    razina: "Za sve razine",
     trajanje: counted(program.days, "dan", "dana", "dana"),
     tagline: cardTaglines[program.id],
     videoCount: lessons.filter(lesson => lesson.type === "video").length,
@@ -168,11 +193,13 @@ export function brojLekcija(program) {
 }
 
 export function pogodnostiPrograma(program) {
+  const { exercises } = program.workbook;
+  const refl = reflections[program.id];
   const benefits = [
-    counted(program.modules.length, "modul", "modula", "modula"),
-    counted(program.videoCount, "psihoedukativna videolekcija", "psihoedukativne videolekcije", "psihoedukativnih videolekcija"),
+    `${counted(program.modules.length, "modul", "modula", "modula")} s ukupno ${counted(program.videoCount, "psihoedukativnom videolekcijom", "psihoedukativne videolekcije", "psihoedukativnih videolekcija")}`,
+    `${program.workbook.title} ${withNumber(exercises)} ${counted(exercises, "vježbom", "vježbe", "vježbi")}${refl ? ` te ${counted(refl, "samorefleksijom", "samorefleksije", "samorefleksija")} za praćenje napretka` : ""}`,
   ];
-  if (program.bonusCount) benefits.push(counted(program.bonusCount, "bonus lekcija", "bonus lekcije", "bonus lekcija"));
-  benefits.push(`${program.workbook.title} · ${counted(program.workbook.exercises, "vježba", "vježbe", "vježbi")}`, "Potvrda o završetku programa");
+  if (program.bonusCount) benefits.push(program.bonusCount === 1 ? "bonus videolekciju" : `${program.bonusCount} bonus videolekcije`);
+  benefits.push("potvrdu o završetku izazova");
   return benefits;
 }

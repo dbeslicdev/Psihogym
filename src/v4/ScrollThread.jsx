@@ -16,7 +16,8 @@ export default function ScrollThread() {
 
   useEffect(() => {
     const svg = svgRef.current;
-    const content = svg?.parentElement;
+    const wrap = svg?.parentElement;
+    const content = wrap?.parentElement;
     if (!content) return;
     const live = liveRef.current;
     const base = baseRef.current;
@@ -32,6 +33,12 @@ export default function ScrollThread() {
     let rebuildTimer;
     let stops = [];
     let focusOffset = 0;
+    // Zamrzavanje uz zaključanu galeriju programa: trag se crta u "virtualnim"
+    // koordinatama bez duljine listanja. SVG je position: sticky unutar omotača koji
+    // je viši točno za duljinu listanja, pa ga preglednik sam drži na mjestu dok
+    // galerija stoji (bez JS pomaka po kadru, koji uz Lenis kasni i poskakuje).
+    let freeze = { start: Infinity, length: 0, top: Infinity };
+    const toVirtual = (y) => y > freeze.top ? y - freeze.length : y;
     const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
     const origin = () => content.getBoundingClientRect().top + scrollY;
     const centreOf = (elements, fallback) => {
@@ -79,11 +86,12 @@ export default function ScrollThread() {
     const tick = () => {
       if (controller.signal.aborted || !svg.isConnected || motion.matches || !pathLength) return;
       const contentOrigin = origin();
-      const anchorYs = stops.map(({ section }) => clamp(anchorViewportY(section) + scrollY - contentOrigin, 0, endY));
+      const shift = clamp(scrollY - freeze.start, 0, freeze.length);
+      const anchorYs = stops.map(({ section }) => clamp(toVirtual(anchorViewportY(section) + scrollY - contentOrigin), 0, endY));
       if (scrollY < 1 && stops.length) {
         focusOffset = anchorYs[0] + contentOrigin;
       }
-      const focus = clamp(scrollY - contentOrigin + focusOffset, 0, endY);
+      const focus = clamp(scrollY - shift - contentOrigin + focusOffset, 0, endY);
       const point = pointAtY(focus);
       // Draw only the visible prefix, ending at the exact circle coordinate.
       live.setAttribute("d", segments.slice(0, point.index + 1).join(" ") + ` L${point.x.toFixed(3)},${point.y.toFixed(3)}`);
@@ -95,7 +103,8 @@ export default function ScrollThread() {
         circle.style.display = "";
         circle.classList.toggle("lit", y <= focus);
       });
-      const gallery = content.querySelector(".v4-programi__sticky");
+      // Trag se više ne skriva iza galerije programa (vidi build: tamo se "zamrzne").
+      const gallery = content.querySelector("[data-thread-behind] .v4-programi__sticky");
       if (gallery) {
         const section = gallery.closest(".v4-programi");
         const box = section.getBoundingClientRect();
@@ -138,16 +147,29 @@ export default function ScrollThread() {
       svg.style.display = motion.matches ? "none" : "";
       if (motion.matches) return;
       const footer = content.querySelector(".footer");
+      const pinned = content.querySelector(".v4-programi:not(.v4-programi--static)");
+      freeze = { start: Infinity, length: 0, top: Infinity };
+      if (pinned) {
+        const sticky = pinned.querySelector(".v4-programi__sticky");
+        const pinTop = parseFloat(getComputedStyle(sticky).top) || 0;
+        const top = pinned.getBoundingClientRect().top + scrollY;
+        freeze = { start: top - pinTop, length: Math.max(0, pinned.offsetHeight - sticky.offsetHeight), top: top - origin() };
+      }
       // The reading trail ends before the footer, including its empty stroke.
       const height = Math.ceil(footer
         ? footer.getBoundingClientRect().top + scrollY - origin()
-        : content.offsetHeight);
+        : content.offsetHeight) - freeze.length;
       const width = innerWidth;
       svg.setAttribute("width", width);
       svg.setAttribute("height", height);
       svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
       svg.style.width = width + "px";
       svg.style.height = height + "px";
+      // Sticky se "zalijepi" kad stranica dođe do početka zaključane galerije i drži
+      // se dok omotač (viši za duljinu listanja) ne istekne.
+      wrap.style.height = height + freeze.length + "px";
+      svg.style.position = freeze.length ? "sticky" : "";
+      svg.style.top = freeze.length ? origin() - freeze.start + "px" : "";
       endY = Math.max(1, height - 24);
       const narrow = width < 700;
       const baseX = narrow ? 9 : Math.round(clamp(width * .034, 26, 58));
@@ -199,6 +221,8 @@ export default function ScrollThread() {
     window.addEventListener("scroll", schedule, { passive: true, signal: controller.signal });
     window.addEventListener("resize", scheduleBuild, { passive: true, signal: controller.signal });
     content.addEventListener("load", scheduleBuild, { capture: true, signal: controller.signal });
+    // Ulazna animacija stranice kratko pomakne <main>; nakon nje se položaj mjeri ponovno.
+    content.addEventListener("animationend", scheduleBuild, { signal: controller.signal });
     motion.addEventListener("change", scheduleBuild, { signal: controller.signal });
     const observer = new ResizeObserver(scheduleBuild);
     observer.observe(content);
@@ -215,7 +239,7 @@ export default function ScrollThread() {
     };
   }, []);
 
-  return <svg className="thread" ref={svgRef} aria-hidden="true">
+  return <div className="thread-wrap" aria-hidden="true"><svg className="thread" ref={svgRef}>
     <defs><mask id="thread-gallery-mask" maskUnits="userSpaceOnUse">
       <rect ref={maskBackgroundRef} x="0" y="0" fill="white" />
       <path ref={galleryMaskRef} fill="black" />
@@ -231,5 +255,5 @@ export default function ScrollThread() {
     <circle className="thread__halo" ref={haloRef} r="9" cx="-99" cy="-99" />
     <circle className="thread__tip" ref={tipRef} r="4.5" cx="-99" cy="-99" />
     </g>
-  </svg>;
+  </svg></div>;
 }

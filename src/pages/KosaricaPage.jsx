@@ -93,7 +93,7 @@ export default function KosaricaPage() {
                     <div className="cart-item__info">
                       <span className="cart-item__name">{p.title}</span>
                       <span className="cart-item__meta">
-                        {p.trajanje} · {p.razina}
+                        {p.trajanje}
                       </span>
                     </div>
                     <span className="cart-item__price">{p.cijenaEur} €</span>

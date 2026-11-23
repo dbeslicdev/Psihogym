@@ -81,7 +81,7 @@
 .pg-premium .pg-original-programs.v4-programi--static .v4-programi__sticky { padding-top: clamp(2.5rem,6svh,4rem); padding-bottom: clamp(4rem,8svh,6rem); }
 .pg-premium .pg-program-catalog.v4-programi--static .v4-programi__sticky { padding-top: clamp(5.5rem,11vh,7rem); padding-bottom: 2rem; }
 @media(min-width:60.001rem) and (max-height:56.25rem) {
-  .pg-premium .pg-original-programs:not(.pg-program-catalog) .pc-concept { zoom: 1.05; }
+  .pg-premium .pg-original-programs:not(.pg-program-catalog) .pc-concept { --rail-zoom-base: 1.05; zoom: calc(var(--rail-zoom-base) * var(--rail-fit, 1)); }
 }
 
 /* Accordion controls stay anchored; only the plus rotates on expansion. */
@@ -213,12 +213,17 @@
     padding-top: clamp(4.5rem, 10svh, 6rem);
   }
 }
-/* Rounded action buttons: consistent lift and press across public pages and portal. */
+/* Rounded action buttons: consistent lift and press across public pages and portal.
+   Podloga (sjena) u mirovanju leži točno ispod gumba (pomak 0, pa se ne vidi). Na hover
+   gumb ide gore, a podloga dolje: isto trajanje i ista krivulja, pa kreću i staju zajedno. */
 :is(.btn,.v4-btn,.v2-btn,.v3-btn,.player__done-btn,.player__nav-btn,.player__asset-dl) {
   border-radius: 999px !important;
   translate: 0 0;
   scale: 1;
-  transition: translate 180ms ease, box-shadow 220ms ease, opacity 220ms ease;
+  box-shadow: 0 0 0 #d7ccbf;
+  transition: color .6s cubic-bezier(.45,0,.55,1), border-color .6s cubic-bezier(.45,0,.55,1),
+    background-color .6s cubic-bezier(.45,0,.55,1), translate .6s cubic-bezier(.22,1,.36,1),
+    box-shadow .6s cubic-bezier(.22,1,.36,1), scale .45s cubic-bezier(.22,1,.36,1), opacity 220ms ease;
 }
 :is(.v4-btn,.v2-btn,.v3-btn)::before { display: none !important; }
 :is(.btn--dark,.v4-btn,.v2-btn,.v3-btn):hover {
@@ -237,14 +242,14 @@
   }
 }
 :is(.btn,.v4-btn,.v2-btn,.v3-btn,.player__done-btn,.player__nav-btn,.player__asset-dl):not(:disabled):not([aria-disabled="true"]):active {
-  translate: 0 3px;
-  scale: 1;
-  box-shadow: none;
+  translate: 0 1px;
+  scale: .985;
+  box-shadow: 0 0 0 #d7ccbf;
 }
 @media (prefers-reduced-motion: reduce) {
   :is(.btn,.v4-btn,.v2-btn,.v3-btn,.player__done-btn,.player__nav-btn,.player__asset-dl) { transition: none; }
 }
-.menu__link[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+/* Izbornik bez podcrtavanja: ni trenutna stranica ni e-mail nisu podcrtani. */
 .nav.nav--hidden:focus-within { transform: none; }
 .pg-contact.marketing-page .on-hero { padding-bottom: clamp(4.5rem, 17svh, 10rem); }
 .pg-contact.marketing-page .kontakt-sekcija { padding-top: clamp(4.5rem, 11svh, 7rem); }

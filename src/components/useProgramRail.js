@@ -1,17 +1,24 @@
 import { useEffect } from "react";
+import { jumpTo } from "../smoothScroll.js";
 
-export default function useProgramRail(pinRef, trackRef, progressRef) {
+/* stepped (naslovna): zaključana galerija se lista korak po korak. Jedan potez
+   kotačića ili touchpada pomakne točno jednu karticu; nakon zadnje kartice
+   stranica nastavlja dalje. Bez stepped (katalog) ostaje kontinuirano listanje. */
+export default function useProgramRail(pinRef, trackRef, progressRef, { stepped = false } = {}) {
   useEffect(() => {
     const section = pinRef.current;
     const track = trackRef.current;
     if (!section || !track) return;
     const viewport = section.querySelector(".v4-programi__viewport");
     const head = section.querySelector(".v4-programi__head");
-    const compact = window.matchMedia("(pointer: coarse), (max-width: 60rem), (max-height: 42rem)");
+    // Niski laptopi (npr. 1366×768 ili skaliranje 125–150 %) zadržavaju zaključanu galeriju:
+    // kartice se smanje (--rail-fit) dok ne stanu po visini. Statično samo ako ni tako ne stanu.
+    const compact = window.matchMedia("(pointer: coarse), (max-width: 60rem)");
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const outer = new AbortController();
     const sticky = section.querySelector(".v4-programi__sticky");
     let staticMode;
+    const minFit = 0.7;
     let maxOffset = 0;
     let pinTop = 0;
     let frame;
@@ -21,6 +28,55 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
     let wheelTarget;
     let wheelTime;
     let wheelPosition;
+    // --- stepped ---
+    const stepScroll = 200; // koliko se stranica pomakne po kartici (nevidljivo, sekcija stoji)
+    let step = -1;
+    let lastStep = 0;
+    let stepSize = 0;
+    let visible = 2;
+    let previousY = scrollY;
+    let lastWheel = 0;
+    let gesture = "pass"; // trenutni potez kotačića ide stranici ("pass") ili galeriji ("swallow")
+    const zoneStart = () => section.getBoundingClientRect().top + scrollY - pinTop;
+    // Traka napretka: vidljiva (fade-in) dok je galerija zaključana; nestaje (fade-out)
+    // kad se prema dolje dođe do zadnje kartice. Pri povratku odozdo opet je puna
+    // i smanjuje se korak po korak.
+    let railEnd = false;
+    let railActive = false;
+    const setRailEnd = (value) => {
+      railEnd = value;
+      section.classList.toggle("is-rail-end", value);
+    };
+    const setRailActive = (value) => {
+      if (value === railActive) return;
+      railActive = value;
+      section.classList.toggle("is-rail-active", value);
+      // Svaki novi ulazak u galeriju (i odozdo, i kad Lenis stane točno na rubu) kreće s vidljivom trakom.
+      if (value) setRailEnd(false);
+    };
+    const setStep = (next) => {
+      next = Math.max(0, Math.min(lastStep, next));
+      if (next === step) return;
+      const previous = step;
+      step = next;
+      track.style.transform = `translate3d(${(-step * stepSize).toFixed(2)}px,0,0)`;
+      // Traka je pomaknuta za jedan korak: već na prvom prikazu pokazuje dio puta,
+      // a puna je na zadnjoj kartici.
+      if (progressRef.current) progressRef.current.style.width = `${(step + 1) / (lastStep + 1) * 100}%`;
+      [...track.children].forEach((card, index) => {
+        card.classList.toggle("is-offstage", index < step || index >= step + visible);
+      });
+      // Nestaje samo kad se do zadnje kartice dođe prema naprijed; svaki korak natrag je vraća.
+      if (previous < 0 || step < previous) setRailEnd(false);
+      else setRailEnd(lastStep > 0 && step === lastStep);
+    };
+    const goToStep = (next) => {
+      next = Math.max(0, Math.min(lastStep, next));
+      setStep(next);
+      jumpTo(zoneStart() + next * stepScroll);
+      previousY = scrollY;
+      setRailActive(true);
+    };
     const stopWheel = () => {
       if (wheelFrame !== undefined) cancelAnimationFrame(wheelFrame);
       wheelFrame = undefined;
@@ -49,6 +105,25 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
     const updatePin = () => {
       frame = undefined;
       if (staticMode) return;
+      if (stepped) {
+        const start = zoneStart();
+        const end = start + lastStep * stepScroll;
+        const y = scrollY;
+        // Ulazak u galeriju glatkim scrollom: stani na početku (odozgo) ili na kraju
+        // (odozdo), da zalet ne preskoči kartice. Veliki skok (poveznice) se ne dira,
+        // osim ako ga je pokrenuo kotačić/touchpad (brzi zalet).
+        // Rub se računa uključivo: kadar koji padne točno na rub inače bi propustio
+        // ostatak zaleta kroz cijelu galeriju.
+        if (Math.abs(y - previousY) < innerHeight * .5 || performance.now() - lastWheel < 200) {
+          if (previousY < start && y >= start) { gesture = "swallow"; goToStep(0); return; }
+          // Povratak odozdo: zadnja kartica s punom, vidljivom trakom.
+          if (previousY > end && y <= end) { gesture = "swallow"; setRailEnd(false); goToStep(lastStep); return; }
+        }
+        previousY = y;
+        setStep(Math.round((y - start) / stepScroll));
+        setRailActive(y >= start - 2 && y <= end + 2);
+        return;
+      }
       const offset = Math.min(Math.max(pinTop - section.getBoundingClientRect().top, 0), maxOffset);
       if (Math.abs(offset - lastOffset) < 0.01) return;
       lastOffset = offset;
@@ -66,12 +141,41 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
       const stickyStyle = getComputedStyle(sticky);
       const viewportStyle = getComputedStyle(viewport);
       pinTop = parseFloat(stickyStyle.top) || 0;
+      const grid = stickyStyle.display === "grid";
+      // Mreža ima jedan razmak (kartice | traka napretka), stupac dva (naslov | kartice | traka).
       const reserve = parseFloat(stickyStyle.paddingTop) + parseFloat(stickyStyle.paddingBottom)
-        + 2 * parseFloat(stickyStyle.rowGap) + parseFloat(viewportStyle.paddingTop)
+        + (grid ? 1 : 2) * parseFloat(stickyStyle.rowGap) + parseFloat(viewportStyle.paddingTop)
         + parseFloat(viewportStyle.paddingBottom) + progressRef.current.parentElement.offsetHeight;
-      const contentHeight = stickyStyle.display === "grid"
-        ? Math.max((head?.offsetHeight || 0), track.offsetHeight) : (head?.offsetHeight || 0) + track.offsetHeight;
-      const nextStatic = compact.matches || motion.matches || contentHeight + reserve + pinTop > innerHeight;
+      // Visina kartica mjeri se u punoj veličini (bez --rail-fit), pa se faktor ponovno
+      // postavi; ista vrijednost na kraju okvira ne okida ResizeObserver (nema petlje).
+      section.classList.toggle("v4-programi--stepped", stepped);
+      if (stepped) {
+        // Cijele kartice + izblijedjeli rub sljedeće. Broj vidljivih prati širinu:
+        // jedna na užem stupcu, dvije na laptopu, tri na velikom monitoru.
+        const trackStyle = getComputedStyle(track);
+        const gap = parseFloat(trackStyle.columnGap) || 0;
+        const width = viewport.clientWidth - parseFloat(trackStyle.paddingLeft) - parseFloat(trackStyle.paddingRight);
+        const peek = Math.max(28, Math.min(64, width * .06));
+        // Najmanji broj kartica uz koji kartica nije šira od 580 px (ni uža od 300 px).
+        const widthFor = (count) => Math.floor((width - peek - count * gap) / count);
+        visible = 1;
+        while (visible < track.children.length && widthFor(visible) > 580 && widthFor(visible + 1) >= 300) visible++;
+        const cardWidth = widthFor(visible);
+        section.style.setProperty("--rail-card-w", cardWidth + "px");
+        section.style.setProperty("--rail-peek", peek + "px");
+        stepSize = cardWidth + gap;
+        lastStep = Math.max(0, track.children.length - visible);
+      }
+      const currentFit = section.style.getPropertyValue("--rail-fit");
+      section.style.removeProperty("--rail-fit");
+      const trackHeight = track.offsetHeight;
+      const headHeight = head?.offsetHeight || 0;
+      const room = innerHeight - reserve - pinTop;
+      const fit = grid ? Math.min(1, Math.floor(room / trackHeight * 1000) / 1000) : 1;
+      const fits = grid ? headHeight <= room && fit >= minFit : headHeight + trackHeight <= room;
+      const nextStatic = compact.matches || motion.matches || !fits;
+      if (!nextStatic && fit < 1) section.style.setProperty("--rail-fit", String(fit));
+      else if (currentFit) section.style.removeProperty("--rail-fit");
       const changed = nextStatic !== staticMode;
       staticMode = nextStatic;
       if (changed || !staticMode) stopWheel();
@@ -81,6 +185,16 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
         track.style.transform = "";
         if (progressRef.current) progressRef.current.style.width = "";
         lastOffset = -1;
+        step = -1;
+        [...track.children].forEach(card => card.classList.remove("is-offstage"));
+      } else if (stepped) {
+        const height = `${innerHeight + lastStep * stepScroll}px`;
+        if (section.style.height !== height) section.style.height = height;
+        if (changed) viewport.scrollLeft = 0;
+        // Nova geometrija: ponovno postavi korak koji odgovara položaju stranice.
+        step = -1;
+        previousY = scrollY;
+        setStep(Math.round((scrollY - zoneStart()) / stepScroll));
       } else {
         maxOffset = Math.max(0, track.scrollWidth - viewport.clientWidth);
         const height = `${(section.dataset.fitContent === "true" ? sticky.offsetHeight : innerHeight) + maxOffset}px`;
@@ -106,6 +220,14 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
       if (staticMode || !keyboardNavigation) return;
       const card = event.target.closest(".v4-program");
       if (!card) return;
+      if (stepped) {
+        // Tipkovnica: korak u kojem je fokusirana kartica cijela vidljiva.
+        const index = [...track.children].indexOf(card);
+        viewport.scrollLeft = 0;
+        if (index < step) goToStep(index);
+        else if (index >= step + visible) goToStep(index - visible + 1);
+        return;
+      }
       const offset = Math.min(Math.max(card.offsetLeft - (viewport.clientWidth - card.offsetWidth) / 2, 0), maxOffset);
       viewport.scrollLeft = 0;
       window.scrollTo({ top: scrollY + section.getBoundingClientRect().top + offset - pinTop, behavior: "instant" });
@@ -131,6 +253,50 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
       wheelTarget = next;
       if (wheelFrame === undefined) wheelFrame = requestAnimationFrame(animateWheel);
     }, { passive: false, signal: outer.signal });
+    if (stepped) {
+      const inZone = () => {
+        const start = zoneStart();
+        return scrollY >= start - 1 && scrollY <= start + lastStep * stepScroll + 1;
+      };
+      // Jedan potez = jedan korak. Potez traje dok događaji stižu gušće od 140 ms
+      // (inercija touchpada), pa se ostatak poteza nakon koraka zanemaruje.
+      window.addEventListener("wheel", (event) => {
+        if (staticMode || event.ctrlKey) return;
+        const now = performance.now();
+        const fresh = now - lastWheel > 140;
+        lastWheel = now;
+        const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
+        if (!delta) return;
+        if (!inZone()) { if (fresh) gesture = "pass"; return; }
+        if (!fresh) {
+          if (gesture === "pass") return;
+          event.preventDefault();
+          event.stopPropagation();
+          return;
+        }
+        const next = step + (delta > 0 ? 1 : -1);
+        // Na rubu galerije potez ide stranici: dalje dolje, odnosno natrag gore.
+        if (next < 0 || next > lastStep) { gesture = "pass"; return; }
+        gesture = "swallow";
+        event.preventDefault();
+        event.stopPropagation();
+        goToStep(next);
+      }, { capture: true, passive: false, signal: outer.signal });
+      // Tipke za listanje stranice u galeriji također idu karticu po karticu.
+      window.addEventListener("keydown", (event) => {
+        if (staticMode || event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey) return;
+        const target = event.target instanceof Element ? event.target : null;
+        if (target?.closest("input, textarea, select, [contenteditable]")) return;
+        const direction = ["ArrowDown", "PageDown", " "].includes(event.key) ? 1
+          : ["ArrowUp", "PageUp"].includes(event.key) ? -1 : 0;
+        if (!direction || (event.key === " " && target?.closest("a, button"))) return;
+        if (!inZone()) return;
+        const next = step + direction;
+        if (next < 0 || next > lastStep) return;
+        event.preventDefault();
+        goToStep(next);
+      }, { signal: outer.signal });
+    }
     viewport.addEventListener("keydown", stopWheel, { signal: outer.signal });
     viewport.addEventListener("pointerdown", stopWheel, { passive: true, signal: outer.signal });
     viewport.addEventListener("touchstart", stopWheel, { passive: true, signal: outer.signal });
@@ -153,8 +319,13 @@ export default function useProgramRail(pinRef, trackRef, progressRef) {
       cancelAnimationFrame(frame);
       cancelAnimationFrame(measureFrame);
       section.style.height = "";
+      section.style.removeProperty("--rail-fit");
+      section.style.removeProperty("--rail-card-w");
+      section.style.removeProperty("--rail-peek");
+      section.classList.remove("v4-programi--stepped", "is-rail-end", "is-rail-active");
+      [...track.children].forEach(card => card.classList.remove("is-offstage"));
       track.style.transform = "";
       if (progressRef.current) progressRef.current.style.width = "";
     };
-  }, [pinRef, trackRef, progressRef]);
+  }, [pinRef, trackRef, progressRef, stepped]);
 }

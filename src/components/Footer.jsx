@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import SocialLinks from "./SocialLinks.jsx";
+import LogoMark from "./LogoMark.jsx";
 import "./footer.css";
 
 const pages = [
@@ -12,7 +13,8 @@ const pages = [
 export default function Footer({ reloadDocument = false, layout = "contact-strip" }) {
   const masthead = layout !== "signature";
   const strip = layout === "contact-strip";
-  const wordmark = <div className="footer__wordmark" aria-hidden="true">psihogym</div>;
+  // Pravi psihogym logo (SVG) umjesto teksta; veličina prati font-size wordmarka.
+  const wordmark = <div className="footer__wordmark" aria-hidden="true"><LogoMark className="footer__logo" /></div>;
   const navigation = (
     <nav className="footer__links" aria-label="Glavne poveznice u podnožju">
       {pages.map(([to, label]) => (

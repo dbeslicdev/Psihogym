@@ -289,7 +289,7 @@ export default function V3Page() {
                   <div>
                     <div className="v3-program__meta">
                       <span className="v3-program__tag">{p.trajanje}</span>
-                      <span className="v3-program__tag">{p.razina}</span>
+                      
                     </div>
                     <h3 className="v3-program__title">{p.title}</h3>
                     <p className="v3-program__tagline">{p.tagline}</p>

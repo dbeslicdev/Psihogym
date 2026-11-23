@@ -289,6 +289,30 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
 }
 /* drugi redak naslova — vlastiti red, mekša boja (referenca: h1 .l2) */
 .v4-split__soft { display: block; color: var(--v4-soft); }
+/* Typewriter u heroju: riječ je u svom retku, a kursor drži visinu retka i kad je
+   riječ izbrisana, pa se ništa ispod naslova ne pomiče. */
+.typewriter { display: inline-grid; white-space: nowrap; text-align: left; }
+.v4-hero__name .typewriter.v4-split__soft { display: inline-grid; }
+.typewriter__sizer, .typewriter__text { grid-area: 1 / 1; }
+.typewriter__sizer { visibility: hidden; }
+/* Jedan redak (useSingleLine): "Trebaš" i riječ u istom retku. */
+.pg-premium.marketing-page .v4-hero__name.pg-hero-typed[data-inline] { max-width: none; white-space: nowrap; }
+/* Inače "Trebaš" ostaje u svom retku, a riječ prelazi u drugi. */
+.v4-hero__name.pg-hero-typed:not([data-inline]) .pg-hero-typed__lead { display: block; }
+.typewriter__caret {
+  display: inline-block;
+  width: .06em;
+  min-width: 2px;
+  height: .85em;
+  margin-left: .08em;
+  background: currentColor;
+  vertical-align: baseline;
+  transform: translateY(.1em);
+  animation: typewriter-caret 1s steps(1) infinite;
+}
+@keyframes typewriter-caret { 50% { opacity: 0; } }
+/* Kursor je iste boje kao riječ uz koju stoji (stari index.css ga je bojao plavo). */
+.v4-hero__name .typewriter .typewriter__caret { background: currentColor; }
 /* meki rub maske putuje s lijeva na desno → tekst se "otkriva" kao fade */
 @property --v4-wipe {
   syntax: "<percentage>";
@@ -1724,13 +1748,19 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
    Referenca (Opus5/final): tanka meander linija preko cijele visine
    dokumenta; akcentni dio se otkriva stroke-dashom kako čitaš, točka na
    svakoj sekciji se "upali" kad je prođeš, vodeća točka prati pogled. */
-.thread {
+.thread-wrap {
   position: absolute;
   left: 0;
   top: 0;
   /* iznad SVIH sekcija (one imaju isolation:isolate pa se slažu po DOM redu,
      a trag dolazi prvi → bez ovoga bi bio ispod njih). Ispod navigacije (100). */
   z-index: 5;
+  pointer-events: none;
+}
+/* SVG je u omotaču da može biti sticky dok je galerija programa zaključana. */
+.thread {
+  display: block;
+  position: relative;
   pointer-events: none;
   overflow: visible;
 }

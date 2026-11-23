@@ -16,3 +16,19 @@
 @import "@fontsource/geist-mono/latin-ext-400.css";
 @import "@fontsource/geist-mono/latin-500.css";
 @import "@fontsource/geist-mono/latin-ext-500.css";
+/* Potpisi u "Riječi koje ostaju" (pisana slova; latin-ext za Ž, š, ć). */
+@import "@fontsource/caveat/latin-400.css";
+@import "@fontsource/caveat/latin-ext-400.css";
+
+/* Marcellus ima brojke "starog stila": 3, 5 i 9 silaze ispod crte, a ni jedan rez
+   te obitelji nema brojke na crti. Zato znamenke 0–9 u Marcellusu dolaze iz fonta
+   Forum (sličan klesani stil, OFL licenca), a sva slova ostaju u Marcellusu.
+   Kasnije definirano lice s istim imenom ima prednost za svoj unicode-range. */
+@font-face {
+  font-family: "Marcellus";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./fonts/forum-latin-400.woff2") format("woff2");
+  unicode-range: U+0030-0039;
+}

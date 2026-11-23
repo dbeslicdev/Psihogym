@@ -9,6 +9,21 @@ import ProgramPreviewCard from "../components/ProgramPreviewCard.jsx";
 import useSectionEntrance from "../components/useSectionEntrance.js";
 import "./program-experience.css";
 
+// Opis cijene iz sadržaja; kad promocija istekne, zagrada s promotivnom cijenom otpada.
+function priceText(program) {
+  const text = program.priceDescription || "";
+  return program.cijenaEur === program.price ? text.replace(/\s*\(početna promotivna cijena:[^)]*\)/, "") : text;
+}
+
+// Završna poruka svakog programa (iznad gumba za kupnju).
+const closingLines = {
+  "emocionalni-razvoj": "Poslušaj što ti emocije govore.",
+  anksioznost: "Zamijeni „što ako“ sa „što mogu“.",
+  stres: "Kreni od „moram“ prema „biram“.",
+  odnosi: "Stvori odnose u kojima možeš disati.",
+  samopouzdanje: "Budi na svojoj strani.",
+};
+
 function ModuleOutline({ module, first }) {
   return (
     <details open={first}>
@@ -25,7 +40,10 @@ function ModuleOutline({ module, first }) {
               <span className="pd-lesson-index">
                 {lesson.type === "video" ? lesson.id.slice(1).padStart(2, "0") : lesson.type === "bonus" ? "Bonus" : "Osvrt"}
               </span>
-              <span>{lesson.title}</span>
+              <span className="pd-lesson-text">
+                <span className="pd-lesson-title">{lesson.title}</span>
+                {lesson.description && <span className="pd-lesson-goal">{lesson.description}</span>}
+              </span>
             </li>
           ))}
         </ul>
@@ -55,14 +73,14 @@ export default function ProgramDetailPage() {
     ["Koliko traje i koliko dugo imaš pristup?", [program.duration, program.access]],
     ["Na čemu se program temelji?", [program.basis]],
     ["Kome program nije namijenjen?", [program.unsuitable]],
+    ["Koja je cijena programa?", [priceText(program)]],
   ];
   return <V4Shell className="marketing-page pg-playground pg-premium pg-detail" data-editorial-waves>
     <section className="pd-hero" ref={heroRef} data-ready={heroReady} data-stop data-bg="#fbf5ec">
       <nav className="pd-breadcrumb" aria-label="Putanja"><Link to="/programi">Programi</Link><span aria-hidden="true">/</span><span>{identity.title}</span></nav>
       <div className="pd-hero-grid">
         <div className={"pd-art-stage pd-brand-art pc-palette--" + (programIndex + 1)} aria-hidden="true">
-          <div className="pd-brand-art__surface"><ProgramConcept index={programIndex} /></div>
-          <span className="pd-art-caption">Tvoj prostor. Tvoj tempo.</span>
+          <div className="pd-brand-art__surface"><ProgramConcept id={program.id} /></div>
         </div>
         <div className="pd-intro">
           <span className="pg-eyebrow">Online program / {identity.number}</span>
@@ -93,14 +111,13 @@ export default function ProgramDetailPage() {
         <div>
           <SplitText as="h2" delay={.1} segments={[{ text: "Koje te lekcije očekuju?" }]} />
           <p className="pd-section-lead">{program.activities}</p>
-          <p className="pd-syllabus-intro">{program.introduction} · {program.bibliography}</p>
           <div className="pd-modules">{program.modules.map((module, index) =>
             <ModuleOutline key={module.id} module={module} first={index === 0} />
           )}</div>
         </div>
         <aside className="pd-included" aria-labelledby="pd-included-heading">
           <h3 id="pd-included-heading">Što dobivaš?</h3>
-          <ul>{program.benefits.map(item => <li key={item}><span aria-hidden="true">↗</span>{item}</li>)}</ul>
+          <ul>{program.benefits.map(item => <li key={item}>{item}</li>)}</ul>
           <Link to="/kontakt" className="pg-text-link">Imaš pitanje? Javi nam se {arrow}</Link>
         </aside>
       </div>
@@ -117,14 +134,14 @@ export default function ProgramDetailPage() {
       </div>
     </Curve>
     <Curve className="pd-closing" data-stop color="#e4d9cd">
-      <div data-wave-content><SplitText as="h2" delay={.1} segments={[{ text: "Počni svojim tempom." }]} />
+      <div data-wave-content><SplitText as="h2" delay={.1} segments={[{ text: closingLines[program.id] || "Počni svojim tempom." }]} />
         <p>{identity.title} · {program.trajanje} · {program.cijenaEur} €</p>
       </div>
       <div data-wave-content>{buy}</div>
     </Curve>
     <Curve className="pd-related pg-original-programs" color="#fbf5ec" data-stop data-program-cards="true" aria-labelledby="pd-related-title">
       <div id="pd-related-title" data-wave-content><SplitText as="h2" delay={.1} segments={[{ text: "Istraži i druge programe" }]} /></div>
-      <div className="pd-related-grid" data-wave-content>{programi.filter(p => p.id !== program.id).slice(0,3).map(p => <ProgramPreviewCard key={p.id} program={p} index={programi.findIndex(item => item.id === p.id)} />)}</div>
+      <div className="pd-related-grid" data-wave-content>{programi.filter(p => p.id !== program.id).map(p => <ProgramPreviewCard key={p.id} program={p} index={programi.findIndex(item => item.id === p.id)} />)}</div>
     </Curve>
   </V4Shell>;
 }

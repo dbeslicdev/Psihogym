@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCartItems } from "../cart.js";
 import SocialLinks from "./SocialLinks.jsx";
+import LogoMark from "./LogoMark.jsx";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -37,7 +38,9 @@ export default function Navigation() {
     const main = document.querySelector("main");
     const wasInert = main?.inert;
     if (main) main.inert = true;
-    const navLinks = [...navRef.current.querySelectorAll("a")];
+    // Logo ostaje klikabilan i uz otvoren izbornik (vodi na naslovnu); ostale veze u traci ne.
+    const logo = navRef.current.querySelector(".nav__logo");
+    const navLinks = [...navRef.current.querySelectorAll("a")].filter((link) => link !== logo);
     navLinks.forEach((link) => { link.inert = true; });
     menuRef.current.querySelector("a")?.focus();
     const onKeyDown = (event) => {
@@ -46,7 +49,7 @@ export default function Navigation() {
         setMenuOpen(false);
       }
       if (event.key !== "Tab") return;
-      const items = [burgerRef.current, ...menuRef.current.querySelectorAll("a[href], button")];
+      const items = [logo, burgerRef.current, ...menuRef.current.querySelectorAll("a[href], button")];
       const index = items.indexOf(document.activeElement);
       if (index < 0 || (!event.shiftKey && index === items.length - 1) || (event.shiftKey && index === 0)) {
         event.preventDefault();
@@ -73,8 +76,9 @@ export default function Navigation() {
   return (
     <>
       <nav ref={navRef} className={navClass}>
-        <Link to="/" className="nav__logo">
-          psihogym<span className="nav__logo-dot">.</span>
+        {/* Logo vodi na naslovnu; ako smo već na njoj, vraća na vrh. */}
+        <Link to="/" className="nav__logo" aria-label="Psihogym, naslovna" onClick={() => { setMenuOpen(false); if (location.pathname === "/") window.scrollTo({ top: 0, behavior: "smooth" }); }}>
+          <LogoMark className="nav__logo-mark" />
         </Link>
         <div className="nav__right">
           <Link
@@ -120,12 +124,13 @@ export default function Navigation() {
         <div className="menu__inner">
           <nav className="menu__nav" aria-label="Glavni izbornik">
             {[
+              ["/", "Naslovna"],
+              ["/programi", "Programi"],
               ["/o-nama", "O nama"],
               ["/savjetovanje", "Savjetovanje"],
-              ["/programi", "Programi"],
               ["/kontakt", "Kontakt"],
             ].map(([path, label], index) => (
-              <NavLink key={path} to={path} className="menu__link" onClick={() => setMenuOpen(false)}>
+              <NavLink key={path} to={path} end={path === "/"} className="menu__link" onClick={() => setMenuOpen(false)}>
                 <span className="menu__num">0{index + 1}</span>{label}
               </NavLink>
             ))}
