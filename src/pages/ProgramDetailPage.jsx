@@ -118,6 +118,7 @@ export default function ProgramDetailPage() {
         <aside className="pd-included" aria-labelledby="pd-included-heading">
           <h3 id="pd-included-heading">Što dobivaš?</h3>
           <ul>{program.benefits.map(item => <li key={item}>{item}</li>)}</ul>
+          {program.benefitsNote && <p className="pd-included-note">{program.benefitsNote}</p>}
           <Link to="/kontakt" className="pg-text-link">Imaš pitanje? Javi nam se {arrow}</Link>
         </aside>
       </div>

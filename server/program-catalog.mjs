@@ -16,6 +16,7 @@ export const programi = Object.entries(courses).map(([id, course]) => ({
   audience: course.audience,
   activities: course.activities,
   benefits: course.benefits,
+  benefitsNote: course.benefitsNote,
   operation: course.operation,
   duration: course.duration,
   access: course.access,

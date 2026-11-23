@@ -39,7 +39,7 @@ function RequireAuth({ children }) {
 
 // Naslov taba po ruti
 const TITLES = {
-  "/": "psihogym — online savjetovalište",
+  "/": "psihogym — online psihosocijalna podrška",
   "/o-nama": "O nama — psihogym",
   "/savjetovanje": "Savjetovanje — psihogym",
   "/programi": "Programi — psihogym",

@@ -1,7 +1,7 @@
 {
   "emocionalni-razvoj": {
     "title": "Emocionalni razvoj",
-    "description": "Ovaj online program daje ti alate za bolje razumijevanje, upravljanje i izražavanje emocija.",
+    "description": "Nauči prepoznati svoje emocije, razumjeti njihovu ulogu i upravljati njima kad te preplave.",
     "days": 14,
     "benefits": [
       "2 modula s ukupno 10 psihoedukativnih videolekcija",
@@ -9,6 +9,7 @@
       "bonus videolekciju",
       "potvrdu o završetku izazova"
     ],
+    "benefitsNote": "Predviđeno trajanje programa je 14 dana.",
     "workbook": {
       "title": "Dnevnik emocionalnog razvoja",
       "pages": 43,
