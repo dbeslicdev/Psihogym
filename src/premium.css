@@ -626,7 +626,8 @@
 .pg-premium .pg-original-programs .program-benefits__list li { position: relative; padding-left: 1.6rem; }
 .pg-premium .pg-original-programs .program-benefits__list li::before {
   content: ""; position: absolute; left: 0; top: .3em; width: 1rem; height: 1rem; border-radius: 50%;
-  background: color-mix(in srgb, var(--ps-terra) 70%, #fff)
+  /* Oblačić u boji kartice (malo tamniji od njezina luka), kvačica ostaje smeđa. */
+  background: color-mix(in srgb, var(--pc-paper, var(--ps-terra)) 86%, var(--ps-brown))
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-5' fill='none' stroke='%239b5836' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat;
 }
 .pg-premium .pg-original-programs .v4-program .program-reveal__body { min-height: 22rem; }
@@ -1757,10 +1758,12 @@
 /* "Istraži druge programe" ima cijelu širinu: u jednom redu čim stane, na mobitelu se lomi. */
 .pg-detail .pd-related h2 { max-width: none; }
 .pg-detail .pd-related-grid { align-items: stretch; grid-template-columns: repeat(4,minmax(0,1fr)); }
-.pg-detail.marketing-page .pd-related .v4-program { width: 100%; min-width: 0; zoom: 1; padding: clamp(1.25rem,2vw,2rem); }
+.pg-detail.marketing-page .pd-related .v4-program { width: 100%; min-width: 0; zoom: 1; padding: clamp(1rem,1.5vw,1.5rem); }
 .pg-detail .pd-related .program-reveal__body { min-height: max(22rem,var(--program-hover-height,0px)); }
-/* Četiri kartice u redu i na užim ekranima: gumb ostaje u jednom retku. */
-@media(max-width:68rem) { .pg-detail .pd-related .v4-program__foot .v4-btn { padding-inline: 1rem; white-space: nowrap; } }
+/* Cijena i "Saznaj više" u istom redu i istih mjera kao na /programi. */
+/* Ako uz staru i novu cijenu nema mjesta (uske kartice), gumb prelazi u novi red umjesto da se zgnječi. */
+.pg-detail.marketing-page .pd-related .v4-program__foot { flex-wrap: wrap; gap: .5rem; }
+.pg-detail.marketing-page .pd-related .v4-program__foot .v4-btn { padding: .65rem .9rem; font-size: .8rem; min-height: 2.75rem; white-space: nowrap; flex-shrink: 0; }
 @media(max-width:60rem) {
   .pg-detail .pd-hero-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .pg-detail .pd-intro { grid-row: 1; }

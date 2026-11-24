@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
 import SocialLinks from "./SocialLinks.jsx";
 import LogoMark from "./LogoMark.jsx";
+import { siteLinks as pages } from "./siteLinks.js";
 import "./footer.css";
-
-const pages = [
-  ["/o-nama", "O nama"],
-  ["/savjetovanje", "Savjetovanje"],
-  ["/programi", "Programi"],
-  ["/kontakt", "Kontakt"],
-];
 
 export default function Footer({ reloadDocument = false, layout = "contact-strip" }) {
   const masthead = layout !== "signature";

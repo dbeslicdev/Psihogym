@@ -144,8 +144,8 @@ export default function SavjetovanjePage() {
           <Link to="/kontakt" className="v4-btn">
             Kontakt
           <span className="cta-arrow" aria-hidden="true">↗</span></Link>
-          <Link to="/o-nama" className="v4-btn v4-btn--ghost">
-            O nama
+          <Link to="/o-meni" className="v4-btn v4-btn--ghost">
+            O meni
           <span className="cta-arrow" aria-hidden="true">↗</span></Link>
         </div>
       </Curve>

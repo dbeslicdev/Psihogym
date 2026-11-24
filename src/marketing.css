@@ -349,6 +349,9 @@ body.menu-open .nav { background: var(--ps-brown); }
   .program-reveal:hover .program-reveal__actions a.v4-btn .cta-arrow { transform: translate(3px,-4px); }
 }
 .program-reveal:has(.program-reveal__actions a[href]) { cursor: pointer; }
+/* Stara cijena na kartici: ista veličina, prigušena i precrtana. */
+.v4-program__price del { color: var(--ps-text-muted); white-space: nowrap; }
+.v4-program__price { white-space: nowrap; }
 @media (hover: none), (pointer: coarse), (max-width: 60rem) {
   .program-reveal__toggle { display: inline-flex; }
   .program-reveal[data-expanded="true"] .program-reveal__front { position: absolute; inset: 0; }

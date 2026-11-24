@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCartItems } from "../cart.js";
 import SocialLinks from "./SocialLinks.jsx";
 import LogoMark from "./LogoMark.jsx";
+import { siteLinks } from "./siteLinks.js";
 
 export default function Navigation() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -123,13 +124,7 @@ export default function Navigation() {
       <div ref={menuRef} id="site-menu" className="menu" aria-hidden={!menuOpen} inert={menuOpen ? undefined : ""} data-lenis-prevent>
         <div className="menu__inner">
           <nav className="menu__nav" aria-label="Glavni izbornik">
-            {[
-              ["/", "Naslovna"],
-              ["/programi", "Programi"],
-              ["/o-nama", "O nama"],
-              ["/savjetovanje", "Savjetovanje"],
-              ["/kontakt", "Kontakt"],
-            ].map(([path, label], index) => (
+            {siteLinks.map(([path, label], index) => (
               <NavLink key={path} to={path} end={path === "/"} className="menu__link" onClick={() => setMenuOpen(false)}>
                 <span className="menu__num">0{index + 1}</span>{label}
               </NavLink>

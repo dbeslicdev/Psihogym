@@ -65,6 +65,8 @@
 }
 .pg-text-link span { transition: transform 220ms ease; }
 .pg-text-link:hover span { transform: translate(3px, -3px); }
+/* Link na sekciju niže na stranici (strelica ↓): na hover se pomiče prema dolje. */
+.pg-text-link[href^="#"]:hover span { transform: translateY(3px); }
 .pg-hero-scene { position: relative; width: 100%; max-width: 490px; min-height: 590px; margin-inline: auto; }
 .pg-hero-orbit {
   position: absolute;

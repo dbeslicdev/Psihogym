@@ -40,6 +40,11 @@
 
 html { scroll-behavior: smooth; }
 
+/* Tekst se ne označava (ni slučajno pri kliku na gumb uz pomak miša).
+   Polja za unos ostaju normalna, da se u njima može označiti i ispraviti tekst. */
+html { -webkit-user-select: none; user-select: none; }
+input, textarea, select, [contenteditable]:not([contenteditable="false"]) { -webkit-user-select: text; user-select: text; }
+
 /* ============ FOKUS (a11y) ============
    Vidljiv prsten SAMO za tipkovnicu (:focus-visible) — klik mišem ga ne
    pokazuje. Vrijedi za cijeli site; forme imaju svoje dodatne stilove. */

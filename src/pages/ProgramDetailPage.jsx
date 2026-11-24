@@ -75,7 +75,13 @@ export default function ProgramDetailPage() {
       : <button type="button" className="v4-btn" onClick={() => addToCart(program.id)}>Dodaj u košaricu {arrow}</button>;
   const questions = [
     ["Kako program funkcionira?", program.operation],
-    ["Koliko traje i koliko dugo imaš pristup?", [program.duration, program.access]],
+    ["Koliko traje i koliko dugo imaš pristup?", [
+      program.duration,
+      // "XXX" = trajanje još nije poznato; crveno da se vidi što treba doraditi.
+      program.videoLength && <>Trajanje pojedine videolekcije je {program.videoLength === "XXX"
+        ? <span className="pd-todo">XXX</span> : program.videoLength}.</>,
+      program.access,
+    ].filter(Boolean)],
     ["Na čemu se program temelji?", [program.basis]],
     ["Kome program nije namijenjen?", [program.unsuitable]],
   ];
@@ -133,7 +139,7 @@ export default function ProgramDetailPage() {
         {questions.map(([title, paragraphs]) => (
           <details key={title} data-accordion="question">
             <summary><span>{title}</span><span className="pd-module-plus" aria-hidden="true">+</span></summary>
-            <div className="pd-question-body">{paragraphs.map(text => <p key={text}>{text}</p>)}</div>
+            <div className="pd-question-body">{paragraphs.map((text, index) => <p key={index}>{text}</p>)}</div>
           </details>
         ))}
       </div>

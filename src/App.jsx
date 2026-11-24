@@ -40,7 +40,7 @@ function RequireAuth({ children }) {
 // Naslov taba po ruti
 const TITLES = {
   "/": "psihogym — online psihosocijalna podrška",
-  "/o-nama": "O nama — psihogym",
+  "/o-meni": "O meni — psihogym",
   "/savjetovanje": "Savjetovanje — psihogym",
   "/programi": "Programi — psihogym",
   "/kosarica": "Košarica — psihogym",
@@ -139,7 +139,9 @@ export default function App() {
           <Route path="/v3" element={<V3Page />} />
           {/* stari /v4 link i dalje vodi na isti (sad je home) */}
           <Route path="/v4" element={<Navigate to="/" replace />} />
-          <Route path="/o-nama" element={<ONamaPage />} />
+          <Route path="/o-meni" element={<ONamaPage />} />
+          {/* Stara adresa (prije "O meni") ostaje ispravna. */}
+          <Route path="/o-nama" element={<Navigate to="/o-meni" replace />} />
           <Route path="/savjetovanje" element={<SavjetovanjePage />} />
           <Route path="/programi" element={<ProgramiPage />} />
           <Route path="/programi/:programId" element={<ProgramDetailPage />} />

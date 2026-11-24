@@ -10,7 +10,11 @@ export default function ProgramPreviewCard({ program, index, titleHeadingLevel =
       <span className="v4-program__tag">{program.trajanje}</span>
     </div></>}
     footer={<div className="v4-program__foot">
-      <span className="v4-program__price">{program.cijenaEur} €</span>
+      <span className="v4-program__price">
+        {/* Dok traje promocija: stara cijena precrtana uz novu (kao na stranici programa). */}
+        {program.cijenaEur < program.price && <><del><span className="v4-sr-only">Stara cijena: </span>{program.price} €</del>{" "}<span className="v4-sr-only">Nova cijena: </span></>}
+        {program.cijenaEur} €
+      </span>
       <Link to={`/programi/${program.id}`} className="v4-btn v4-btn--ghost">
         <span>Saznaj više</span><span className="cta-arrow" aria-hidden="true">↗</span>
       </Link>

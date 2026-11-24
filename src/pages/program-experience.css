@@ -28,6 +28,8 @@
 .pg-detail .pd-purchase del { font: inherit; color: var(--ps-text-muted); }
 /* "+ bonus" uz broj videolekcija: isti font i veličina kao ostale vrijednosti (npr. "14 dana"). */
 .pg-detail .pd-facts dd small { font: inherit; color: inherit; }
+/* Sadržaj koji tek treba doraditi (npr. "XXX"): crveno, da se ne previdi. */
+.pg-detail .pd-todo { color: #c0392b; font-weight: 600; }
 /* Brojke kao glavni podatak: veće od riječi uz njih, na istoj osnovnoj liniji. */
 .pg-detail .pd-facts .pd-fact-num { font-size: 1.7em; line-height: 1; font-variant-numeric: lining-nums; }
 .pg-detail .pd-section-lead { max-width: 62ch; }
