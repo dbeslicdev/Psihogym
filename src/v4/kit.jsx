@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useRef } from "react";
 import { waveGeometry, waveEdgeAtX, programWaveGeometry, editorialWaveGeometry } from "./wave.js";
+import { SCROLL_JUMP } from "../smoothScroll.js";
 
 /* ============================================================
    V4 KIT — dijeljene primitive "Utočište" design-sistema.
@@ -103,6 +104,8 @@ export function SplitText({
               </span>{" "}
             </Fragment>
           ));
+        // `br` = dio uvijek počinje u novom redu (ručni prijelom)
+        if (seg.br) return <Fragment key={si}><br />{words}</Fragment>;
         // `soft` = vlastiti redak u mekšoj boji (drugi red naslova)
         return seg.soft ? (
           <span className="v4-split__soft" key={si}>
@@ -435,6 +438,8 @@ export function useV4Transitions(wrapRef) {
       passive: true,
       signal: ctrl.signal,
     });
+    // Programski pomak (jumpTo): valove iscrtaj odmah, bez kadra kašnjenja.
+    window.addEventListener(SCROLL_JUMP, update, { signal: ctrl.signal });
     window.addEventListener(
       "resize",
       () => {

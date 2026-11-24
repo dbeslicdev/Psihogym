@@ -72,6 +72,20 @@ export default function ProgramCard({ program, className, id, delay, titleClassN
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
       }}
+      onClick={(event) => {
+        // Cijela kartica vodi na program kao i "Saznaj više" (mišem i dodirom).
+        // Pravi link ostaje gumb, pa čitač ekrana i tipkovnica rade kao i prije.
+        const card = event.currentTarget;
+        if (event.defaultPrevented || event.button !== 0) return;
+        if (event.target.closest("a, button, input, select, textarea, label, [role='button']")) return;
+        if (String(window.getSelection?.() ?? "").trim()) return; // označavanje teksta nije klik
+        const back = event.target.closest(".program-reveal__back");
+        if (back && event.clientX > back.getBoundingClientRect().left + back.clientWidth) return; // traka za scroll
+        const link = card.querySelector(".program-reveal__actions a[href]");
+        if (!link) return;
+        if (event.metaKey || event.ctrlKey || event.shiftKey) window.open(link.href, "_blank", "noopener");
+        else link.click();
+      }}
       onKeyDown={(event) => {
         if (event.key === "Escape") {
           event.stopPropagation();

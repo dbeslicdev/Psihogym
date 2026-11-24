@@ -62,7 +62,6 @@
 .pd-purchase { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 .pd-purchase strong { display: block; font-family: var(--ps-font-display); font-size: 2.3rem; font-weight: 400; margin-top: .25rem; }
 .pd-purchase .pg-eyebrow { color: var(--ps-text-muted); font-size: .65rem; }
-.pd-purchase-note { font-size: .85rem; color: var(--ps-text-muted); line-height: 1.6; margin: 1.2rem 0; }
 .pd-intro .pg-text-link { font-size: .9rem; }
 .pd-overview { padding-block: 4rem 5rem; border-top: 1px solid rgba(74,58,50,.2); }
 .pd-overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 1rem; }
@@ -73,7 +72,7 @@
 .pd-content-grid { display: grid; grid-template-columns: minmax(0,1.12fr) minmax(0,.88fr); gap: clamp(3rem,7vw,7rem); align-items: start; }
 .pd-section-lead { font-size: 1rem; color: var(--ps-text-muted); line-height: 1.6; margin-bottom: 2rem; }
 .pd-modules { border-top: 1px solid rgba(74,58,50,.3); }
-.pd-modules details { border-bottom: 1px solid rgba(74,58,50,.3); }
+.pd-modules details { display: flow-root; border-bottom: 1px solid rgba(74,58,50,.3); }
 .pd-modules summary { display: grid; grid-template-columns: 2rem 1fr 1.5rem; align-items: start; gap: .6rem; list-style: none; cursor: pointer; padding-block: 1.5rem; font-family: var(--ps-font-display); font-size: 1.4rem; line-height: 1.35; }
 .pd-modules summary::-webkit-details-marker { display: none; }
 .pd-module-num { font-family: var(--ps-font-mono); font-size: .75rem; padding-top: .3rem; }
@@ -1693,8 +1692,9 @@
   padding-top: clamp(5.5rem,11vh,7rem);
 }
 
-/* Keep portal access visible directly after the horizontal catalogue. */
-.pg-programs .prog-login { padding-top: clamp(3rem,6vh,4.5rem); scroll-margin-top: 6rem; }
+/* Prijava je u istoj boji kao katalog (bez vala) i pojavljuje se čim
+   traka napretka galerije dođe do kraja. */
+.pg-programs .prog-login { padding-top: clamp(1.5rem,3vh,2.5rem); scroll-margin-top: 6rem; }
 
 /* Programme details use the current homepage identity, not the old cover art. */
 .pg-detail :is(.pd-hero,.pd-overview,.pd-content,.pd-materials,.pd-closing,.pd-related) {
@@ -1726,17 +1726,12 @@
 .pg-detail :is(.pd-content,.pd-materials,.pd-related) { padding-block: clamp(4rem,9vh,7rem); }
 .pg-detail .pd-included { background: #fbf5ec; border-color: rgba(74,58,50,.12); border-radius: 1.5rem; }
 .pg-detail .pd-reflection { border-radius: 1.5rem; background: #e5ecdd; border-color: rgba(74,58,50,.12); }
-.pg-detail .pd-modules summary { transition: translate 140ms var(--pg-ease); }
-.pg-detail .pd-modules summary:active { translate: 0 3px; }
 .pg-detail .pd-closing { color: var(--ps-brown); padding-block: clamp(4rem,9vh,7rem); }
 .pg-detail .pd-closing .pg-eyebrow { color: var(--ps-text-muted); }
 .pg-detail .pd-closing .v4-btn { background: var(--ps-brown); color: var(--ps-cream); border-color: var(--ps-brown); }
 .pg-detail .pd-closing .v4-btn:hover { color: var(--ps-cream); }
 /* Give the surface room to rise without cutting through cards or corner copy. */
 @media (prefers-reduced-motion: no-preference) {
-  .pg-programs .prog-login {
-    margin-top: clamp(2rem, 7svh, 4.5rem);
-  }
   .pg-detail :is(.pd-overview, .pd-content, .pd-materials, .pd-closing) {
     padding-bottom: clamp(4rem, 12svh, 8rem);
   }
@@ -1753,13 +1748,14 @@
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.3l2.2 2.2 4.8-5' fill='none' stroke='%239b5836' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% no-repeat;
 }
 /* Cilj lekcije ispod naslova. */
-.pg-detail .pd-lesson-text { display: grid; gap: .2rem; }
 .pg-detail .pd-lesson-goal { font-size: .9rem; line-height: 1.55; color: var(--ps-text-muted); }
 /* "O sudjelovanju" ostaje vidljiv dok se pitanja otvaraju. */
 .pg-detail .pd-material-copy { position: sticky; top: 7rem; align-self: start; }
 @media(max-width:60rem) { .pg-detail .pd-material-copy { position: static; } }
 /* Završna poruka i gumb zajedno, centrirani na sredini stranice. */
 .pg-detail .pd-closing { justify-content: center; gap: clamp(2rem,6vw,6rem); }
+/* "Istraži druge programe" ima cijelu širinu: u jednom redu čim stane, na mobitelu se lomi. */
+.pg-detail .pd-related h2 { max-width: none; }
 .pg-detail .pd-related-grid { align-items: stretch; grid-template-columns: repeat(4,minmax(0,1fr)); }
 .pg-detail.marketing-page .pd-related .v4-program { width: 100%; min-width: 0; zoom: 1; padding: clamp(1.25rem,2vw,2rem); }
 .pg-detail .pd-related .program-reveal__body { min-height: max(22rem,var(--program-hover-height,0px)); }

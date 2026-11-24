@@ -24,25 +24,43 @@
   background: var(--ps-brown);
   color: var(--ps-cream);
 }
-.pg-detail .pd-facts dd small, .pg-detail .pd-purchase del {
-  font-family: var(--ps-font-mono);
-  font-size: .72rem;
-  color: var(--ps-text-muted);
-}
+/* Stara cijena: iste veličine i fonta kao nova, ali prigušena i precrtana. */
+.pg-detail .pd-purchase del { font: inherit; color: var(--ps-text-muted); }
+/* "+ bonus" uz broj videolekcija: isti font i veličina kao ostale vrijednosti (npr. "14 dana"). */
+.pg-detail .pd-facts dd small { font: inherit; color: inherit; }
+/* Brojke kao glavni podatak: veće od riječi uz njih, na istoj osnovnoj liniji. */
+.pg-detail .pd-facts .pd-fact-num { font-size: 1.7em; line-height: 1; font-variant-numeric: lining-nums; }
 .pg-detail .pd-section-lead { max-width: 62ch; }
 .pg-detail .pd-syllabus-intro { color: var(--ps-text-muted); font-size: .9rem; margin-block: 1.5rem 1rem; }
 .pg-detail .pd-module-intro:first-child, .pg-detail .pd-question-body {
   font-size: 1rem; line-height: 1.65; color: var(--ps-brown);
 }
 .pg-detail .pd-lesson-list { list-style: none; padding: 0; margin: 1rem 0 0; }
-.pg-detail .pd-lesson-list li {
-  display: grid; grid-template-columns: 3rem 1fr; gap: .75rem;
-  padding-block: .6rem; border-top: 1px solid rgba(74,58,50,.13); line-height: 1.45;
+.pg-detail .pd-lesson-list li { border-top: 1px solid rgba(74,58,50,.13); line-height: 1.45; }
+/* Lekcija: naslov uvijek vidljiv, opis se otvara klikom (po defaultu zatvoreno). */
+.pg-detail .pd-lesson-list .pd-lesson { border: 0; }
+.pg-detail .pd-lesson-list .pd-lesson,
+.pg-detail .pd-lesson-list .pd-lesson > summary {
+  display: grid; grid-template-columns: 3rem 1fr 1.2rem; gap: .75rem; align-items: start;
+  padding-block: .6rem; font: inherit; line-height: 1.45;
 }
+/* flow-root: margine opisa ostaju unutar lekcije, pa je visina ista tijekom i nakon animacije. */
+.pg-detail .pd-lesson-list details.pd-lesson { display: flow-root; padding: 0; }
+.pg-detail .pd-lesson-list .pd-lesson > summary { list-style: none; cursor: pointer; }
+.pg-detail .pd-lesson-list .pd-lesson > summary::-webkit-details-marker { display: none; }
+.pg-detail .pd-lesson-plus { font-size: 1.15rem; line-height: 1.2; text-align: center; color: var(--ps-text-muted); transition: transform 200ms ease; }
+.pg-detail .pd-lesson[open] .pd-lesson-plus { transform: rotate(45deg); }
+/* Dok se stavka zatvara (accordion.js), × se odmah vraća u +. */
+.pg-detail .pd-lesson.is-closing .pd-lesson-plus,
+.pg-detail .pd-modules details.is-closing > summary .pd-module-plus { transform: none; }
+.pg-detail .pd-lesson-list .pd-lesson-goal { margin: -.2rem 1.95rem .7rem 3.75rem; }
 .pg-detail .pd-lesson-index { font: .7rem/1.6 var(--ps-font-mono); color: var(--ps-text-muted); padding-block: .15rem; }
+@media (prefers-reduced-motion: reduce) { .pg-detail .pd-lesson-plus { transition: none; } }
 .pg-detail .pd-questions summary { grid-template-columns: minmax(0,1fr) auto; }
 .pg-detail .pd-question-body { max-width: 60ch; padding: 0 1.5rem 1rem 0; }
 .pg-detail .pd-question-body p { margin-block: 0 .75rem; }
 @media(max-width: 32rem) {
-  .pg-detail .pd-lesson-list li { grid-template-columns: 2.5rem 1fr; gap: .5rem; }
+  .pg-detail .pd-lesson-list .pd-lesson,
+  .pg-detail .pd-lesson-list .pd-lesson > summary { grid-template-columns: 2.5rem 1fr 1.2rem; gap: .5rem; }
+  .pg-detail .pd-lesson-list .pd-lesson-goal { margin-inline: 3rem 1.7rem; }
 }

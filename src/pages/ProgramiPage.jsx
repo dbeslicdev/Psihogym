@@ -67,7 +67,7 @@ export default function ProgramiPage() {
           delay={0.1}
           segments={[
             {
-              text: "Vođeni online programi za rad na sebi — svojim tempom, uz materijale i vježbe.",
+              text: "Odaberi temu koja ti je sada važna i radi na sebi svojim tempom, uz videolekcije i dnevnik s vježbama.",
             },
           ]}
         />
@@ -86,7 +86,7 @@ export default function ProgramiPage() {
       {/* ---------- Prijava ---------- */}
       <Curve
         className="prog-sekcija prog-login"
-        color="#e2ecf1"
+        color="#fbf5ec"
         aria-label="Prijava u portal"
         id="prijava"
       >
@@ -113,7 +113,7 @@ export default function ProgramiPage() {
           ) : (
             <>
               <h2 className="login-card__title">{creating?"Izradi račun":"Prijava"}</h2>
-              <p className="login-card__hint">Pristup portalu programa.</p>
+              <p className="login-card__hint">Pristupi portalu programa</p>
 
               <form
                 className="kontakt-form login-form"

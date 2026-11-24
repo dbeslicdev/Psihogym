@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { programWaveGeometry } from "./wave.js";
+import { SCROLL_JUMP } from "../smoothScroll.js";
 
 // Every dot and the live stroke endpoint use the very same SVG path length.
 export default function ScrollThread() {
@@ -198,15 +199,24 @@ export default function ScrollThread() {
       const radius = narrow ? 3.5 : 4.5;
       tip.setAttribute("r", radius);
       halo.setAttribute("r", narrow ? 6 : 9);
-      dotsRef.current.replaceChildren();
+      // Postojeće točkice se zadržavaju: nova točkica kreće neispunjena pa bi se
+      // (uz tranziciju boje) ispunjena točkica na svakom ponovnom mjerenju
+      // nakratko posvijetlila, npr. dok se otvaraju lekcije.
+      const previous = new Map(stops.map(({ section, circle }) => [section, circle]));
       stops = [...content.querySelectorAll("[data-stop]")].map(section => {
-        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("class", "thread__dot");
+        let circle = previous.get(section);
+        if (!circle) {
+          circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          circle.setAttribute("class", "thread__dot");
+          circle.dataset.section = section.className;
+          dotsRef.current.append(circle);
+        }
         circle.setAttribute("r", radius);
-        circle.dataset.section = section.className;
-        dotsRef.current.append(circle);
         return { section, circle };
       });
+      // Ukloni sve ostale (stari odjeljci, ili ostaci prethodnog pokretanja efekta).
+      const keep = new Set(stops.map(({ circle }) => circle));
+      [...dotsRef.current.children].forEach(circle => { if (!keep.has(circle)) circle.remove(); });
       focusOffset = stops.length
         ? anchorViewportY(stops[0].section) + scrollY - origin()
         : innerHeight * .5;
@@ -219,6 +229,7 @@ export default function ScrollThread() {
     };
     content.addEventListener("pg:surface-updated", tick, { signal: controller.signal });
     window.addEventListener("scroll", schedule, { passive: true, signal: controller.signal });
+    window.addEventListener(SCROLL_JUMP, tick, { signal: controller.signal });
     window.addEventListener("resize", scheduleBuild, { passive: true, signal: controller.signal });
     content.addEventListener("load", scheduleBuild, { capture: true, signal: controller.signal });
     // Ulazna animacija stranice kratko pomakne <main>; nakon nje se položaj mjeri ponovno.

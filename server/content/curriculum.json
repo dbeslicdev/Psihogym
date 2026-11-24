@@ -129,7 +129,7 @@
   },
   "anksioznost": {
     "title": "Upravljanje anksioznošću",
-    "description": "Ovaj online program daje ti alate za bolje razumijevanje i upravljanje anksioznošću.",
+    "description": "Nauči razumjeti svoju anksioznost, lakše se nositi s brigama i bolje brinuti o sebi.",
     "days": 25,
     "benefits": [
       "3 modula s ukupno 19 psihoedukativnih videolekcija",
@@ -137,6 +137,7 @@
       "bonus videolekciju",
       "potvrdu o završetku izazova"
     ],
+    "benefitsNote": "Predviđeno trajanje programa je 25 dana.",
     "workbook": {
       "title": "Dnevnik upravljanja anksioznošću",
       "pages": 76,
@@ -323,13 +324,14 @@
   },
   "stres": {
     "title": "Upravljanje stresom",
-    "description": "Ovaj online program daje ti alate za bolje upravljanje stresom.",
+    "description": "Nauči prepoznati što te opterećuje, posložiti svoje prioritete i pronaći više prostora za sebe.",
     "days": 21,
     "benefits": [
       "3 modula s ukupno 17 psihoedukativnih videolekcija",
       "Dnevnik upravljanja stresom s 24 vježbe te 3 samorefleksije za praćenje napretka",
       "potvrdu o završetku izazova"
     ],
+    "benefitsNote": "Predviđeno trajanje programa je 21 dan.",
     "workbook": {
       "title": "Dnevnik upravljanja stresom",
       "pages": 56,
@@ -498,7 +500,7 @@
   },
   "odnosi": {
     "title": "Zdraviji odnosi",
-    "description": "Ovaj online program daje ti alate za izgradnju zdravijih odnosa s drugima.",
+    "description": "Nauči se zauzimati za sebe, otvoreno izražavati svoje potrebe i postavljati zdrave granice.",
     "days": 21,
     "benefits": [
       "2 modula s ukupno 11 psihoedukativnih videolekcija",
@@ -506,6 +508,7 @@
       "bonus videolekciju",
       "potvrdu o završetku izazova"
     ],
+    "benefitsNote": "Predviđeno trajanje programa je 21 dan.",
     "workbook": {
       "title": "Dnevnik zdravijih odnosa",
       "pages": 43,
@@ -631,7 +634,7 @@
   },
   "samopouzdanje": {
     "title": "Razvoj samopouzdanja",
-    "description": "Ovaj online program daje ti alate za razvoj samopouzdanja.",
+    "description": "Nauči graditi bolji odnos prema sebi, utišati unutarnjeg kritičara i više vjerovati u svoje sposobnosti.",
     "days": 21,
     "benefits": [
       "2 modula s ukupno 12 psihoedukativnih videolekcija",
@@ -639,6 +642,7 @@
       "bonus videolekciju",
       "potvrdu o završetku izazova"
     ],
+    "benefitsNote": "Predviđeno trajanje programa je 21 dan.",
     "workbook": {
       "title": "Dnevnik samopouzdanja",
       "pages": 48,

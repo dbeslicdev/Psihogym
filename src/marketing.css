@@ -337,7 +337,18 @@ body.menu-open .nav { background: var(--ps-brown); }
 @media (hover: hover) and (pointer: fine) {
   /* The content animates inside the card; the card itself stays in place. */
   .marketing-page .v4-program.program-reveal:hover { transform: none; }
+  /* Cijela kartica je klikabilna (ProgramCard): "Saznaj više" pokazuje hover
+     čim je miš na kartici, da se vidi kamo klik vodi. */
+  .program-reveal:hover .program-reveal__actions a.v4-btn--ghost {
+    background: var(--ps-cream, #fbf5ec);
+    color: var(--ps-brown, #4a3a32);
+    border-color: var(--ps-brown, #4a3a32);
+    translate: 0 -2px;
+    box-shadow: 0 5px 0 #d7ccbf;
+  }
+  .program-reveal:hover .program-reveal__actions a.v4-btn .cta-arrow { transform: translate(3px,-4px); }
 }
+.program-reveal:has(.program-reveal__actions a[href]) { cursor: pointer; }
 @media (hover: none), (pointer: coarse), (max-width: 60rem) {
   .program-reveal__toggle { display: inline-flex; }
   .program-reveal[data-expanded="true"] .program-reveal__front { position: absolute; inset: 0; }

@@ -200,7 +200,9 @@ h1 em, h2 em, h3 em { font-style: normal; color: var(--blue); }
 }
 /* SVG logo: visina kao prijašnji tekstualni logo, boja = boja navigacije (currentColor). */
 .nav__logo { display: inline-flex; align-items: center; }
-.nav__logo-mark { display: block; height: 1.5rem; width: auto; }
+.nav__logo-mark { display: block; height: 1.75rem; width: auto; }
+/* Malo deblja slova: tanki obrub iste boje oko krivulja (logo nije font, pa nema font-weight). */
+.nav__logo-mark g { stroke: currentColor; stroke-width: 3; stroke-linejoin: round; paint-order: stroke; }
 
 .nav__right { display: flex; align-items: center; gap: 1rem; }
 .nav__cart {
