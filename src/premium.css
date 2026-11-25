@@ -1234,8 +1234,19 @@
   padding-top: 2rem;
   padding-bottom: clamp(4rem, 10vh, 8rem);
 }
-.pg-about .on-about-profile .pg-ivana-image { aspect-ratio: 1.1; }
+.pg-about .on-about-profile .pg-ivana-image { aspect-ratio: 4 / 5; }
 .pg-about .on-about-profile .pg-ivana-image img { object-position: 50% 30%; }
+/* Dvije portretne fotografije, meka izmjena (vidi ONamaPage). */
+.pg-about .on-about-photos img {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s var(--pg-ease);
+}
+.pg-about .on-about-photos img[data-active="true"] { opacity: 1; }
+@media(prefers-reduced-motion:reduce) {
+  .pg-about .on-about-photos img { transition: none; }
+}
 .pg-about .on-about-profile .v4-ivana__name { margin: 0 0 1rem; }
 /* Naslovna: uloga ispod imena uvijek u jednom redu. */
 .pg-premium .v4-curve.v4-ivana .v4-ivana__role { max-width: none; white-space: nowrap; }

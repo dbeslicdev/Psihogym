@@ -7,6 +7,9 @@ import "../v4.css";
 /* O MENI (ruta /o-meni) — v4 "Utočište" jezik: uvodna rečenica slovo-po-slovo, arch
    portret, dvostupčani prose, prvi val na "profesionalni put", CTA.
    Boje/tipografija iz globalnih tokena (--ps-*). */
+const ABOUT_PHOTOS = ["/ivana-o-meni-1.jpg", "/ivana-o-meni-2.jpg"];
+const PHOTO_INTERVAL_MS = 7000;
+
 export default function ONamaPage() {
   const [careerParagraph, setCareerParagraph] = useState(0);
   const careerBodyRef = useRef(null);
@@ -23,6 +26,12 @@ export default function ONamaPage() {
     });
     paragraphs.forEach((paragraph) => observer.observe(paragraph));
     return () => observer.disconnect();
+  }, []);
+  // Dvije fotografije se izmjenjuju svakih 7 s (privremeno, za odabir bolje).
+  const [photo, setPhoto] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => setPhoto((current) => (current + 1) % ABOUT_PHOTOS.length), PHOTO_INTERVAL_MS);
+    return () => clearInterval(timer);
   }, []);
   const portraitRef = useRef(null);
   const closingRef = useRef(null);
@@ -50,8 +59,19 @@ export default function ONamaPage() {
         <div className="v4-ivana__media">
           <div className="pg-ivana-frame">
             <div className="pg-ivana-backdrop" aria-hidden="true"><div className="pg-ivana-backdrop-shape" /></div>
-            <div className="pg-ivana-image">
-              <img src="/ivana_mitric2.jpg" alt="Ivana Bešlić, socijalna pedagoginja i specijalizantica psihoterapije" loading="eager" fetchPriority="high" />
+            <div className="pg-ivana-image on-about-photos">
+              {ABOUT_PHOTOS.map((src, index) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={index === photo ? "Ivana Bešlić, socijalna pedagoginja i specijalizantica psihoterapije" : ""}
+                  aria-hidden={index === photo ? undefined : true}
+                  data-active={index === photo}
+                  width="1000"
+                  height="1500"
+                  loading="eager"
+                />
+              ))}
             </div>
           </div>
         </div>
