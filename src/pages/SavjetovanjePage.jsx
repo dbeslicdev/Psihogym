@@ -12,13 +12,13 @@ import "../v4.css";
    lavanda (CTA). Boje/tipografija iz tokena (--ps-*). */
 
 const ZNATI = [
-  "Sve što kažeš ostaje između nas.",
-  "Individualni rad namijenjen je osobama starijim od 18 godina.",
-  "Jedan termin traje 45 minuta.",
-  "Termin dogovaramo barem tjedan dana unaprijed, kako bismo oboje imali dovoljno vremena.",
-  "Termin možeš otkazati najkasnije 24 sata prije početka. Kasnije otkazan termin naplaćuje se u punom iznosu.",
-  "Plaćaš brzo i jednostavno, uplatom na račun.",
-  "Susreti se održavaju putem Google Meeta.",
+  "Sve što kažeš ostaje između nas",
+  "Za individualni rad trebaš imati navršenih 18 godina",
+  "Jedan termin traje 45 minuta",
+  "Termin dogovaramo barem tjedan dana unaprijed, kako bismo oboje imali dovoljno vremena",
+  "Termin možeš otkazati najkasnije 24 sata prije početka; kasnije otkazan termin naplaćuje se u punom iznosu",
+  "Plaćaš brzo i jednostavno, uplatom na račun",
+  "Susreti se održavaju putem Google Meeta",
 ];
 
 // Boje kuta oblačića, istim redom kao kartice tema na naslovnici.

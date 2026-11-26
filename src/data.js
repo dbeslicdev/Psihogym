@@ -130,13 +130,13 @@ export const mitovi = [
       "Ljudi obično traže pomoć zato što se žele suočiti s problemima, a ne zato što su nemoćni.",
   },
   {
-    mit: "Savjetovatelj je odgovoran za napredak",
+    mit: "Dovoljno je uključiti se na susret",
     istina:
-      "Savjetovatelj te vodi, ali ti moraš hodati. Tvoja spremnost i trud su ključni.",
+      "Susreti su važni, ali najviše se mijenja između njih, kad isprobavaš ono o čemu smo razgovarali.",
   },
   {
-    mit: "Savjetovanje je preskupo",
-    istina: "Mentalno zdravlje nije trošak, već vrijedna investicija.",
+    mit: "Rad na sebi je preskup",
+    istina: "Rad na sebi ima dugoročnu vrijednost. Ako ti individualni rad trenutno nije opcija, online programi su pristupačniji način da kreneš.",
   },
 ];
 

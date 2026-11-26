@@ -71,6 +71,7 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
         const step = vh * .85;
         const last = top + height - vh; // dno sekcije na dnu ekrana: uvijek stanica
         const out = [top];
+        if (!(step > 0)) return out; // skriven/0-visok prozor: bez beskonačne petlje
         for (let y = top + step; y < last; y += step) out.push(y);
         // Međustanica preblizu zadnjoj otpada ako prethodna i dalje pokriva sve do nje
         // (nema preskočenog sadržaja).

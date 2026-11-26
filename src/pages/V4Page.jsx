@@ -198,7 +198,7 @@ export default function V4Page() {
         <div className="v4-ivana__tx">
 
           <SplitText as="h2" className="v4-ivana__name" active={ivanaReady} delay={0.1} segments={[{ text: "Ivana Bešlić" }]} />
-          <SplitText as="p" className="v4-ivana__role" active={ivanaReady} delay={0.22} segments={[{ text: "Socijalna pedagoginja i specijalizantica psihoterapije" }]} />
+          <SplitText as="p" className="v4-ivana__role" active={ivanaReady} delay={0.22} segments={[{ text: "Socijalna pedagoginja" }, { text: "specijalizantica psihoterapije", br: true }]} />
           <div className="v4-ivana__q">
             <SplitText as="q" active={ivanaReady} delay={0.34} segments={[{ text: "Ne moraš imati sve odgovore. Promjene u odnosu prema sebi, prema drugima i u svakodnevnici često počinju malim koracima." }]} />
             <Link to="/kontakt" className="v4-btn v4-ivana__cta pg-sequence-cta">

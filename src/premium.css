@@ -1244,18 +1244,9 @@
   padding-bottom: clamp(4rem, 10vh, 8rem);
 }
 .pg-about .on-about-profile .pg-ivana-image { aspect-ratio: 4 / 5; }
+.pg-about.marketing-page .on-about-profile.v4-ivana > .v4-ivana__media { max-width: min(26rem, 34vw, calc((100svh - 14rem) * .8)); justify-self: center; }
 .pg-about .on-about-profile .pg-ivana-image img { object-position: 50% 30%; }
-/* Dvije portretne fotografije, meka izmjena (vidi ONamaPage). */
-.pg-about .on-about-photos img {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity 1.2s var(--pg-ease);
-}
-.pg-about .on-about-photos img[data-active="true"] { opacity: 1; }
-@media(prefers-reduced-motion:reduce) {
-  .pg-about .on-about-photos img { transition: none; }
-}
+/* Portret manji na laptopu i velikim ekranima. */
 .pg-about .on-about-profile .v4-ivana__name { margin: 0 0 1rem; }
 /* Naslovna: uloga ispod imena uvijek u jednom redu. */
 .pg-premium .v4-curve.v4-ivana .v4-ivana__role { max-width: none; white-space: nowrap; }
@@ -1304,7 +1295,7 @@
     gap: 3rem;
     padding-top: 1rem;
   }
-  .pg-about .on-about-profile .v4-ivana__media { max-width: 35rem; margin-inline: auto; }
+  .pg-about.marketing-page .on-about-profile.v4-ivana > .v4-ivana__media { max-width: 35rem; margin-inline: auto; }
   .pg-about .on-about-profile .v4-ivana__tx { width: 100%; }
   .pg-about .on-prose { grid-template-columns: 1fr; }
   .pg-about .on-about-career { margin-top: 0; }
@@ -1325,10 +1316,8 @@
 }
 .pg-about .on-about-profile .pg-ivana-image {
   border-radius: 1.5rem 1.5rem 1.5rem 5rem;
-  opacity: 0;
-  transform: translateY(18px);
-  clip-path: inset(0 0 12% 0);
-  transition: opacity 650ms var(--pg-ease), transform 650ms var(--pg-ease), clip-path 650ms var(--pg-ease);
+  /* Isti ulaz kao portret na naslovnici: pozadina se pojavi, slika se otkrije odozgo prema dolje. */
+  clip-path: inset(0 0 100% 0 round 1.5rem 1.5rem 1.5rem 5rem);
 }
 /* Override prose's shorthand padding: reserve actual reading time before waves. */
 .pg-about.marketing-page :is(.on-about-belief,.on-about-career).reading-exit {
@@ -1443,9 +1432,9 @@
   .pg-home-closing > .v4-btn { opacity: 1; transform: none; transition: none; }
 }
 
-.pg-about .on-about-profile[data-ready="true"] .pg-ivana-image { opacity: 1; transform: none; clip-path: inset(0); }
+.pg-about .on-about-profile[data-ready="true"] .pg-ivana-image { clip-path: inset(0 round 1.5rem 1.5rem 1.5rem 5rem); }
 @media(prefers-reduced-motion:reduce) {
-  .pg-about .on-about-profile .pg-ivana-image { opacity: 1; transform: none; clip-path: none; transition: none; }
+  .pg-about .on-about-profile .pg-ivana-image { clip-path: none; transition: none; }
 }
 
 
@@ -1821,4 +1810,18 @@
   .pg-premium.pg-counselling .sv-znati .v4-chip--c5 { top: 56%; left: calc(50% - 480px); right: auto; bottom: auto; }
   .pg-premium.pg-counselling .sv-znati .v4-chip--c6 { top: 56%; right: calc(50% - 480px); left: auto; bottom: auto; }
   .pg-premium.pg-counselling .sv-znati .v4-chip--c7 { top: 75%; left: 50%; right: auto; bottom: auto; margin-left: -220px; }
+}
+
+/* O meni — "Moj profesionalni put": odlomci se pojavljuju cijeli, jedan za drugim. */
+.on-career-body > p {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .6s var(--pg-ease, ease), transform .6s var(--pg-ease, ease);
+}
+.on-career-body.is-in > p { opacity: 1; transform: none; }
+.on-career-body.is-in > p:nth-child(2) { transition-delay: .15s; }
+.on-career-body.is-in > p:nth-child(3) { transition-delay: .3s; }
+.on-career-body.is-in > p:nth-child(4) { transition-delay: .45s; }
+@media (prefers-reduced-motion: reduce) {
+  .on-career-body > p { opacity: 1; transform: none; transition: none; }
 }
