@@ -1172,6 +1172,9 @@
 }
 .pg-premium .pg-original-programs:not(.v4-programi--static) .v4-programi__sticky {
   padding-top: clamp(5rem, 12vh, 8rem);
+  /* Naslov, kartice i traka stoje na sredini ekrana i na visokim monitorima,
+     umjesto priljubljeni uz vrh s praznom donjom polovicom. */
+  align-content: center;
   transform: none;
 }
 /* Programme decoration is static; keep only the intentional hover reveal. */
@@ -1694,6 +1697,10 @@
   padding-top: clamp(5.5rem,11vh,7rem);
   padding-bottom: 1.25rem;
   gap: 1.5rem;
+  /* Kao galerija na naslovnici: okvir je visine ekrana, a naslov i kartice stoje na
+     sredini i na visokim monitorima, ne uz vrh s praznom donjom polovicom. */
+  height: 100svh;
+  justify-content: center;
 }
 .pg-programs.marketing-page .pg-program-catalog .v4-programi__head.on-hero {
   position: relative;
@@ -1794,3 +1801,24 @@
 
 
 .pg-premium .pg-original-programs .v4-programi__progress { opacity: var(--rail-indicator-opacity, 1); }
+
+/* Savjetovanje, "Važno je znati": iste kartice i gibanje kao teme na naslovnici
+   (useRefinedSections), samo sedam kartica u četiri reda i tvrdnja umjesto naslova. */
+.pg-premium.pg-counselling .sv-znati .v4-chip.pg-topic--corner .v4-chip__desc.sv-znati__text {
+  display: block;
+  margin-top: clamp(3.2rem, 4.6vw, 4.8rem);
+  font-family: var(--v4-serif);
+  font-size: clamp(1.25rem, 1rem + .7vw, 1.6rem);
+  line-height: 1.3;
+  color: var(--ps-brown, #4a3a32);
+}
+@media(min-width:80.001rem) and (min-height:42.001rem) {
+  .pg-premium.marketing-page.pg-counselling .sv-znati { height: 225svh; min-height: 2000px; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c1 { top: 18%; left: calc(50% - 480px); right: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c2 { top: 18%; right: calc(50% - 480px); left: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c3 { top: 37%; left: calc(50% - 480px); right: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c4 { top: 37%; right: calc(50% - 480px); left: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c5 { top: 56%; left: calc(50% - 480px); right: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c6 { top: 56%; right: calc(50% - 480px); left: auto; bottom: auto; }
+  .pg-premium.pg-counselling .sv-znati .v4-chip--c7 { top: 75%; left: 50%; right: auto; bottom: auto; margin-left: -220px; }
+}

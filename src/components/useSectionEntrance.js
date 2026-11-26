@@ -9,14 +9,17 @@ export default function useSectionEntrance(ref, visualSelector, entranceFraction
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const controller = new AbortController();
     let frame;
-    const check = () => {
+    // `ahead`: za koliko će se stranica još pomaknuti (cinematic skok najavi odredište,
+    // pa ulaz kreće odmah, tijekom skoka, a ne tek po dolasku).
+    const check = (ahead = 0) => {
       frame = undefined;
-      if (motion.matches || visual.getBoundingClientRect().top < innerHeight * entranceFraction) {
+      if (motion.matches || visual.getBoundingClientRect().top - ahead < innerHeight * entranceFraction) {
         root.dataset.ready = "true";
         setReady(true);
         controller.abort();
       }
     };
+    window.addEventListener("pg:snap-glide", (event) => check(event.detail.target - scrollY), { signal: controller.signal });
     const schedule = () => {
       if (frame === undefined) frame = requestAnimationFrame(() => {
         frame = requestAnimationFrame(check);

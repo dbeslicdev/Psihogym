@@ -13,3 +13,17 @@ export function jumpTo(top) {
   else window.scrollTo({ top, behavior: "instant" });
   window.dispatchEvent(new Event(SCROLL_JUMP));
 }
+
+// Cinematic skok na stanicu: meko ubrzanje i usporenje, bez korisnikova
+// utjecaja dok traje (lock). onComplete se zove kad Lenis stigne; ako skok
+// prekine trenutačni jumpTo (galerija na rubu zone), poziva ga pozivatelj
+// sam preko zaštitnog tajmera.
+const easeInOutCubic = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+export function glideTo(top, { duration = .9, onComplete } = {}) {
+  if (smoothScroll.instance) {
+    smoothScroll.instance.scrollTo(top, { duration, easing: easeInOutCubic, lock: true, force: true, onComplete });
+  } else {
+    window.scrollTo({ top, behavior: "smooth" });
+    if (onComplete) setTimeout(onComplete, duration * 1000);
+  }
+}

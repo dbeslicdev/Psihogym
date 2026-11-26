@@ -3,6 +3,8 @@ import { useEffect, useRef } from "react";
 import { Routes, Route, Navigate, Link, useLocation } from "react-router-dom";
 import Lenis from "lenis";
 import { smoothScroll } from "./smoothScroll.js";
+import useSnapScroll from "./components/useSnapScroll.js";
+import { snapPreviewEnabled } from "./snapPreview.js";
 import Navigation from "./components/Navigation.jsx";
 import ScrollThread from "./v4/ScrollThread.jsx";
 import Footer from "./components/Footer.jsx";
@@ -63,6 +65,8 @@ function titleFor(pathname) {
   }
   return "psihogym";
 }
+
+const getMain = () => document.querySelector("main");
 
 export default function App() {
   useAccount();
@@ -125,6 +129,9 @@ export default function App() {
 
   // Globalni scroll efekti — ponovno se vežu na svaku rutu
   useScrollReveal(location.pathname);
+  // Cinematic scroll (pregled, ?snap) na svim stranicama; naslovnica ga montira sama
+  // (V4Page, prije galerije), pa je ovdje isključen za "/".
+  useSnapScroll(getMain, { enabled: snapPreviewEnabled() && location.pathname !== "/" && !isApp, key: location.pathname });
   useParallax(location.pathname);
 
   return (

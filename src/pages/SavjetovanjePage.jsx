@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { mitovi } from "../data.js";
 import { SplitText, Curve, V4Shell } from "../v4/kit.jsx";
 import useSectionEntrance from "../components/useSectionEntrance.js";
+import useRefinedSections from "../components/useRefinedSections.js";
 import "../v4.css";
 
 /* SAVJETOVANJE — v4 "Utočište" jezik. Sekvenca valova:
@@ -12,21 +13,24 @@ import "../v4.css";
 
 const ZNATI = [
   "Sve što kažeš ostaje između nas.",
-  "Savjetovanje je namijenjeno osobama starijim od 18 godina.",
-  "Cijena jednog termina iznosi 65€.",
-  "Jedan termin traje jedan školski sat.",
-  "Termin dogovaramo barem tjedan dana unaprijed — da nitko ne bude u žurbi.",
-  "Otkazan termin unutar 24 sata prije održavanja naplaćuje se kao da je održan.",
-  "Plaćanje ide transakcijski, brzo i jednostavno.",
-  "Susrete provodimo putem Google Meet aplikacije.",
+  "Individualni rad namijenjen je osobama starijim od 18 godina.",
+  "Jedan termin traje 45 minuta.",
+  "Termin dogovaramo barem tjedan dana unaprijed, kako bismo oboje imali dovoljno vremena.",
+  "Termin možeš otkazati najkasnije 24 sata prije početka. Kasnije otkazan termin naplaćuje se u punom iznosu.",
+  "Plaćaš brzo i jednostavno, uplatom na račun.",
+  "Susreti se održavaju putem Google Meeta.",
 ];
+
+// Boje kuta oblačića, istim redom kao kartice tema na naslovnici.
+const ZNATI_PAPER = ["var(--ps-mist)", "var(--ps-sage-bg)", "var(--ps-terra)", "var(--ps-terra)", "var(--ps-mist)", "var(--ps-sage-bg)", "var(--ps-terra)"];
+const ZNATI_COLOR = ["lavender", "cream", "sage", "cream", "sage", "lavender", "cream"];
 
 const OCEKIVANJA = ["plakanje", "kontinuirani oporavak", "još plakanja"];
 
 const NIJE_ZA_TEBE = [
-  "Očekuješ da će netko drugi riješiti tvoje probleme umjesto tebe.",
-  "Ne želiš razgovarati o svojim iskustvima, mislima i osjećajima.",
-  "Dolaziš samo zato što te netko drugi šalje, a sam/a ne vidiš potrebu za razgovorom.",
+  "očekuješ da će netko drugi riješiti tvoje probleme umjesto tebe",
+  "ne želiš razgovarati o svojim iskustvima, mislima i osjećajima",
+  "dolaziš samo zato što te netko drugi šalje, a ti ne vidiš potrebu za razgovorom",
 ];
 
 const REALNOST = [
@@ -41,20 +45,23 @@ const REALNOST = [
 export default function SavjetovanjePage() {
   const [openMit, setOpenMit] = useState(null);
   const closingRef = useRef(null);
+  const znatiRef = useRef(null);
+  const noIvana = useRef(null);
+  useRefinedSections(noIvana, znatiRef); // kartice "Važno je znati" ulaze sa strane kao teme
   const closingReady = useSectionEntrance(closingRef, ".v4-cta__title", .85);
 
   return (
     <V4Shell className="marketing-page pg-playground pg-premium pg-counselling" data-editorial-waves>
       {/* ===== 1. SUBHERO — što je savjetovanje, slovo po slovo ===== */}
       <section className="on-hero" data-bg="#fbf5ec" data-stop>
-        <span className="v4-label">SAVJETOVANJE</span>
+        <span className="v4-label">INDIVIDUALNI RAD</span>
         <SplitText
           as="h1"
           className="on-hero__title"
           delay={0.1}
           segments={[
             {
-              text: "Razgovaramo o onome što te muči, brine ili zbunjuje te zajedno istražujemo moguća rješenja.",
+              text: "Razgovaramo o onome što te muči, brine ili zbunjuje i zajedno tražimo moguća rješenja.",
             },
           ]}
         />
@@ -62,35 +69,37 @@ export default function SavjetovanjePage() {
 
       {/* ===== 2. TIMSKI RAD — prose (krem) ===== */}
       <section className="on-prose reading-exit" data-bg="#fbf5ec" data-stop>
-        <SplitText as="h2" className="on-prose__title" delay={0.1} segments={[{ text: "Savjetovanje je timski rad." }]} />
+        <SplitText as="h2" className="on-prose__title" delay={0.1} segments={[{ text: "Ti i ja smo tim" }]} />
         <div className="on-prose__body" data-wave-content>
-          <SplitText as="p" delay={0.15} stagger={0.0035} duration={0.28} segments={[{ text: "Tvoja želja za radom na sebi bitan je dio procesa. Mi donosimo znanje i iskustvo, a ti se najbolje poznaješ. Zajedno otkrivamo što ti je važno, postavljamo ciljeve i radimo smislene korake." }]} />
+          <SplitText as="p" delay={0.15} stagger={0.0035} duration={0.28} segments={[{ text: "Tvoja želja za radom na sebi važan je dio procesa. Ja donosim znanje i iskustvo, a ti se najbolje poznaješ. Zajedno otkrivamo što ti je važno, postavljamo ciljeve i činimo smislene korake." }]} />
         </div>
       </section>
 
       {/* Practical information: the heading follows four reading blocks. */}
-      <Curve color="#e2ecf1" className="sv-section sv-reading reading-exit" data-stop>
-        <div className="sv-reading__layout" data-wave-content>
-          <div className="sv-reading__heading">
-            <SplitText as="h2" className="sv-h2" delay={0.1} segments={[{ text: "Važno je znati" }]} />
-          </div>
-          <div className="sv-reading__body">
-            {[0, 2, 4, 6].map((start) => (
-              <div className="sv-reading__pair" key={start}>
-                {ZNATI.slice(start, start + 2).map((text, index) => (
-                  <SplitText as="p" key={text} className={index === 0 ? "sv-reading__lead" : "sv-reading__detail"}
-                    stagger={0.0035} duration={0.28} delay={0.05} segments={[{ text }]} />
-                ))}
+      {/* "Važno je znati": naslov na sredini, svaka tvrdnja u oblačiću kao kartice tema
+          (obojeni kut, redni broj), po sadržaju od 26. 11. 2026. */}
+      <Curve color="#e2ecf1" className="v4-podrucja pg-topics-scroll sv-znati" innerRef={znatiRef} consumeStart={0.95} data-stop>
+        <SplitText as="h2" className="v4-podrucja__title pg-topics-heading" delay={0.1} segments={[{ text: "Važno je znati" }]} />
+        <div className="v4-podrucja__chips">
+          {ZNATI.map((text, i) => (
+            <div
+              className={`v4-chip v4-chip--${ZNATI_COLOR[i % ZNATI_COLOR.length]} v4-chip--c${i + 1} pg-topic--corner`}
+              style={{ "--topic-paper": ZNATI_PAPER[i % ZNATI_PAPER.length] }}
+              key={text}
+            >
+              <div className="v4-chip__inner">
+                <span className="v4-chip__num">{String(i + 1).padStart(2, "0")}</span>
+                <span className="v4-chip__desc sv-znati__text">{text}</span>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </Curve>
 
       {/* ===== 5. MITOVI — accordion (lavender-soft) ===== */}
       <Curve color="#e5ecdd" className="sv-section reading-exit" consumeStart={0.55} data-stop>
         <div className="sv-head">
-          <SplitText as="h2" className="sv-h2" delay={0.1} segments={[{ text: "Najčešći mitovi o savjetovanju" }]} />
+          <SplitText as="h2" className="sv-h2" delay={0.1} segments={[{ text: "Što ljudi često misle, a nije tako" }]} />
         </div>
         <div className="sv-mitovi" data-wave-content>
           {mitovi.map((m, i) => {
@@ -130,7 +139,7 @@ export default function SavjetovanjePage() {
 
       <Curve color="#fbf5ec" className="sv-section sv-not-for reading-exit" consumeStart={0.55} data-stop>
         <div className="sv-not-for__layout" data-wave-content>
-          <SplitText as="h2" className="sv-h2" segments={[{ text: "Za tebe nije savjetovanje ako:" }]} />
+          <SplitText as="h2" className="sv-h2" segments={[{ text: "Individualni rad nije za tebe ako:" }]} />
           <div className="sv-not-for__body">
             {NIJE_ZA_TEBE.map(text => <SplitText key={text} as="p" stagger={0.0035} duration={0.28} segments={[{ text }]} />)}
           </div>
@@ -142,10 +151,10 @@ export default function SavjetovanjePage() {
         <SplitText as="h2" className="v4-cta__title" delay={0.1} active={closingReady} segments={[{ text: "Želiš napraviti prvi korak?" }]} />
         <div className="on-cta__row counselling-cta-sequence">
           <Link to="/kontakt" className="v4-btn">
-            Kontakt
+            Dogovori termin
           <span className="cta-arrow" aria-hidden="true">↗</span></Link>
           <Link to="/o-meni" className="v4-btn v4-btn--ghost">
-            O meni
+            Upoznaj me
           <span className="cta-arrow" aria-hidden="true">↗</span></Link>
         </div>
       </Curve>

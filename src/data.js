@@ -90,42 +90,42 @@ export const iskustva = [
 
 export const mitovi = [
   {
-    mit: "Savjetovanje je samo razgovor, a savjetovatelj ti govori što da radiš",
+    mit: "Individualni rad je samo razgovor u kojem ti netko govori što da radiš",
     istina:
-      "Nema gotovih rješenja. Savjetovatelj ti pomaže da dođeš do odgovora. Nisi pasivan slušatelj, već aktivni sudionik.",
+      "Nema gotovih rješenja. Pomažem ti da dođeš do svojih odgovora, a ti u tome aktivno sudjeluješ.",
   },
   {
-    mit: "Savjetovanje dugo traje",
+    mit: "Rad na sebi dugo traje",
     istina:
-      "Nekad je dovoljno par susreta, nekad treba više. Sve ovisi o tebi i tvojoj situaciji. Nema univerzalnog trajanja.",
+      "Nekad je dovoljno nekoliko susreta, nekad treba više. Sve ovisi o tebi i tvojoj situaciji.",
   },
   {
-    mit: "Savjetovanje je lagano i ugodno",
+    mit: "Rad na sebi je lagan i ugodan",
     istina:
-      "Nekad je teško i neugodno – ali to je ok. Radiš na stvarima koje su ti važne.",
+      "Nekad je teško i neugodno, i to je u redu. Radiš na stvarima koje su ti važne.",
   },
   {
-    mit: "Ako se poteškoće vrate, savjetovanje nije uspjelo",
+    mit: "Ako se poteškoće vrate, rad nije uspio",
     istina:
-      "Povratak teškoća ne znači da si opet na početku. To je dio procesa.",
+      "Povratak poteškoća ne znači da si opet na početku. To je dio procesa.",
   },
   {
     mit: "Napredak je linearan",
     istina:
-      "Napredak nije ravna crta. Ima uspona i padova – i to ne znači da ne ideš naprijed.",
+      "Napredak nije ravna crta. Ima uspona i padova, a to ne znači da ne ideš naprijed.",
   },
   {
     mit: "Postoji jedan ispravan put",
     istina:
-      "Nema univerzalne formule. Ono što funkcionira za druge, možda za tebe neće. Za svakoga je to putovanje drugačije.",
+      "Nema univerzalne formule. Ono što pomaže drugima, tebi možda neće. Svačiji je put drugačiji.",
   },
   {
-    mit: "Savjetovanje je isto kao i razgovor s prijateljem",
+    mit: "To je isto kao razgovor s prijateljem",
     istina:
-      "Prijatelj te može saslušati, ali savjetovatelj koristi stručno znanje i metode.",
+      "Prijatelj te može saslušati, a ja u radu koristim stručno znanje i provjerene metode.",
   },
   {
-    mit: "Savjetovanje je za ljude koji se ne mogu nositi s problemima",
+    mit: "Pomoć traže oni koji se ne mogu nositi s problemima",
     istina:
       "Ljudi obično traže pomoć zato što se žele suočiti s problemima, a ne zato što su nemoćni.",
   },
@@ -141,11 +141,11 @@ export const mitovi = [
 ];
 
 export const podrucjaOpcije = [
-  "Odnosi",
   "Anksioznost",
+  "Stres",
   "Samopouzdanje",
   "Zauzimanje za sebe",
-  "Stres",
+  "Odnosi",
   "Roditeljstvo",
 ];
 

@@ -1799,3 +1799,8 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
   vector-effect: non-scaling-stroke;
 }
 .thread__halo { fill: rgba(192, 122, 87, 0.18); }
+
+/* Kontakt: napomena ispod polja ("Sve što ovdje napišeš vidim samo ja.") i hitna
+   napomena ispod obrasca. */
+.v4 .kontakt-hint { display: block; margin-top: .4rem; font-family: var(--font-body); font-size: 0.85rem; color: var(--v4-muted); text-transform: none; letter-spacing: 0; }
+.v4 .kontakt-urgent { margin-top: 1.25rem; }

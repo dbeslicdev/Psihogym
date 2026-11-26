@@ -6,7 +6,6 @@ import "../v4.css";
 export default function KontaktPage() {
   const [formType, setFormType] = useState("savjetovanje");
   const [applicationDate, setApplicationDate] = useState("");
-  const [drugoChecked, setDrugoChecked] = useState(false);
   const [ocekivanjeDrugoChecked, setOcekivanjeDrugoChecked] = useState(false);
 
   return (
@@ -19,19 +18,21 @@ export default function KontaktPage() {
           delay={0.1}
           segments={[
             {
-              text: "Razmišljaš o savjetovanju ili imaš pitanje?",
+              text: "Razmišljaš o individualnom radu ili imaš pitanje?",
             },
           ]}
         />
         <p className="on-hero__intro" data-wave-content>
-          Za prijavu ili upit piši na <a href="mailto:info@psihogym.hr">info@psihogym.hr</a>.
+          Za prijavu ispuni obrazac ispod. Tako ću bolje razumjeti s čime dolaziš i lakše ćemo dogovoriti prvi susret.
+        </p>
+        <p className="on-hero__intro" data-wave-content>
+          Svaku prijavu pažljivo pročitam i odgovorim. Ako procijenim da ti mogu pomoći i imam slobodan termin, predložit ću ti prvi susret.
         </p>
       </section>
 
       <Curve className="kontakt-sekcija" color="#e5ecdd" data-stop aria-label="Obrazac za kontakt">
         <div className="kontakt-layout">
           <div className="kontakt-layout__right">
-            <p className="kontakt-availability">Obrasci su trenutačno dostupni za pregled. Za prijavu ili upit <a href="mailto:info@psihogym.hr">javi se e-poštom</a>.</p>
             <div className="kontakt-toggles" role="group" aria-label="Razlog javljanja">
               <button
                 type="button"
@@ -39,7 +40,7 @@ export default function KontaktPage() {
                 aria-pressed={formType === "savjetovanje"}
                 onClick={() => setFormType("savjetovanje")}
               >
-                Savjetovanje
+                Individualni rad
               </button>
               <button
                 type="button"
@@ -47,7 +48,7 @@ export default function KontaktPage() {
                 aria-pressed={formType === "upit"}
                 onClick={() => setFormType("upit")}
               >
-                Upit
+                Opći upit
               </button>
             </div>
 
@@ -79,12 +80,12 @@ export default function KontaktPage() {
               </label>
               <label className="kontakt-label">
                 Datum prijave
-                <input type="date" name="datum_prijave" className="kontakt-input kontakt-date"
+                <input type="date" name="datum_prijave" className="kontakt-input kontakt-date" required
                   value={applicationDate} data-empty={!applicationDate}
                   onChange={(event) => setApplicationDate(event.target.value)} />
               </label>
               <label className="kontakt-label">
-                Broj mobitela
+                Broj mobitela (nije obavezno)
                 <input
                   type="tel"
                   name="mobitel"
@@ -93,14 +94,14 @@ export default function KontaktPage() {
                 />
               </label>
               <label className="kontakt-label">
-                Jesi li prethodno već imao/la iskustvo savjetovanja ili
-                psihoterapije?
+                Imaš li već iskustva s psihoterapijom ili sličnim oblikom podrške? (nije obavezno)
                 <textarea name="iskustvo" className="kontakt-textarea" rows={3} />
+                <span className="kontakt-hint">Sve što ovdje napišeš vidim samo ja.</span>
               </label>
 
               <fieldset className="kontakt-fieldset">
                 <legend className="kontakt-legend">
-                  teme o kojima želiš pričati
+                  Teme o kojima želiš razgovarati
                 </legend>
                 {podrucjaOpcije.map((opcija) => (
                   <label key={opcija} className="kontakt-check">
@@ -116,12 +117,14 @@ export default function KontaktPage() {
                   name="glavni_problem"
                   className="kontakt-textarea"
                   rows={4}
+                  required
                 />
+                <span className="kontakt-hint">Sve što ovdje napišeš vidim samo ja.</span>
               </label>
 
               <fieldset className="kontakt-fieldset">
                 <legend className="kontakt-legend">
-                  Što očekuješ od savjetovanja?
+                  Što očekuješ od našeg rada?
                 </legend>
                 <label className="kontakt-check">
                   <input type="checkbox" name="ocekivanje_razgovor" />
@@ -150,11 +153,12 @@ export default function KontaktPage() {
               </fieldset>
 
               <label className="kontakt-label">
-                Navedi željene ciljeve savjetovanja.
+                Što želiš postići?
                 <textarea
                   name="ciljevi_savjetovanja"
                   className="kontakt-textarea"
                   rows={4}
+                  required
                 />
               </label>
 
@@ -171,25 +175,13 @@ export default function KontaktPage() {
                   radnim danom poslijepodne
                 </label>
                 <label className="kontakt-check">
-                  <input
-                    type="checkbox"
-                    name="termin_drugo"
-                    checked={drugoChecked}
-                    onChange={(e) => setDrugoChecked(e.target.checked)}
-                  />
-                  Drugo:
-                  <input
-                    type="text"
-                    name="termin_drugo_text"
-                    className="kontakt-input"
-                    disabled={!drugoChecked}
-                    aria-label="Drugi termin"
-                  />
+                  <input type="checkbox" name="termin_svejedno" />
+                  svejedno mi je
                 </label>
               </fieldset>
 
               <fieldset className="kontakt-fieldset">
-                <legend className="kontakt-legend">Kako si saznao/la za nas?</legend>
+                <legend className="kontakt-legend">Odakle znaš za Psihogym? (nije obavezno)</legend>
                 <label className="kontakt-check">
                   <input type="checkbox" name="izvor_drustvene" />
                   društvene mreže
@@ -205,7 +197,7 @@ export default function KontaktPage() {
               </fieldset>
 
               <label className="kontakt-label">
-                Želiš li da još nešto znamo prije susreta?
+                Želiš li da još nešto znam prije susreta? (nije obavezno)
                 <textarea
                   name="dodatno_prije_susreta"
                   className="kontakt-textarea"
@@ -213,7 +205,7 @@ export default function KontaktPage() {
                 />
               </label>
               <label className="kontakt-label">
-                Imaš li neko pitanje ili dilemu?
+                Imaš li neko pitanje ili dilemu? (nije obavezno)
                 <textarea
                   name="pitanje_dilema"
                   className="kontakt-textarea"
@@ -224,23 +216,28 @@ export default function KontaktPage() {
               <div className="kontakt-disclaimer">
                 <label className="kontakt-check">
                   <input type="checkbox" name="uvjeti_prihvat" required />
-                  Potvrđujem da sam upoznat/a s uvjetima savjetovanja navedenim
-                  na web-u i da ih prihvaćam.
+                  Prihvaćam uvjete individualnog rada navedene na webu.
+                </label>
+                <label className="kontakt-check">
+                  <input type="checkbox" name="punoljetnost" required />
+                  Potvrđujem da imam navršenih 18 godina.
                 </label>
                 <label className="kontakt-check">
                   <input type="checkbox" name="gdpr_suglasnost" required />
                   Dajem suglasnost za prikupljanje i obradu svojih osobnih
-                  podataka u svrhu prijave, organizacije i provedbe savjetovanja.
+                  podataka u svrhu prijave, organizacije i provedbe individualnog rada.
                 </label>
                 <p className="kontakt-disclaimer-text">
-                  Ne brini, nećemo dijeliti tvoje podatke i nećemo ti slati
-                  neželjene mailove.
+                  Tvoje podatke neću dijeliti s drugima i neću ti slati neželjene poruke.
                 </p>
               </div>
 
-              <a className="v4-btn" href="mailto:info@psihogym.hr?subject=Savjetovanje">
+              <a className="v4-btn" href="mailto:info@psihogym.hr?subject=Individualni rad">
                 Otvori e-poštu <span className="cta-arrow" aria-hidden="true">↗</span>
               </a>
+              <p className="kontakt-disclaimer-text kontakt-urgent">
+                Ako ti je podrška potrebna odmah, ne čekaj na moj odgovor. Obrati se svom liječniku ili najbližoj zdravstvenoj ustanovi.
+              </p>
             </form>
 
             {/* Forma: opći upit */}
@@ -286,11 +283,10 @@ export default function KontaktPage() {
                     required
                   />
                   Dajem suglasnost za prikupljanje i obradu svojih osobnih
-                  podataka u svrhu prijave, organizacije i provedbe savjetovanja.
+                  podataka u svrhu odgovora na moj upit.
                 </label>
                 <p className="kontakt-disclaimer-text">
-                  Ne brini, nećemo dijeliti tvoje podatke i nećemo ti slati
-                  neželjene mailove.
+                  Tvoje podatke neću dijeliti s drugima i neću ti slati neželjene poruke.
                 </p>
               </div>
               <a className="v4-btn" href="mailto:info@psihogym.hr?subject=Upit">

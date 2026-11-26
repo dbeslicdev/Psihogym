@@ -4,6 +4,8 @@ import { podrucja, iskustva, programi, stats } from "../data.js";
 import ProgramPreviewCard from "../components/ProgramPreviewCard.jsx";
 import useRefinedSections from "../components/useRefinedSections.js";
 import useProgramRail from "../components/useProgramRail.js";
+import useSnapScroll from "../components/useSnapScroll.js";
+import { snapPreviewEnabled } from "../snapPreview.js";
 import useReviewStack from "../components/useReviewStack.js";
 import useSectionEntrance from "../components/useSectionEntrance.js";
 import { HeroScene, OnlineJourney, usePlaygroundMotion } from "../components/PlaygroundScenes.jsx";
@@ -106,6 +108,9 @@ export default function V4Page() {
 
   // Keep the pinned gallery only while every card fits vertically. This
   // also responds to font loading, content height, zoom and motion settings.
+  // Pregled cinematic scrolla (?snap uključuje, ?snap=0 isključuje; pamti se za
+  // trajanja kartice). Poziva se prije useProgramRail da prvi dobije kotačić.
+  useSnapScroll(() => pinRef.current?.closest(".v4"), { enabled: snapPreviewEnabled() });
   // Naslovna: jedan scroll = jedna kartica.
   useProgramRail(pinRef, trackRef, progressRef, { stepped: true });
 

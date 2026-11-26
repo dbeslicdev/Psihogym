@@ -24,6 +24,20 @@ export function usePlaygroundMotion(heroRef) {
     // Observe the unmasked scene rather than an image clipped to zero:
     // a fully clipped target has no intersection until it is revealed.
     items.forEach((item) => observer.observe(item.dataset.pgReveal === "mask" ? item.parentElement : item));
+    // Cinematic scroll (useSnapScroll): skok najavi odredište, pa otkrivanja koja će
+    // ondje biti vidljiva kreću odmah, tijekom skoka, a ne tek po dolasku.
+    window.addEventListener("pg:snap-glide", (event) => {
+      const { target: destination } = event.detail;
+      items.forEach((item) => {
+        if (item.dataset.in === "true") return;
+        const box = (item.dataset.pgReveal === "mask" ? item.parentElement : item).getBoundingClientRect();
+        const top = box.top + scrollY;
+        if (top + box.height > destination && top < destination + innerHeight) {
+          item.dataset.in = "true";
+          observer.unobserve(item.dataset.pgReveal === "mask" ? item.parentElement : item);
+        }
+      });
+    }, { signal: controller.signal });
     const visibility = new IntersectionObserver(([entry]) => {
       hero.dataset.paused = String(!entry.isIntersecting || document.hidden);
     });

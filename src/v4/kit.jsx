@@ -46,30 +46,43 @@ export function SplitText({
       return;
     }
     let timer = null;
+    const glideController = new AbortController();
+    // Dodaj is-in ODMAH (bez rAF — throttlan tab ne bi okinuo rAF pa
+    // bi tekst ostao nevidljiv). Za elemente odmah u vidokrugu mali
+    // transition-delay (>=0.1s) spriječi da se transition preskoči.
+    // will-change samo dok animira, pa počisti (bez trajnih slojeva).
+    const enter = () => {
+      if (el.classList.contains("is-in")) return;
+      el.classList.add("is-in", "is-animating");
+      glideController.abort();
+      const n = el.querySelectorAll(".v4-letter").length;
+      timer = setTimeout(
+        () => { el.classList.remove("is-animating"); completeRef.current?.(); },
+        Math.max(0, n - 1) * stagger * 1000 + (duration ?? 0.45) * 1000 + delay * 1000,
+      );
+    };
     const io = new IntersectionObserver(
       ([e]) => {
         if (!e.isIntersecting) return;
-        // Dodaj is-in ODMAH (bez rAF — throttlan tab ne bi okinuo rAF pa
-        // bi tekst ostao nevidljiv). Za elemente odmah u vidokrugu mali
-        // transition-delay (>=0.1s) spriječi da se transition preskoči.
-        // will-change samo dok animira, pa počisti (bez trajnih slojeva).
-        el.classList.add("is-in", "is-animating");
         io.disconnect();
-        const n = el.querySelectorAll(".v4-letter").length;
-        timer = setTimeout(
-          () => { el.classList.remove("is-animating"); completeRef.current?.(); },
-          Math.max(0, n - 1) * stagger * 1000 + (duration ?? 0.45) * 1000 + delay * 1000,
-        );
+        enter();
       },
       { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
-    if (active === true) {
-      el.classList.add("is-in", "is-animating");
-      const n = el.querySelectorAll(".v4-letter").length;
-      timer = setTimeout(() => { el.classList.remove("is-animating"); completeRef.current?.(); }, Math.max(0, n - 1) * stagger * 1000 + (duration ?? 0.45) * 1000 + delay * 1000);
-    } else io.observe(el);
+    if (active === true) enter();
+    else {
+      io.observe(el);
+      // Cinematic scroll (useSnapScroll): skok na stanicu najavi odredište, pa naslov
+      // koji će ondje biti vidljiv ulazi odmah, tijekom skoka, a ne tek po dolasku.
+      window.addEventListener("pg:snap-glide", (event) => {
+        const top = el.getBoundingClientRect().top + scrollY;
+        const { target } = event.detail;
+        if (top >= target - 40 && top < target + innerHeight) { io.disconnect(); enter(); }
+      }, { signal: glideController.signal });
+    }
     return () => {
       io.disconnect();
+      glideController.abort();
       if (timer) clearTimeout(timer);
     };
   }, [delay, active, stagger, duration]);

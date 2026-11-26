@@ -262,3 +262,6 @@
 .pg-contact .kontakt-availability a { color: inherit; text-underline-offset: .18em; }
 .missing-page .btn { background: var(--ps-brown); color: var(--ps-cream); }
 main:has(.missing-page) .thread { display: none; }
+
+/* "Važno je znati" kao jedan popis: jedina stavka u retku nema donju marginu. */
+.pg-counselling .sv-reading__pair .sv-reading__lead:last-child { margin-bottom: 0; }

@@ -5,7 +5,7 @@ export default function useRefinedSections(ivanaRef, topicsRef) {
   useEffect(() => {
     const ivana = ivanaRef.current;
     const topics = topicsRef.current;
-    if (!ivana || !topics) return;
+    if (!topics) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const desktop = matchMedia("(min-width: 80.001rem) and (min-height: 42.001rem)");
     const cards = [...topics.querySelectorAll(".v4-chip")];
@@ -20,13 +20,13 @@ export default function useRefinedSections(ivanaRef, topicsRef) {
       const dt = Math.min(64, previousTime ? time - previousTime : 16);
       previousTime = time;
       const vh = innerHeight;
-      const image = ivana.querySelector(".v4-ivana__media");
+      const image = ivana?.querySelector(".v4-ivana__media");
       // Sva čitanja geometrije prije ijednog zapisa: čitanje nakon zapisa (stil kartice,
       // data-ready) prisiljava style recalc cijele stranice po svakoj kartici u kadru.
-      const imageTop = image.getBoundingClientRect().top;
+      const imageTop = image ? image.getBoundingClientRect().top : Infinity;
       const bounds = topics.getBoundingClientRect();
       const rects = cards.map(card => card.getBoundingClientRect());
-      if (reduced.matches || imageTop < vh * .62) {
+      if (ivana && (reduced.matches || imageTop < vh * .62)) {
         if (ivana.dataset.ready !== "true") {
           ivana.dataset.ready = "true";
           setIvanaReady(true);
@@ -71,7 +71,7 @@ export default function useRefinedSections(ivanaRef, topicsRef) {
     reduced.addEventListener("change", schedule, { signal: controller.signal });
     desktop.addEventListener("change", schedule, { signal: controller.signal });
     const observer = new ResizeObserver(schedule);
-    observer.observe(ivana);
+    if (ivana) observer.observe(ivana);
     observer.observe(topics);
     schedule();
     return () => {
