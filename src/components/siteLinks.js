@@ -2,7 +2,7 @@
 export const siteLinks = [
   ["/", "Naslovna"],
   ["/programi", "Programi"],
-  ["/o-meni", "O meni"],
   ["/savjetovanje", "Individualni rad"],
+  ["/o-meni", "O meni"],
   ["/kontakt", "Kontakt"],
 ];
