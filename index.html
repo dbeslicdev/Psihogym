@@ -4,6 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Fontovi vidljivi iznad pregiba kreću odmah, prije CSS-a i JS-a: bez bljeska
+         zamjenskog fonta. Vite ih u buildu zamijeni istim hashiranim datotekama
+         koje koristi src/fonts.css. -->
+    <link rel="preload" href="/src/fonts/marcellus-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/marcellus-latin-ext-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/forum-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/hanken-grotesk-latin-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/hanken-grotesk-latin-ext-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/hanken-grotesk-latin-500.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/src/fonts/geist-mono-latin-400.woff2" as="font" type="font/woff2" crossorigin />
     <title>Psihogym — online psihosocijalna podrška</title>
   </head>
   <body>

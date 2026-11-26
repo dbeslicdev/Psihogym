@@ -104,7 +104,7 @@ export function HeroScene() {
     <div className="pg-hero-scene">
       <div className="pg-hero-orbit" aria-hidden="true" />
       <div className="pg-hero-portrait" data-pg-reveal="mask">
-        <img src="/playground/ivana-portrait.webp" alt="Ivana Bešlić, socijalna pedagoginja i specijalizantica psihoterapije" width="950" height="1426" fetchPriority="high" />
+        <img src="/playground/ivana-portrait.webp" alt="Ivana Bešlić, socijalna pedagoginja i specijalizantica psihoterapije" width="950" height="1426" fetchpriority="high" />
 
       </div>
       <div className="pg-hero-selected-symbol pg-hero-selected-symbol--asterisk" aria-hidden="true">

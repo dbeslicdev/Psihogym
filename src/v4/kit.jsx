@@ -227,6 +227,9 @@ export function useV4Transitions(wrapRef) {
     const wrap = wrapRef.current;
     if (!wrap) return;
     const root = document.documentElement;
+    // Boja navigacije piše se na samu traku, ne na <html>: naslijeđeno custom svojstvo
+    // na korijenu pri svakoj promjeni invalidira stil cijelog dokumenta (~30 ms).
+    const navHost = document.querySelector(".nav") || root;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const editorial = wrap.hasAttribute("data-editorial-waves");
     const readingLayout = wrap.classList.contains("marketing-page");
@@ -254,6 +257,13 @@ export function useV4Transitions(wrapRef) {
         readingBlocks: editorial && previous ? previous.querySelectorAll("[data-wave-content]") : [],
         el,
         section,
+        // Pomaci sadržaja pišu se na sekciju i na elemente koji ih troše, a ne samo na
+        // sekciju: svojstva su bez nasljeđivanja (@property u premium.css), pa zapis ne
+        // invalidira stil svih potomaka sekcije u svakom kadru.
+        liftTargets: [section, ...section.querySelectorAll(".pg-online-text-only, .pg-stats-content")],
+        ctaLiftTargets: [section, ...[...section.children].filter(child => child !== el)],
+        // Traka napretka galerije troši --rail-indicator-opacity; zapis na nju, ne na sekciju.
+        previousIndicator: previous?.querySelector(".v4-programi__progress") || null,
         animated: el.hasAttribute("data-circle"),
         start: readingLayout ? 0.95 : parseFloat(el.dataset.consumeStart || "1"),
         curve,
@@ -353,7 +363,7 @@ export function useV4Transitions(wrapRef) {
               const exit = Math.max(0, Math.min(1, (.48 * vh - bottom) / (.4 * vh)));
               const easedExit = exit * exit * (3 - 2 * exit);
               available += vh * .32 * easedExit;
-              if (galleryExit) previous.style.setProperty("--rail-indicator-opacity", 1 - easedExit);
+              if (galleryExit) (c.previousIndicator || previous).style.setProperty("--rail-indicator-opacity", 1 - easedExit);
               // Use the visible crest, including the reading clearance, to finish the arc.
               const crest = r.top - Math.min(shape.lift, available);
               const remaining = Math.max(0, Math.min(1, (crest + .12 * vh) / (.65 * vh)));
@@ -369,7 +379,14 @@ export function useV4Transitions(wrapRef) {
           }
           if (c.section.hasAttribute("data-center-wave")) {
             // Keep the invitation centred in the visible surface as its top lifts.
-            c.section.style.setProperty("--cta-content-lift", `${(shape.lift / 2).toFixed(3)}px`);
+            // Vidljivi dio površine počinje na vrhu ekrana kad se val podigne iznad njega:
+            // podizanje se računa samo do vrha sekcije (r.top), inače bi na dnu stranice
+            // naslov otišao iznad ekrana i ostao bi vidljiv samo gumb.
+            // Sekcija sama zadržava puni iznos (margin-bottom, preklapanje s podnožjem),
+            // da se visina stranice ne mijenja dok se scrolla; samo sadržaj dobiva ograničeni.
+            const ctaLift = `${(Math.max(0, Math.min(shape.lift, r.top)) / 2).toFixed(3)}px`;
+            const ctaMargin = `${(shape.lift / 2).toFixed(3)}px`;
+            for (const target of c.ctaLiftTargets) target.style.setProperty("--cta-content-lift", target === c.section ? ctaMargin : ctaLift);
           }
           if (c.section.hasAttribute("data-ride-wave")) {
             // Let the surface reach the top first; then lift the content gently.
@@ -381,11 +398,15 @@ export function useV4Transitions(wrapRef) {
             const surfaceInset = Math.max(32, Math.min(48, vh * .045));
             const insideSurface = Math.max(0, shape.lift + paddingTop - surfaceInset);
             const contentLift = Math.min(requestedLift, safeLift, insideSurface);
-            c.section.style.setProperty("--content-lift", contentLift.toFixed(3) + "px");
+            const lift = contentLift.toFixed(3) + "px";
+            for (const target of c.liftTargets) target.style.setProperty("--content-lift", lift);
           }
           c.el.style.setProperty("--wave-lift", `${shape.lift.toFixed(3)}px`);
           c.el.style.setProperty("--wave-depth", `${shape.depth.toFixed(3)}px`);
-          c.el.style.setProperty("--wave-height", `${Math.max(r.height, wrapBottom - r.top).toFixed(3)}px`);
+          // Površina seže ispod sekcije samo jedan ekran: toliko treba da se ispod
+          // zaobljenih kutova sljedećeg vala vidi ova boja. Do dna omotača bi svaka
+          // sekcija bila GPU sloj visok kao cijela stranica (stotine MB, zastoji).
+          c.el.style.setProperty("--wave-height", `${Math.min(Math.max(r.height, wrapBottom - r.top), r.height + vh).toFixed(3)}px`);
           if (navY >= waveEdgeAtX(r.top, r.left, r.width, navX, shape) && navY <= wrapBottom) {
             navColor = c.curve;
           }
@@ -413,8 +434,8 @@ export function useV4Transitions(wrapRef) {
 
       // 3) nav tint
       if (navColor !== lastNav) {
-        root.style.setProperty("--nav-bg", navColor);
-        root.style.setProperty(
+        navHost.style.setProperty("--nav-bg", navColor);
+        navHost.style.setProperty(
           "--nav-fg",
           isDark(navColor) ? "#faf6f0" : "#5c3d29",
         );
@@ -458,8 +479,8 @@ export function useV4Transitions(wrapRef) {
       if (frame !== null) cancelAnimationFrame(frame);
       document.body.classList.remove("v4-nav");
       wrap.style.backgroundColor = "";
-      root.style.removeProperty("--nav-bg");
-      root.style.removeProperty("--nav-fg");
+      navHost.style.removeProperty("--nav-bg");
+      navHost.style.removeProperty("--nav-fg");
     };
   }, [wrapRef]);
 }

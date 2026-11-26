@@ -596,6 +596,12 @@
   top: 0;
   border-radius: 0;
 }
+/* Pomaci sadržaja uz val pišu se iz kit.jsx u svakom kadru. Bez nasljeđivanja:
+   promjena naslijeđenog custom svojstva na sekciji invalidira stil svih njezinih
+   potomaka (stotine elemenata po kadru). kit.jsx ih zato zapisuje i na sekciju
+   (margin-bottom) i na element koji ih troši (top). */
+@property --content-lift { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --cta-content-lift { syntax: "<length>"; inherits: false; initial-value: 0px; }
 /* The surface leads; content follows with a smaller, delayed lift. */
 .pg-premium.marketing-page .v4-online[data-ride-wave] {
   margin-bottom: calc(-1 * var(--content-lift,0px));

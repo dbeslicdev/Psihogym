@@ -34,7 +34,10 @@
   grid-template-columns: minmax(0, 1.18fr) minmax(0, 0.82fr);
   align-items: center;
   gap: clamp(2rem, 4vw, 5rem);
-  min-height: min(940px, 100svh);
+  /* Puni ekran i na visokim monitorima: sadržaj je vertikalno na sredini,
+     a programi dolaze tek scrollom (prije je gornja granica od 940 px ostavljala
+     hero u gornjoj trećini ekrana na 1440 px visine). */
+  min-height: 100svh;
   padding-top: clamp(8rem, 15vh, 11rem);
   padding-bottom: 5rem;
 }

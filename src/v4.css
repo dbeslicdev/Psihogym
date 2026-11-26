@@ -502,12 +502,14 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
 .v4-letter {
   display: inline-block;
   opacity: 0;
-  transform: translate3d(2rem, 1rem, 0);
+  /* 2D pomak, ne translate3d: 3D transform bi svako slovo trajno držao kao
+     zaseban GPU sloj (stotine slojeva na naslovnici) i nakon animacije. */
+  transform: translate(2rem, 1rem);
   transition:
     opacity 0.4s var(--ps-ease),
     transform 0.4s var(--ps-ease);
 }
-.v4-split.is-in .v4-letter { opacity: 1; transform: translate3d(0, 0, 0); }
+.v4-split.is-in .v4-letter { opacity: 1; transform: none; }
 /* GPU sloj SAMO dok animira (klasa se skida timerom) — bez trajnih slojeva */
 .v4-split.is-animating .v4-letter { will-change: transform, opacity; }
 /* --ps-sage NE postoji u tokens.css (stara paleta) — akcent je burnt za tekst */

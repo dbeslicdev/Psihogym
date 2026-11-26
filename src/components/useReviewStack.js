@@ -9,9 +9,18 @@ export default function useReviewStack(sectionRef) {
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const controller = new AbortController();
     let frame;
-    const update = () => {
-      frame = undefined;
-      const cards = steps.map(step => step.querySelector(".v4-stackcard"));
+    let measureFrame;
+    const cards = steps.map(step => step.querySelector(".v4-stackcard"));
+    // Geometrija koja ne ovisi o scrollu (visine kartica i naslova, kompaktni način,
+    // sticky/flow) mjeri se samo pri promjeni veličine, ne u svakom kadru: skidanje
+    // i vraćanje data-atributa uz čitanje offsetHeight prisiljavalo je style recalc
+    // cijele sekcije (preko tisuću elemenata) pri svakom scroll kadru.
+    let heights = [];
+    let resolvedTop = 0;
+    let fade = 36;
+    let stacking = false;
+    const measure = () => {
+      measureFrame = undefined;
       // Na nižim ekranima najviša kartica ne stane ispod naslova; tada se kartice
       // stisnu (manji razmaci i slova), da naslov i dalje stoji dok se kartice izmjenjuju.
       const fits = () => Math.max(0, ...cards.map(card => card?.offsetHeight || 0)) + (heading?.offsetHeight || 0) + 28 <= innerHeight;
@@ -20,20 +29,24 @@ export default function useReviewStack(sectionRef) {
         section.dataset.reviewCompact = "true";
         if (!fits()) delete section.dataset.reviewCompact;
       }
-      const heights = cards.map(card => card?.offsetHeight || 0);
+      heights = cards.map(card => card?.offsetHeight || 0);
       const navClearance = (document.querySelector(".nav")?.offsetHeight || 64) + 8;
       section.style.setProperty("--review-pin-top", navClearance + "px");
       const headingPixels = heading?.offsetHeight || 0;
-      const resolvedTop = headingPixels + 12;
+      resolvedTop = headingPixels + 12;
       // Visina mekog prijelaza: kartica blijedi dok prolazi iza naslova (kao kartice tema).
-      const fade = Math.round(Math.min(64, Math.max(36, innerHeight * .06)));
+      fade = Math.round(Math.min(64, Math.max(36, innerHeight * .06)));
       section.style.setProperty("--stack-top", resolvedTop + "px");
-      const stacking = !motion.matches && Math.max(0, ...heights) + resolvedTop + 16 <= innerHeight;
+      stacking = !motion.matches && Math.max(0, ...heights) + resolvedTop + 16 <= innerHeight;
       section.dataset.reviewLayout = stacking ? "sticky" : "flow";
-      const headingHeight = (heading?.offsetHeight || 0) + "px";
+      const headingHeight = headingPixels + "px";
       if (section.style.getPropertyValue("--review-heading-height") !== headingHeight) {
         section.style.setProperty("--review-heading-height", headingHeight);
       }
+      update();
+    };
+    const update = () => {
+      frame = undefined;
       // Read layout before writing any transforms. The sticky wrappers keep
       // their reading pause; only their figures move when the next one touches.
       const tops = steps.map(step => step.getBoundingClientRect().top);
@@ -80,17 +93,21 @@ export default function useReviewStack(sectionRef) {
       });
     };
     const schedule = () => {
-      if (frame === undefined) frame = requestAnimationFrame(update);
+      if (frame === undefined && measureFrame === undefined) frame = requestAnimationFrame(update);
+    };
+    const scheduleMeasure = () => {
+      if (frame !== undefined) { cancelAnimationFrame(frame); frame = undefined; }
+      if (measureFrame === undefined) measureFrame = requestAnimationFrame(measure);
     };
     window.addEventListener("scroll", schedule, { passive: true, signal: controller.signal });
-    window.addEventListener("resize", schedule, { passive: true, signal: controller.signal });
-    motion.addEventListener("change", schedule, { signal: controller.signal });
-    const observer = new ResizeObserver(schedule);
+    window.addEventListener("resize", scheduleMeasure, { passive: true, signal: controller.signal });
+    motion.addEventListener("change", scheduleMeasure, { signal: controller.signal });
+    const observer = new ResizeObserver(scheduleMeasure);
     observer.observe(section);
     if (heading) observer.observe(heading);
     steps.forEach(step => observer.observe(step));
     steps.forEach(step => { const card = step.querySelector(".v4-stackcard"); if (card) observer.observe(card); });
-    update();
+    measure();
     return () => {
       controller.abort();
       heading?.style.removeProperty("top");
@@ -101,6 +118,7 @@ export default function useReviewStack(sectionRef) {
       delete section.dataset.reviewCompact;
       observer.disconnect();
       cancelAnimationFrame(frame);
+      cancelAnimationFrame(measureFrame);
       steps.forEach(step => { delete step.dataset.covered; step.querySelector(".v4-stackcard")?.style.removeProperty("transform"); step.querySelector(".v4-stackcard")?.style.removeProperty("mask-image"); step.querySelector(".v4-stackcard")?.style.removeProperty("-webkit-mask-image"); step.inert = false; step.removeAttribute("aria-hidden"); });
     };
   }, [sectionRef]);

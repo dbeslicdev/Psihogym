@@ -260,13 +260,37 @@ export default function useProgramRail(pinRef, trackRef, progressRef, { stepped 
       };
       // Jedan potez = jedan korak. Potez traje dok događaji stižu gušće od 140 ms
       // (inercija touchpada), pa se ostatak poteza nakon koraka zanemaruje.
+      // Novi potez prepoznaje se i bez stanke, inače bi brzo vrtenje kotačića
+      // zaglavilo u galeriji (svi zupci unutar 140 ms bili su "isti potez"):
+      //  - zubac miša je uvijek svoj potez: wheelDelta u koracima od 120 (ili
+      //    deltaMode u redcima) i ista jačina kao prethodni događaj, jer su zupci
+      //    uvijek jednaki, a touchpad na Macu povremeno pogodi višekratnik 120;
+      //  - promjena smjera je novi potez (inercija ne mijenja smjer);
+      //  - na touchpadu porast delte nakon što je inercija počela slabjeti znači
+      //    novi zamah (zamah raste pa pada; porast tijekom rasta nije novi);
+      //  - potez bez stanke ipak ne traje dulje od 1,5 s, da se nikad ne zaglavi.
+      let previousSize = 0;
+      let previousSign = 0;
+      let peakSize = 0;
+      let gestureStart = 0;
       window.addEventListener("wheel", (event) => {
         if (staticMode || event.ctrlKey) return;
         const now = performance.now();
-        const fresh = now - lastWheel > 140;
-        lastWheel = now;
         const delta = Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
         if (!delta) return;
+        const size = Math.abs(delta);
+        const sign = Math.sign(delta);
+        const wheelDelta = Math.abs(event.wheelDeltaY || 0);
+        const pause = now - lastWheel > 140;
+        const steady = Math.abs(size - previousSize) <= Math.max(2, size * .1);
+        // Zubac je uvijek barem ~30 px (Mac miš 40, Windows 100); sitni repovi inercije nisu zupci.
+        const notch = event.deltaMode === 1 || (size >= 30 && wheelDelta >= 120 && wheelDelta % 120 === 0 && (pause || steady));
+        const flick = previousSize < peakSize && size >= 1.5 * previousSize && size - previousSize >= 8;
+        const fresh = pause || notch || flick || sign !== previousSign || now - gestureStart > 1500;
+        lastWheel = now;
+        if (fresh) { gestureStart = now; peakSize = size; } else peakSize = Math.max(peakSize, size);
+        previousSize = size;
+        previousSign = sign;
         if (!inZone()) { if (fresh) gesture = "pass"; return; }
         if (!fresh) {
           if (gesture === "pass") return;

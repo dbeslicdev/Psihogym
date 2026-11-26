@@ -16,20 +16,44 @@ export default function Navigation() {
   const lastY = useRef(0);
   const cartCount = useCartItems().length;
 
-  // Skrivanje na scroll dolje + solid (krem/blur) pozadina izvan heroja
+  // Skrivanje na scroll dolje + solid (krem/blur) pozadina izvan heroja.
+  // Visine heroja i trake mjere se pri promjeni rute i veličine, ne na svaki scroll
+  // događaj: offsetHeight u scroll handleru prisiljava layout cijele stranice u
+  // svakom kadru (uz Lenis scroll događaj stiže svaki kadar), što je pri brzom
+  // scrollu bilo mjerljivo zastajkivanje. Stanje se postavlja najviše jednom po kadru.
   useEffect(() => {
-    const onScroll = () => {
-      const y = window.scrollY;
-      setHidden(y > lastY.current && y > 80);
+    let heroBottom = 0;
+    let frame;
+    const measure = () => {
       const hero = document.querySelector(".hero");
       const navH = navRef.current ? navRef.current.offsetHeight : 0;
-      const heroBottom = hero ? hero.offsetHeight - navH : 0;
-      setSolid(y > heroBottom);
-      lastY.current = y;
+      heroBottom = hero ? hero.offsetHeight - navH : 0;
     };
-    window.addEventListener("scroll", onScroll, { passive: true });
+    const onScroll = () => {
+      if (frame !== undefined) return;
+      frame = requestAnimationFrame(() => {
+        frame = undefined;
+        const y = window.scrollY;
+        setHidden(y > lastY.current && y > 80);
+        setSolid(y > heroBottom);
+        lastY.current = y;
+      });
+    };
+    const onResize = () => { measure(); onScroll(); };
+    measure();
     onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onResize, { passive: true });
+    // Hero mijenja visinu kad stignu fontovi i slike; tada se granica mjeri ponovno.
+    const hero = document.querySelector(".hero");
+    const observer = hero ? new ResizeObserver(onResize) : null;
+    observer?.observe(hero);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+      observer?.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [location.pathname]);
 
   // Blokiraj scroll dok je menu otvoren

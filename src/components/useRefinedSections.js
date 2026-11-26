@@ -21,16 +21,20 @@ export default function useRefinedSections(ivanaRef, topicsRef) {
       previousTime = time;
       const vh = innerHeight;
       const image = ivana.querySelector(".v4-ivana__media");
-      if (reduced.matches || image.getBoundingClientRect().top < vh * .62) {
+      // Sva čitanja geometrije prije ijednog zapisa: čitanje nakon zapisa (stil kartice,
+      // data-ready) prisiljava style recalc cijele stranice po svakoj kartici u kadru.
+      const imageTop = image.getBoundingClientRect().top;
+      const bounds = topics.getBoundingClientRect();
+      const rects = cards.map(card => card.getBoundingClientRect());
+      if (reduced.matches || imageTop < vh * .62) {
         if (ivana.dataset.ready !== "true") {
           ivana.dataset.ready = "true";
           setIvanaReady(true);
         }
       }
-      const bounds = topics.getBoundingClientRect();
       let moving = false;
       cards.forEach((card, index) => {
-        const rect = card.getBoundingClientRect();
+        const rect = rects[index];
         const center = rect.top + rect.height / 2;
         const enter = smooth(clamp((vh * 1.22 - center) / (vh * .45)));
         const exit = smooth(clamp((center - vh * .22) / (vh * .3)));
@@ -53,11 +57,7 @@ export default function useRefinedSections(ivanaRef, topicsRef) {
         if (Math.abs(current.x - targetX) > .1 || Math.abs(current.opacity - targetOpacity) > .002) moving = true;
       });
       const heading = topics.querySelector(".pg-topics-heading");
-      const lastPair = cards.slice(-2);
-      const lastCenter = Math.max(...lastPair.map(card => {
-        const rect = card.getBoundingClientRect();
-        return rect.top + rect.height / 2;
-      }));
+      const lastCenter = Math.max(...rects.slice(-2).map(rect => rect.top + rect.height / 2));
       const headingOpacity = desktop.matches && !reduced.matches
         ? smooth(clamp((lastCenter - vh * .22) / (vh * .3))) : 1;
       heading.style.opacity = headingOpacity.toFixed(3);
