@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { createWheelGesture } from "./wheelGesture.js";
 import { glideTo, jumpTo } from "../smoothScroll.js";
 
-/* Cinematic scroll (pregled, uključuje se s ?snap): jedan potez kotačića ili
+/* Cinematic scroll (uključen po zadanom, ?snap=0 isključuje): jedan potez kotačića ili
    touchpada, bilo koje jačine, vodi na sljedeću logičku cjelinu ("stanicu").
    Stanice se izvode iz sekcija stranice:
     - sekcija niža od ekrana stoji sa sadržajem na sredini; dvije (ili više) kratkih
