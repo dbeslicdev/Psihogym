@@ -2,9 +2,7 @@
 .marketing-page {
   --gut: clamp(1.5rem, 7.5vw, 8rem);
   --sec-y: clamp(3rem, 7vh, 6rem);
-  --ps-text-display-xl: clamp(2.5rem, 1.25rem + 4.5vw, 6.25rem);
-  --ps-text-display-l: clamp(2rem, 1.35rem + 1.6vw, 3.625rem);
-  --ps-text-display-m: clamp(2.15rem, 1.45rem + 1.9vw, 4.125rem);
+  /* Veličine teksta: vidi tokens.css (jedna ljestvica) i typography.css (uloge). */
   --v4-cta-gap: clamp(1.5rem, 3vh, 2.5rem);
   --v4-head-gap: clamp(1.5rem, 3vh, 2.25rem);
   transition: none;

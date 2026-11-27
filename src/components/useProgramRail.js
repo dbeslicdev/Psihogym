@@ -116,9 +116,11 @@ export default function useProgramRail(pinRef, trackRef, progressRef, { stepped 
         // Rub se računa uključivo: kadar koji padne točno na rub inače bi propustio
         // ostatak zaleta kroz cijelu galeriju.
         if (Math.abs(y - previousY) < innerHeight * .5 || performance.now() - wheelGesture.lastWheel < 200) {
-          if (previousY < start && y >= start) { gesture = "swallow"; goToStep(0); return; }
+          // Tolerancija od 1 px: početak zone zna biti razlomljen (npr. 817,47), a preglednik
+          // položaj nakon skoka zaokruži, pa bi se ulazak inače okidao pri svakom pomaku.
+          if (previousY < start - 1 && y >= start) { gesture = "swallow"; goToStep(0); return; }
           // Povratak odozdo: zadnja kartica s punom, vidljivom trakom.
-          if (previousY > end && y <= end) { gesture = "swallow"; setRailEnd(false); goToStep(lastStep); return; }
+          if (previousY > end + 1 && y <= end) { gesture = "swallow"; setRailEnd(false); goToStep(lastStep); return; }
         }
         previousY = y;
         setStep(Math.round((y - start) / stepScroll));

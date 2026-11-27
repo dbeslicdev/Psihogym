@@ -69,14 +69,21 @@
      tablet imali su naslov sekcije na 30px dok je hero već rastao. Sada je
      ljestvica hero > rečenica > naslov sekcije provjereno očuvana na
      375 / 768 / 1440 / 1920. */
-  --ps-text-display-xl: clamp(42px, 6.2vw, 100px);            /* hero naslov (d1) */
-  --ps-text-display-l: clamp(35px, 29px + 1.6vw, 58px);       /* naslov sekcije (d2) */
-  --ps-text-display-m: clamp(39px, 32.3px + 1.78vw, 66px);    /* velika rečenica (stage) */
-  --ps-text-title: clamp(26px, 3.2vw, 50px);         /* naslov poglavlja */
-  --ps-text-lead: clamp(16.5px, 1.28vw, 20px);       /* uvodni odlomak */
-  --ps-text-body: 16px;      /* tekst */
-  /* labela (uppercase, razmaknuta) — i mikro-tekst mora rasti s ekranom */
-  --ps-text-label: clamp(11.5px, 11px + 0.13vw, 13px);
+  /* Jedna ljestvica za cijeli web; koju razinu koja uloga dobiva vidi src/typography.css
+     (tablica s vrijednostima na 390 / 1366 / 1768 / 2560 px). */
+  --ps-text-display-xl: clamp(2.5rem, 1.1rem + 3.4vw, 5.5rem);     /* hero naslovnice */
+  --ps-text-h1: clamp(2.4rem, 1.5rem + 2.6vw, 4.6rem);            /* naslov podstranice */
+  --ps-text-display-l: clamp(2rem, 1.35rem + 1.6vw, 3.625rem);    /* naslov sekcije (h2) */
+  --ps-text-display-m: clamp(2.4rem, 1.9rem + 1.9vw, 4.4rem);     /* ime */
+  --ps-text-title: clamp(1.35rem, 1.05rem + 0.9vw, 2.1rem);       /* naslov kartice, h3 */
+  --ps-text-lead: clamp(1.25rem, 1rem + 0.95vw, 2rem);            /* uvodni odlomak (serif) */
+  --ps-text-body: clamp(1rem, 0.94rem + 0.2vw, 1.125rem);         /* tekst */
+  --ps-text-small: clamp(0.85rem, 0.82rem + 0.15vw, 0.95rem);     /* napomene */
+  --ps-text-label: clamp(0.7rem, 0.68rem + 0.12vw, 0.8rem);       /* oznake (uppercase/mono) */
+  --ps-text-ui: clamp(0.9rem, 0.86rem + 0.18vw, 1rem);            /* gumbi */
+  --ps-text-stat: clamp(2.8rem, 1.6rem + 3.4vw, 5rem);            /* brojke */
+  --ps-text-quote: clamp(1.2rem, 0.95rem + 0.85vw, 1.9rem);       /* recenzija */
+  --ps-text-signature: clamp(1.6rem, 1.4rem + 0.6vw, 2rem);       /* potpis (Caveat) */
 
   --ps-leading-tight: 1.06;  /* naslovi */
   --ps-leading-snug: 1.12;   /* velike rečenice */

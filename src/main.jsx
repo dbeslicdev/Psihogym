@@ -18,3 +18,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
 );
 
 import "./responsive-audit.css";
+import "./typography.css"; // zadnje: jedna tipografska ljestvica nadjačava razbacane veličine

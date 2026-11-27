@@ -1,0 +1,130 @@
+/* ============ TIPOGRAFSKA LJESTVICA — jedno mjesto za veličine ============
+   Učitava se zadnje (main.jsx), pa nadjačava razbacane veličine po sekcijama.
+   Sve razine su fluidne (clamp): rastu sa širinom ekrana, s donjom granicom za
+   mobitel i gornjom za široke monitore. Vrijednosti su u tokens.css.
+
+   Razina        · 390 px · 1366 px · 1768 px · 2560 px · uloga
+   display-xl    ·  40    ·  64     ·  78     ·  88     · hero naslov naslovnice
+   h1            ·  38    ·  60     ·  70     ·  74     · naslov podstranice (hero)
+   display-l     ·  32    ·  43     ·  50     ·  58     · naslov sekcije (h2)
+   display-m     ·  38    ·  56     ·  64     ·  70     · ime (Ivana Bešlić)
+   title         ·  22    ·  29     ·  33     ·  34     · naslov kartice, h3, "Prijava"
+   lead          ·  20    ·  27     ·  32     ·  32     · uvodni odlomak (serif)
+   body          ·  16    ·  17     ·  18     ·  18     · tekst, popisi, obrazac
+   small         ·  13.6  ·  14.9   ·  15.2   ·  15.2   · napomene, sitni linkovi
+   label         ·  11.2  ·  12.5   ·  13     ·  13     · oznake (uppercase/mono)
+   ui            ·  14.4  ·  15.6   ·  16     ·  16     · gumbi, prekidači
+   stat          ·  45    ·  68     ·  80     ·  80     · brojke u "Detaljima"
+   quote         ·  19    ·  25     ·  30     ·  30     · recenzija
+   signature     ·  26    ·  30     ·  32     ·  32     · potpis (Caveat)
+
+   Prijelomne točke (postojeće, ne mijenjaju se): 35rem (560 px, telefon),
+   60rem (960 px, tablet / uski laptop), 80rem (1280 px, desktop),
+   100rem (1600 px, široki monitor); visina 42rem (672 px, nizak laptop). */
+
+/* --- hero naslovnice --- */
+.v4.marketing-page .v4-hero__name { font-size: var(--ps-text-display-xl); }
+
+/* --- naslov podstranice (O meni, Savjetovanje, Kontakt, stranica programa) --- */
+.v4.marketing-page .on-hero__title,
+.v4.marketing-page .pd-hero h1,
+.v4.marketing-page .pd-intro h1 { font-size: var(--ps-text-h1); line-height: 1.1; }
+/* Katalog ima dugu rečenicu umjesto naslova: razina sekcije. */
+.v4.marketing-page .pg-program-catalog .on-hero__title { font-size: var(--ps-text-display-l); }
+
+/* --- naslov sekcije --- */
+.v4.marketing-page :is(.v4-h2, .sv-h2, .on-prose__title, .v4-podrucja__title, .v4-cta__title, .kontakt-intro-title),
+.v4.marketing-page.pg-detail :is(.pd-overview-grid h2, .pd-content h2, .pd-material-copy h2, .pd-closing h2, .pd-related h2),
+.v4.marketing-page .pg-detail h2 { font-size: var(--ps-text-display-l); }
+
+/* --- ime --- */
+.v4.marketing-page .v4-ivana__name { font-size: var(--ps-text-display-m); }
+
+/* --- naslov kartice / h3 --- */
+.v4.marketing-page .v4-program__title,
+.v4.marketing-page.pg-playground .v4-program__title,
+.v4.marketing-page.pg-premium .v4-program__title,
+.v4.marketing-page .pd-content h3,
+.v4.marketing-page .pd-included h3,
+.v4.marketing-page .login-card__title { font-size: var(--ps-text-title); }
+/* Četiri kartice u redu ("Istraži druge programe"): naslov razinu niže i smije se prelomiti. */
+.v4.marketing-page .pd-related .v4-program__title { font-size: clamp(1.2rem, 0.95rem + 0.7vw, 1.6rem); white-space: normal; }
+
+/* --- uvodni odlomak (serif) --- */
+.v4.marketing-page .on-prose > p,
+.v4.marketing-page .on-prose__body > p:first-child,
+.v4.marketing-page .v4-ivana__tx p:not(.v4-ivana__role),
+.v4.marketing-page .pg-online-body,
+.v4.marketing-page .pd-overview p,
+.v4.marketing-page .v4-programi__subtitle,
+.v4.marketing-page .v4-programi__head .v4-program__tagline,
+.v4.marketing-page .sv-not-for__body p,
+.v4.marketing-page .sv-reading__lead { font-size: var(--ps-text-lead); }
+
+/* --- tekst --- */
+.v4.marketing-page .on-hero__intro,
+.v4.marketing-page .pd-tagline,
+.v4.marketing-page .pd-section-lead,
+.v4.marketing-page .pd-module-intro,
+.v4.marketing-page .pd-content li,
+.v4.marketing-page .pd-content p:not(.pd-lesson-goal):not(.pd-included-note),
+.v4.marketing-page .on-prose__body > p:not(:first-child),
+.v4.marketing-page .pg-program-catalog .v4-program__tagline,
+.v4.marketing-page .pd-materials p,
+.v4.marketing-page .pd-closing p,
+.v4.marketing-page .pd-material-copy p,
+.v4.marketing-page .kontakt-check,
+.v4.marketing-page .kontakt-input,
+.v4.marketing-page .kontakt-textarea,
+.v4.marketing-page .login-card__hint,
+.v4.marketing-page .v4-chip__desc,
+.v4.marketing-page .pg-online-subtitle,
+.v4.marketing-page .v4-program__tagline,
+.v4.marketing-page .sv-mit__inner p,
+.v4.marketing-page .sv-know li,
+.v4.marketing-page .sv-reading__detail,
+.v4.marketing-page .v4-stackcard .pg-review-full { font-size: var(--ps-text-body); }
+/* Odgovor u harmonici i tvrdnje "Važno je znati" ostaju serif, ali na razini teksta. */
+.v4.marketing-page .sv-znati .v4-chip__desc.sv-znati__text { font-size: var(--ps-text-lead); }
+
+/* --- napomene, sitni linkovi --- */
+.v4.marketing-page .kontakt-disclaimer-text,
+.v4.marketing-page .kontakt-hint,
+.v4.marketing-page .pd-lesson-goal,
+.v4.marketing-page .pd-included-note,
+.v4.marketing-page .pg-text-link,
+.v4.marketing-page .login-note,
+.v4.marketing-page .login-forgot,
+.v4.marketing-page .login-pw__toggle,
+.v4.marketing-page .v4-ivana__role,
+.v4.marketing-page .pd-hero .pd-breadcrumb,
+.v4.marketing-page .login-logout,
+.v4.marketing-page .program-reveal__toggle { font-size: var(--ps-text-small); }
+
+/* --- oznake (uppercase / mono) --- */
+.v4.marketing-page .v4-label,
+.v4.marketing-page .pg-eyebrow,
+.v4.marketing-page.pg-premium .pg-eyebrow,
+.v4.marketing-page .kontakt-label,
+.v4.marketing-page .kontakt-legend,
+.v4.marketing-page .v4-stats__label,
+.v4.marketing-page .pd-hero dt,
+.v4.marketing-page .pd-purchase .pg-eyebrow { font-size: var(--ps-text-label); }
+
+/* --- gumbi i prekidači --- */
+.v4.marketing-page .v4-btn,
+.v4.marketing-page .pg-hero-actions .v4-btn,
+.v4.marketing-page .v4-program__foot .v4-btn,
+.v4.marketing-page.pg-playground .v4-program__foot .v4-btn,
+.v4.marketing-page .pd-purchase .v4-btn,
+.v4.marketing-page .kontakt-toggle { font-size: var(--ps-text-ui); }
+
+/* --- pitanja u harmonici: serif srednje razine, kao recenzija --- */
+.v4.marketing-page .sv-mit__trigger { font-size: var(--ps-text-quote); }
+
+/* --- brojke, recenzije, potpis --- */
+.v4.marketing-page.pg-playground .v4-stats__value,
+.v4.marketing-page .v4-stats__value { font-size: var(--ps-text-stat); }
+.v4.marketing-page .v4-stackcard blockquote,
+.v4.marketing-page.pg-premium .v4-iskustva[data-review-compact="true"] .v4-stackcard blockquote { font-size: var(--ps-text-quote); }
+.v4.marketing-page.pg-premium .v4-iskustva .v4-stackcard figcaption { font-size: var(--ps-text-signature); }

@@ -53,8 +53,8 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
       const maxLift = Math.min(vh * .18, 200); // kao requestedLift u kit.jsx
       let pending = 0; // koliko će sekcije ispod još biti povučene gore do konačnog stanja
       const toFinal = (y) => Math.round(y - pending);
-      // Sadržaj sekcije (sve osim površine vala): njegova sredina ide na sredinu ekrana.
-      const contentCentre = (section, rect) => {
+      // Sadržaj sekcije (sve osim površine vala), u koordinatama stranice.
+      const contentBox = (section, rect) => {
         let top = Infinity;
         let bottom = -Infinity;
         for (const child of section.children) {
@@ -64,8 +64,10 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
           top = Math.min(top, r.top);
           bottom = Math.max(bottom, r.bottom);
         }
-        return scrollY + (top === Infinity ? rect.top + rect.height / 2 : (top + bottom) / 2);
+        if (top === Infinity) { top = rect.top; bottom = rect.bottom; }
+        return { top: top + scrollY, bottom: bottom + scrollY };
       };
+      const navGap = 96; // prostor ispod navigacije kad se sadržaj poravnava uz vrh
       // Visoka sekcija: od vrha, pa međustanice; zadnja tako da joj je dno na dnu ekrana.
       const tallStops = (top, height) => {
         const step = vh * .85;
@@ -95,7 +97,10 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
         if (section.classList.contains("v4-programi") && !section.classList.contains("v4-programi--static")) {
           const sticky = section.querySelector(".v4-programi__sticky");
           const pinTop = parseFloat(getComputedStyle(sticky).top) || 0;
-          const zoneStart = toFinal(top - pinTop);
+          // Naviše, ne na najbliži piksel: zona galerije počinje na razlomljenom položaju
+          // (npr. 817,4), a stanica ispod tog praga ne "uđe" u galeriju, pa bi je sljedeći
+          // potez (ulazak) prekinuo trenutačnim skokom.
+          const zoneStart = Math.ceil(rect.top + scrollY - pinTop - pending);
           if (section.classList.contains("v4-programi--stepped")) {
             // Zaključana galerija: stanica na početku zone i za svaku karticu (korak = 200 px).
             const lastStep = Math.max(0, Math.round((section.offsetHeight - vh) / stepScroll));
@@ -158,31 +163,48 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
           liftBelow();
           continue;
         }
-        // Kratka sekcija: sadržaj (u nepodignutom stanju: + ownLift) na sredini ekrana.
-        let stop = contentCentre(section, rect) + ownLift - vh / 2;
-        // Kratke sekcije koje zajedno stanu na ekran dijele stanicu (Online + Detalji;
-        // odlomci pravnih tekstova): sljedeći potez ide odmah dalje. Sredina ostaje na
-        // prvoj, ali dno skupine ne smije ispasti ispod ekrana.
-        let groupBottom = top + rect.height;
+        /* Kratka sekcija: gleda se sadržaj (bez okvira i površine vala), u nepodignutom
+           stanju (+ ownLift). Sljedeće kratke sekcije čiji sadržaj još stane na ekran
+           dijele stanicu (Online + Detalji na visokim ekranima; odlomci pravnih tekstova):
+           sredina skupine na sredini ekrana. Par koji "jedva ne stane" (do 1,4 ekrana)
+           dobiva dvije stanice: sadržaj uz vrh, pa sadržaj uz dno, bez treće između. */
+        // Završna sekcija (data-center-wave) sadržaj podiže s valom (top: -lift), pa bi
+        // njegov položaj ovisio o tome odakle se mjeri: uzima se okvir sekcije, koji miruje.
+        const own = section.hasAttribute("data-center-wave") ? { top: rect.top + scrollY, bottom: rect.bottom + scrollY } : contentBox(section, rect);
+        // Sekcija s data-ride-wave do dolaska podigne sadržaj (i sve ispod) do punog lifta:
+        // stanica cilja položaj kakav će biti pri dolasku (nepodignuto − puni lift).
+        const arrivalShift = section.hasAttribute("data-ride-wave") ? ownLift - maxLift : ownLift;
+        const groupTop = own.top + arrivalShift;
+        let groupBottom = own.bottom + arrivalShift;
         let j = i + 1;
+        const isSpecial = (el) => el.classList.contains("v4-programi") || el.classList.contains("v4-podrucja") || el.classList.contains("v4-iskustva");
         while (j < sections.length) {
           const candidate = sections[j];
-          const special = candidate.classList.contains("v4-programi") || candidate.classList.contains("v4-podrucja") || candidate.classList.contains("v4-iskustva");
           const cRect = candidate.getBoundingClientRect();
-          if (special || cRect.bottom + scrollY - top > vh) break;
+          if (isSpecial(candidate) || cRect.height >= vh) break;
+          const cBottom = (candidate.hasAttribute("data-center-wave") ? cRect.bottom + scrollY : contentBox(candidate, cRect).bottom) + arrivalShift;
+          if (cBottom - groupTop > vh - navGap / 2) break;
           shownWithPrevious.add(candidate);
-          groupBottom = cRect.bottom + scrollY;
+          groupBottom = cBottom;
           j++;
         }
-        if (j > i + 1) stop = Math.min(stop, groupBottom - vh);
         const next = sections[j];
-        if (next && j === i + 1) {
-          const nextRect = next.getBoundingClientRect();
-          if (nextRect.height >= vh) {
-            // Visoka sljedeća sekcija ostaje ispod ruba ekrana: njezin "oblačić" (val)
-            // pojavi se tek sljedećim potezom.
-            stop = Math.min(stop, nextRect.top + scrollY - vh);
-          }
+        const nextRect = next ? next.getBoundingClientRect() : null;
+        const nextShort = next && !isSpecial(next) && nextRect.height < vh;
+        const nextBottom = nextShort ? (next.hasAttribute("data-center-wave") ? nextRect.bottom + scrollY : contentBox(next, nextRect).bottom) + arrivalShift : null;
+        if (j === i + 1 && nextShort && nextBottom - groupTop <= vh * 1.4) {
+          // Par koji jedva ne stane: uz vrh pa uz dno.
+          shownWithPrevious.add(next);
+          list.push(Math.max(0, toFinal(groupTop - navGap)));
+          list.push(Math.max(0, toFinal(nextBottom - vh + navGap / 2)));
+          liftBelow();
+          continue;
+        }
+        let stop = (groupTop + groupBottom) / 2 - vh / 2;
+        if (next && nextRect.height >= vh) {
+          // Visoka sljedeća sekcija ostaje ispod ruba ekrana: njezin "oblačić" (val)
+          // pojavi se tek sljedećim potezom.
+          stop = Math.min(stop, nextRect.top + scrollY - vh);
         }
         list.push(Math.max(0, toFinal(stop)));
         liftBelow();
@@ -196,7 +218,7 @@ export default function useSnapScroll(getRoot, { enabled = false, key = "" } = {
       // završne sekcije), zato beskonačno.
       // Stanica tik uz dno stranice otpada (dno je ionako stanica).
       const nearEnd = document.documentElement.scrollHeight - vh - vh * .1;
-      stops = [...new Set(list.map(y => Math.max(0, Math.round(y))))].filter(y => y < nearEnd).sort((a, b) => a - b);
+      stops = [...new Set(list.map(y => Math.max(0, Math.round(y))))].filter(y => y < nearEnd && (y === 0 || y > vh * .15)).sort((a, b) => a - b);
       stops.push(Infinity);
     };
     // Samo u razvoju: uvid u stanice iz konzole (window.__snapStops()).
