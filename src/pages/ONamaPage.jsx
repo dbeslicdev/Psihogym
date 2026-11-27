@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import useSectionEntrance from "../components/useSectionEntrance.js";
+import useReviewStack from "../components/useReviewStack.js";
 import { Link } from "react-router-dom";
 import { SplitText, Curve, V4Shell } from "../v4/kit.jsx";
 import "../v4.css";
@@ -8,10 +9,16 @@ import "../v4.css";
    portret, dvostupčani prose, prvi val na "profesionalni put", CTA.
    Boje/tipografija iz globalnih tokena (--ps-*). */
 
+const CAREER = [
+  "Moj put prema savjetodavnom radu počinje studijem socijalne pedagogije na Edukacijsko-rehabilitacijskom fakultetu u Zagrebu. Ondje se upoznajem s transakcijskom analizom, psihoterapijskim pravcem koji mi daje konkretne alate za razumijevanje sebe i odnosa s drugima.",
+  "S vremenom transakcijska analiza postaje moj osobni i profesionalni kompas. Vodi me i danas, u radu s ljudima i u svakodnevnom životu.",
+  "Tijekom godina završavam različite edukacije i sudjelujem u nacionalnim i međunarodnim projektima. Iskustvo stječem radeći u osnovnoškolskom i visokom obrazovanju te u odgojnom savjetovalištu u Zagrebu.",
+  "Nakon potresa u Zagrebu i pandemije vraćam se u rodnu Slavoniju i otvaram vlastitu praksu. U njoj povezujem sve što sam godinama učila, istraživala i gradila u radu s ljudima.",
+];
+
 export default function ONamaPage() {
-  // Profesionalni put: odlomci se pojavljuju cijeli, jedan za drugim (brzo).
-  const careerBodyRef = useRef(null);
-  const careerIn = useSectionEntrance(careerBodyRef, "p", .9);
+  const careerRef = useRef(null);
+  useReviewStack(careerRef);
   const portraitRef = useRef(null);
   const closingRef = useRef(null);
   const closingReady = useSectionEntrance(closingRef, ".v4-cta__title", .85);
@@ -67,15 +74,19 @@ export default function ONamaPage() {
         </div>
       </section>
 
-      {/* ===== 4. MOJ PROFESIONALNI PUT — prvi VAL (sage-soft) ===== */}
-      <Curve color="#e2ecf1" className="on-prose on-prose--curve on-about-career reading-exit" data-stop>
-        <SplitText as="h2" className="on-prose__title" delay={0.1} segments={[{ text: "Moj profesionalni put" }]} />
-        <div className={`on-prose__body on-career-body${careerIn ? " is-in" : ""}`} ref={careerBodyRef} data-wave-content>
-          <p>Moj put prema savjetodavnom radu počinje studijem socijalne pedagogije na Edukacijsko-rehabilitacijskom fakultetu u Zagrebu. Ondje se upoznajem s transakcijskom analizom, psihoterapijskim pravcem koji mi daje konkretne alate za razumijevanje sebe i odnosa s drugima.</p>
-          <p>S vremenom transakcijska analiza postaje moj osobni i profesionalni kompas. Vodi me i danas, u radu s ljudima i u svakodnevnom životu.</p>
-          <p>Tijekom godina završavam različite edukacije i sudjelujem u nacionalnim i međunarodnim projektima. Iskustvo stječem radeći u osnovnoškolskom i visokom obrazovanju te u odgojnom savjetovalištu u Zagrebu.</p>
-          <p>Nakon potresa u Zagrebu i pandemije vraćam se u rodnu Slavoniju i otvaram vlastitu praksu. U njoj povezujem sve što sam godinama učila, istraživala i gradila u radu s ljudima.</p>
+      {/* ===== 4. MOJ PROFESIONALNI PUT — odlomci kao bijele kartice koje se slažu
+          jedna preko druge (isti mehanizam kao recenzije na naslovnici: useReviewStack). ===== */}
+      <Curve color="#e2ecf1" className="v4-iskustva on-about-career" innerRef={careerRef} data-stop>
+        <div className="v4-iskustva__head">
+          <SplitText as="h2" className="v4-h2" delay={0.1} segments={[{ text: "Moj profesionalni put" }]} />
         </div>
+        {CAREER.map((text) => (
+          <div className={`v4-step${text.split(/\s+/).length > 30 ? " v4-step--long" : ""}`} key={text.slice(0, 24)}>
+            <figure className="v4-stackcard pg-review--centered on-career-card">
+              <blockquote>{text}</blockquote>
+            </figure>
+          </div>
+        ))}
       </Curve>
 
       {/* ===== 5. CTA — lavanda finale ===== */}

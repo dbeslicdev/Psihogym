@@ -1923,3 +1923,15 @@ body.v4-nav:not(.menu-open) .nav.nav--solid {
 /* Brojevi u punoj visini (serif font po zadanom ima "old-style" brojke koje izgledaju sitno). */
 html, body, .v4 { font-variant-numeric: lining-nums; }
 .v4 .kontakt-calendar__day { font-weight: 500; }
+
+/* Katalog: kartica prijave skrivena dok traka ne dođe do kraja, pa blago iskoči odozdo
+   (data-in postavlja useRailEndReveal u ProgramiPage). */
+.pg-programs .prog-login .login-card {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity .55s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
+}
+.pg-programs .prog-login .login-card[data-in="true"] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pg-programs .prog-login .login-card { opacity: 1; transform: none; transition: none; }
+}

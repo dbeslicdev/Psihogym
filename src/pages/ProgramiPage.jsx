@@ -1,5 +1,5 @@
 import {register,useAccount} from "../account.js";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login, isLoggedIn, logout } from "../auth.js";
 import { programi } from "../data.js";
@@ -15,9 +15,38 @@ import "../v4.css";
    na dashboard /app.
    ============================================================ */
 
+/* Kartica prijave pojavi se (blago iskoči odozdo) tek kad traka kataloga dođe do kraja:
+   kraj trake = dno zaključane sekcije na dnu ekrana. Cinematic skok najavi odredište
+   (pg:snap-glide), pa ulaz krene tijekom skoka. Bez zaključane trake (mobitel) kartica
+   ulazi kad dođe u kadar. Jednosmjerno: jednom pokazana, ostaje. */
+function useRailEndReveal(pinRef, cardRef) {
+  useEffect(() => {
+    const pin = pinRef.current;
+    const card = cardRef.current;
+    if (!pin || !card) return;
+    const controller = new AbortController();
+    let frame;
+    const check = (ahead = 0) => {
+      frame = undefined;
+      const locked = !pin.classList.contains("v4-programi--static");
+      const railEnd = pin.getBoundingClientRect().top + scrollY + pin.offsetHeight - innerHeight;
+      const reached = locked ? scrollY + ahead >= railEnd - 2 : card.getBoundingClientRect().top - ahead < innerHeight * .9;
+      if (reached) { card.dataset.in = "true"; controller.abort(); }
+    };
+    const schedule = () => { if (frame === undefined) frame = requestAnimationFrame(() => check()); };
+    window.addEventListener("scroll", schedule, { passive: true, signal: controller.signal });
+    window.addEventListener("resize", schedule, { passive: true, signal: controller.signal });
+    window.addEventListener("pg:snap-glide", (event) => check(event.detail.target - scrollY), { signal: controller.signal });
+    check();
+    return () => { controller.abort(); cancelAnimationFrame(frame); };
+  }, [pinRef, cardRef]);
+}
+
 export default function ProgramiPage() {
   const pinRef = useRef(null);
   const trackRef = useRef(null);
+  const loginCardRef = useRef(null);
+  useRailEndReveal(pinRef, loginCardRef);
   const progressRef = useRef(null);
   useProgramRail(pinRef, trackRef, progressRef);
   const navigate = useNavigate();
@@ -90,7 +119,7 @@ export default function ProgramiPage() {
         aria-label="Prijava u portal"
         id="prijava"
       >
-        <div className="login-card" data-wave-content>
+        <div className="login-card" data-wave-content ref={loginCardRef}>
           {loggedIn ? (
             <>
               <h2 className="login-card__title">Već si prijavljen/na</h2>

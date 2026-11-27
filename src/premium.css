@@ -1825,3 +1825,20 @@
 @media (prefers-reduced-motion: reduce) {
   .on-career-body > p { opacity: 1; transform: none; transition: none; }
 }
+
+/* Savjetovanje, harmonika mitova: naslov ostaje ljepljiv dok se gledaju zadnje stavke
+   (kao naslov Tema); podloga naslova je boja sekcije, samo oko teksta. */
+@media(min-width:60.001rem) {
+  .pg-premium.pg-counselling .sv-section .sv-head {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    padding: 6.5rem 0 1rem;
+    background: var(--curve, var(--ps-cream));
+  }
+}
+
+/* O meni, "Moj profesionalni put": kartice odlomaka bez navodnika i zvjezdica, tekst
+   u sans-serifu na razini uvodnog odlomka. */
+.pg-premium.pg-about .on-career-card blockquote { font-family: var(--ps-font-body); font-size: var(--ps-text-lead); line-height: 1.5; font-weight: 300; margin: 0; }
