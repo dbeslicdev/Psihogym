@@ -47,8 +47,10 @@
 .v4.marketing-page .pd-content h3,
 .v4.marketing-page .pd-included h3,
 .v4.marketing-page .login-card__title { font-size: var(--ps-text-title); }
-/* Četiri kartice u redu ("Istraži druge programe"): naslov razinu niže i smije se prelomiti. */
-.v4.marketing-page .pd-related .v4-program__title { font-size: clamp(1.2rem, 0.95rem + 0.7vw, 1.6rem); white-space: normal; }
+/* Uže kartice (katalog, "Istraži druge programe"): naslov razinu niže i smije se prelomiti,
+   inače "Razvoj samopouzdanja" ispada iz kartice. */
+.v4.marketing-page .pd-related .v4-program__title,
+.v4.marketing-page .pg-program-catalog .v4-program__title { font-size: clamp(1.2rem, 0.95rem + 0.7vw, 1.6rem); white-space: normal; overflow-wrap: anywhere; }
 
 /* --- uvodni odlomak (serif) --- */
 .v4.marketing-page .on-prose > p,
