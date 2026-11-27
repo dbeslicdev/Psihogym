@@ -129,7 +129,7 @@ export default function App() {
 
   // Globalni scroll efekti — ponovno se vežu na svaku rutu
   useScrollReveal(location.pathname);
-  // Cinematic scroll (pregled, ?snap) na svim stranicama; naslovnica ga montira sama
+  // Cinematic scroll (zadano uključen) na svim stranicama; naslovnica ga montira sama
   // (V4Page, prije galerije), pa je ovdje isključen za "/".
   useSnapScroll(getMain, { enabled: snapPreviewEnabled() && location.pathname !== "/" && !isApp, key: location.pathname });
   useParallax(location.pathname);

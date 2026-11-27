@@ -108,7 +108,7 @@ export default function V4Page() {
 
   // Keep the pinned gallery only while every card fits vertically. This
   // also responds to font loading, content height, zoom and motion settings.
-  // Pregled cinematic scrolla (?snap uključuje, ?snap=0 isključuje; pamti se za
+  // Cinematic scroll (zadano uključen, ?snap=0 isključuje; pamti se za
   // trajanja kartice). Poziva se prije useProgramRail da prvi dobije kotačić.
   useSnapScroll(() => pinRef.current?.closest(".v4"), { enabled: snapPreviewEnabled() });
   // Naslovna: jedan scroll = jedna kartica.
