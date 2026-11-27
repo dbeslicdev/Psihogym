@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { podrucjaOpcije } from "../data.js";
 import { Curve, SplitText, V4Shell } from "../v4/kit.jsx";
 import KontaktDatePicker from "../components/KontaktDatePicker.jsx";
@@ -43,11 +43,31 @@ function findErrors(form) {
   return errors;
 }
 
+// Je li forma netaknuta: nijedno polje upisano, nijedna kućica označena.
+function isUntouched(form) {
+  for (const el of form.elements) {
+    if (!el.name) continue;
+    if (el.type === "checkbox" || el.type === "radio") { if (el.checked) return false; }
+    else if (el.value && el.value.trim()) return false;
+  }
+  return true;
+}
+
 export default function KontaktPage() {
   const [formType, setFormType] = useState("savjetovanje");
   const [applicationDate, setApplicationDate] = useState("");
   const [ocekivanjeDrugoChecked, setOcekivanjeDrugoChecked] = useState(false);
   const [errors, setErrors] = useState({ savjetovanje: {}, upit: {} });
+  const formRefs = { savjetovanje: useRef(null), upit: useRef(null) };
+
+  // Promjena taba: ako je forma koju napuštamo prazna, njezina validacija više nema smisla,
+  // pa se briše; djelomično ispunjena forma zadržava greške dok se korisnik ne vrati.
+  const switchTo = (next) => {
+    if (next === formType) return;
+    const leaving = formRefs[formType].current;
+    if (leaving && isUntouched(leaving)) setErrors((all) => ({ ...all, [formType]: {} }));
+    setFormType(next);
+  };
 
   const submit = (key, mailto) => (event) => {
     event.preventDefault();
@@ -103,7 +123,7 @@ export default function KontaktPage() {
                 type="button"
                 className={`kontakt-toggle${formType === "savjetovanje" ? " is-active" : ""}`}
                 aria-pressed={formType === "savjetovanje"}
-                onClick={() => setFormType("savjetovanje")}
+                onClick={() => switchTo("savjetovanje")}
               >
                 Individualni rad
               </button>
@@ -111,7 +131,7 @@ export default function KontaktPage() {
                 type="button"
                 className={`kontakt-toggle${formType === "upit" ? " is-active" : ""}`}
                 aria-pressed={formType === "upit"}
-                onClick={() => setFormType("upit")}
+                onClick={() => switchTo("upit")}
               >
                 Opći upit
               </button>
@@ -121,6 +141,7 @@ export default function KontaktPage() {
             <form
               className="kontakt-form"
               noValidate
+              ref={formRefs.savjetovanje}
               onSubmit={submit("savjetovanje", "mailto:info@psihogym.hr?subject=Individualni rad")}
               onChange={clear("savjetovanje")}
               onInput={clear("savjetovanje")}
@@ -298,6 +319,7 @@ export default function KontaktPage() {
             <form
               className="kontakt-form"
               noValidate
+              ref={formRefs.upit}
               onSubmit={submit("upit", "mailto:info@psihogym.hr?subject=Upit")}
               onChange={clear("upit")}
               onInput={clear("upit")}
